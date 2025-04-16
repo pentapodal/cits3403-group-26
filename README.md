@@ -13,5 +13,5 @@
 10. Create a pull request for the new branch
 
 
-For Windows
+### For Windows
 3. Activate the virtual environment with `.\venv\Scripts\Activate.ps1`
