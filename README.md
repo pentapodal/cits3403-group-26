@@ -11,3 +11,7 @@
 8. Update requirements.txt with `pip freeze > requirements.txt`
 9. Commit and push the new branch to GitHub
 10. Create a pull request for the new branch
+
+
+For Windows
+3. Activate the virtual environment with `.\venv\Scripts\Activate.ps1`
