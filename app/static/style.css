@@ -2,3 +2,7 @@ div.header {
   background-color: pink;
   padding: 5px;
 }
+
+.error {
+  color: red;
+}
