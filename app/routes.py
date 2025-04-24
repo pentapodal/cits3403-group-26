@@ -9,7 +9,6 @@ from app.models import User
 
 @app.route('/')
 @app.route('/index')
-@login_required
 def index():
   posts = [
     {
@@ -21,7 +20,7 @@ def index():
       'body': 'The Avengers movie was so cool!'
     }
   ]
-  return render_template('index.jinja', title='Home', posts=posts)
+  return render_template('index.html', posts=posts)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -40,7 +39,7 @@ def login():
     if not next_page or urlsplit(next_page).netloc != '':
       next_page = url_for('index')
     return redirect(next_page)
-  return render_template('login.jinja', title='Sign In', form=form)
+  return render_template('login.html', title='Sign In', form=form)
 
 
 @app.route('/logout')
@@ -61,4 +60,34 @@ def register():
     db.session.commit()
     flash('Congratulations, you are now a registered user!')
     return redirect(url_for('login'))
-  return render_template('register.jinja', title='Register', form=form)
+  return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/home')
+@login_required
+def home():
+  return render_template('home.html', title='Home')
+
+
+@app.route('/friends')
+@login_required
+def friends():
+  return render_template('friends.html', title='Friends')
+
+
+@app.route('/upload')
+@login_required
+def upload():
+  return render_template('upload.html', title='Upload')
+
+
+@app.route('/overshare')
+@login_required
+def overshare_self():
+  return overshare(current_user.username)
+
+
+@app.route('/overshare/<username>')
+@login_required
+def overshare(username):
+  return render_template('overshare.html', title='Overshare', username=username)
