@@ -33,14 +33,13 @@
 
         </div>
 
+        {% else %}
+        <p>You have no friends yet.</p>
+
         {% endfor %}
 
       </div>
-      
-    {% else %}
-      <p>You have no friends yet.</p>
-    {% endif %}
-      
+            
     </div>
   </body>
 {% endblock content %}
