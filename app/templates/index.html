@@ -1,27 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overshare</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
-</head>
-<body>
-    <!--Header for buttons-->
-    <div class="header">
-      <div class="nav-buttons">
-          <button class="nav-btn">login</button>
-          <button class="nav-btn">sign up</button>
-      </div>
-  </div>
+{% extends "base.html" %}
 
-  <!-- Overshare title -->
-  <div class="center-text">
-      <h1 class="logo">Overshare</h1>
-      <p class="description">Drop your Insta data. Get the ultimate recap. Flex it. Share it. Overshare it.</p>
-  </div>
-            
-</body>
-</html>
+{% block title %}Home - Overshare{% endblock %}
+
+{% block content %}
+<div class="center-text">
+    <h1 class="logo">Overshare</h1>
+    <p class="subtitle">Drop your Insta data. Get the ultimate recap. Flex it. Share it. Overshare it.</p>
+</div>
+{% endblock %}
+
 

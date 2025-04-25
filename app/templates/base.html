@@ -1,33 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  {% if title %}
-  <title>{{ title }} - Overshare</title>  
-  {% else %}
-  <title>Overshare</title>
-  {% endif %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <title>{% block title %}Overshare{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="header">
-    Overshare:
-    <a href="{{ url_for('index') }}">Home</a>
-    {% if current_user.is_anonymous %}
-    <a href="{{ url_for('login') }}">Login</a>
-    {% else %}
-    <a href="{{ url_for('logout') }}">Logout</a>
-    {% endif %}
-  </div>
-  <hr>
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-  {% endwith %}
-  {% block content %}{% endblock %}
+    <!-- Top-right buttons -->
+    <div class="header">
+        <div class="nav-buttons">
+            <a href="{{ url_for('login') }}"><button class="nav-btn">login</button></a>
+            <a href="{{ url_for('register') }}"><button class="nav-btn">sign up</button></a>
+        </div>
+    </div>
+
+    {% block content %}
+    {% endblock %}
 </body>
 </html>

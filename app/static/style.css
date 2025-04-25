@@ -28,8 +28,8 @@ body {
 }
 
 /* description under the logo */
-.description {
-  font-size: 20px;
+.subtitle {
+  font-size: 25px;
   font-weight: 300;
   margin-top: 10px;
   color: #fceff9;
@@ -60,4 +60,52 @@ body {
 
 .nav-btn:hover {
   background-color: #f0f0f0;
+}
+
+/* login and sign up container */
+.form-container {
+  background-color: white;
+  color: black;
+  max-width: 800px;
+  padding: 40px;
+  margin: 80px;
+  border-radius: 60px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  text-align: left;
+}
+
+/* Input fields */ 
+.form-input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+/*labels*/
+.form-group label {
+  font-weight:600;
+}
+
+/*checkbox and button*/
+.form-check {
+  margin: 10px 0 20px;
+}
+
+.form-submit {
+  text-align: right;
+}
+
+.alt-option {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
 }
