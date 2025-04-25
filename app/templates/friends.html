@@ -14,7 +14,8 @@
   </header>
 
   <body>
-    <div>
+    <div class="friends-container">
+
       <p>Friends</p>
 
       <div class="friends-grid">
@@ -35,6 +36,10 @@
         {% endfor %}
 
       </div>
+      
+    {% else %}
+      <p>You have no friends yet.</p>
+    {% endif %}
       
     </div>
   </body>
