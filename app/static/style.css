@@ -1,8 +1,63 @@
-div.header {
-  background-color: pink;
-  padding: 5px;
+/* Full page layout */
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #f000b8 0%, #ff6c00 100%);
+  font-family: 'Lobster', sans-serif;
+  color: white;
+  display: flex;
+
 }
 
-.error {
-  color: red;
+/* Header with absolute positioned buttons */
+.header {
+  width: 100%;
+  position: relative;
+  text-align: center;
+}
+
+/* Logo styling */
+.center-text {
+  font-size: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* description under the logo */
+.description {
+  font-size: 20px;
+  font-weight: 300;
+  margin-top: 10px;
+  color: #fceff9;
+}
+
+/* Login and Signup buttons aligned to top-right */
+.nav-buttons {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  display: flex;
+  gap: 20px;
+}
+
+/* Button styling */
+.nav-btn {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+  background-color: #f0f0f0;
 }
