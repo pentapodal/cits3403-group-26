@@ -1,24 +1,12 @@
 <!--friends page-->
 
-<!--list out friends-->
-<!--add friends-->
-<!--pending friend request-->
-<!--maybe remove-->
-
 {% extends "base.html" %}
 
 {% block content %}
-  <header>
-    <title>Overshare</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  </header>
 
-  <body>
     <div class="friends-container">
 
-      <p>Friends</p>
-
-      <div class="friends-grid">
+      <p>Friends List</p>
 
         {% for friend in friends %}
 
@@ -41,5 +29,4 @@
       </div>
             
     </div>
-  </body>
 {% endblock content %}
