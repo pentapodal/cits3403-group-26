@@ -70,9 +70,16 @@ def home():
 
 
 @app.route('/friends')
-@login_required
+#@login_required # Uncomment this line to require login for the friends page
 def friends():
-  return render_template('friends.html', title='Friends')
+  friends = [
+    {'username': 'Chen ', 'profile_picture': 'alice.png'},
+    {'username': 'Andrea', 'profile_picture': None},
+    {'username': 'Jia', 'profile_picture': 'charlie.png'},
+    {'username': 'David', 'profile_picture': None},
+    {'username': 'Eve', 'profile_picture': 'eve.png'},
+  ]
+  return render_template('friends.html', title='Friends', friends=friends)
 
 
 @app.route('/upload')
