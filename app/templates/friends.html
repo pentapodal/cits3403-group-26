@@ -1,6 +1,33 @@
+
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Hi, {{ current_user.username }}</h1>
-  <div><p>Friends</p></div>
+
+    <div class="friends-container">
+
+      <p>Friends</p>
+
+      <div class="friends-grid">
+
+        {% for friend in friends %}
+
+        <div class="friend-card">
+
+            {{ friend.username }}
+            {% if friend.profile_picture %}
+              <img src="{{ url_for('static', filename='images/profile_pictures/' + friend.profile_picture) }}" alt="pfp" width="50" height="50">
+            {% else %}
+              <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" width="50" height="50">
+            {% endif %}
+
+        </div>
+
+        {% else %}
+        <p>You have no friends yet.</p>
+
+        {% endfor %}
+
+      </div>
+            
+    </div>
 {% endblock content %}
