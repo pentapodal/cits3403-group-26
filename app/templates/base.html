@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Overshare{% endblock %}</title>
+    {% if title %}
+    <title>{{ title }} - Overshare</title>  
+    {% else %}
+    <title>Overshare</title>
+    {% endif %}
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <!-- Top-right buttons -->
     <div class="header">
-        <div class="nav-buttons">
-            <a href="{{ url_for('login') }}"><button class="nav-btn">login</button></a>
-            <a href="{{ url_for('register') }}"><button class="nav-btn">sign up</button></a>
-        </div>
+      <div class="nav-right">
+        {% if current_user.is_anonymous %}
+          <a href="{{ url_for('login') }}" class="nav-btn">Login</a>
+          <a href="{{ url_for('register') }}"class="nav-btn">Register</a>
+        {% else %}
+          <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+      </div>
     </div>
+        
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
     {% block content %}
     {% endblock %}

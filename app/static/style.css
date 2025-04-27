@@ -12,9 +12,16 @@ body {
 
 /* Header with absolute positioned buttons */
 .header {
+  position: absolute;
+  top: 20px;
+  /* adds spacing from very top */
+  right: 40px;
+  /* adds spacing from right side */
+  display: flex;
+  justify-content: flex-end;
+  /* push .nav-right to the right */
   width: 100%;
-  position: relative;
-  text-align: center;
+  z-index: 1000;
 }
 
 /* Logo styling */
@@ -35,14 +42,6 @@ body {
   color: #fceff9;
 }
 
-/* Login and Signup buttons aligned to top-right */
-.nav-buttons {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  display: flex;
-  gap: 20px;
-}
 
 /* Button styling */
 .nav-btn {
@@ -53,9 +52,16 @@ body {
   border-radius: 999px;
   font-size: 16px;
   font-weight: 500;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+.nav-right {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  ;
 }
 
 .nav-btn:hover {
@@ -67,14 +73,15 @@ body {
   background-color: white;
   color: black;
   max-width: 800px;
+  width: 400px;
   padding: 40px;
-  margin: 80px;
-  border-radius: 60px;
+  margin: 120px auto;
+  border-radius: 30px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   text-align: left;
 }
 
-/* Input fields */ 
+/* Input fields */
 .form-input {
   width: 100%;
   padding: 12px;
@@ -88,7 +95,7 @@ body {
 
 /*labels*/
 .form-group label {
-  font-weight:600;
+  font-weight: 600;
 }
 
 /*checkbox and button*/
