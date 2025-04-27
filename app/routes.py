@@ -73,11 +73,11 @@ def home():
 #@login_required # Uncomment this line to require login for the friends page
 def friends():
   friends = [
-    {'username': 'Chen ', 'profile_picture': 'chen.png'},
+    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
     {'username': 'Andrea', 'profile_picture': 'andrea.png'},
-    {'username': 'Jia', 'profile_picture': 'jia.png.png'},
+    {'username': 'Jia', 'profile_picture': 'jia.png'},
     {'username': 'David', 'profile_picture': None},
-    {'username': 'Eve', 'profile_picture': 'eve.png'},
+    {'username': 'Eve', 'profile_picture': None},
   ]
   return render_template('friends.html', title='Friends', friends=friends)
 
