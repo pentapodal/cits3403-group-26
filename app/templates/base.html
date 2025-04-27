@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% if title %}
+  {% if title %}
     <title>{{ title }} - Overshare</title>  
     {% else %}
     <title>Overshare</title>
@@ -9,28 +9,28 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="header">
-      <div class="nav-right">
-        {% if current_user.is_anonymous %}
-          <a href="{{ url_for('login') }}" class="nav-btn">Login</a>
-          <a href="{{ url_for('register') }}"class="nav-btn">Register</a>
-        {% else %}
-          <a href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
-      </div>
-    </div>
-        
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul>
-          {% for message in messages %}
-            <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
+  <div class="header">
+    <div class="nav-right">
+      {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}" class="nav-btn">Login</a>
+        <a href="{{ url_for('register') }}"class="nav-btn">Register</a>
+      {% else %}
+        <a href="{{ url_for('logout') }}">Logout</a>
       {% endif %}
-    {% endwith %}
+    </div>
+  </div>
+        
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
 
-    {% block content %}
-    {% endblock %}
+  {% block content %}
+  {% endblock %}
 </body>
 </html>

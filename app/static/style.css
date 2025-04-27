@@ -116,3 +116,31 @@ body {
   color: red;
   font-size: 14px;
 }
+
+/*main page button container*/
+.center-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  gap: 20px;
+}
+
+/*styling for the main page buttons*/
+.main-btn {
+  background-color: white;
+  color: black;
+  padding: 15px 30px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.main-btn:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
