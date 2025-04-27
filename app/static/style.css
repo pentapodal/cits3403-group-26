@@ -1,10 +1,120 @@
-div.header {
-  background-color: pink;
-  padding: 5px;
+/* Full page layout */
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #f000b8 0%, #ff6c00 100%);
+  font-family: 'Lobster', sans-serif;
+  color: white;
+  display: flex;
+
+}
+
+/* Header with absolute positioned buttons */
+.header {
+  position: absolute;
+  top: 20px;
+  /* adds spacing from very top */
+  right: 40px;
+  /* adds spacing from right side */
+  display: flex;
+  justify-content: flex-end;
+  /* push .nav-right to the right */
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Logo styling */
+.center-text {
+  font-size: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* description under the logo */
+.subtitle {
+  font-size: 25px;
+  font-weight: 300;
+  margin-top: 10px;
+  color: #fceff9;
+}
+
+
+/* Button styling */
+.nav-btn {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-right {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  ;
+}
+
+.nav-btn:hover {
+  background-color: #f0f0f0;
+}
+
+/* login and sign up container */
+.form-container {
+  background-color: white;
+  color: black;
+  max-width: 800px;
+  width: 400px;
+  padding: 40px;
+  margin: 120px auto;
+  border-radius: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  text-align: left;
+}
+
+/* Input fields */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+/*labels*/
+.form-group label {
+  font-weight: 600;
+}
+
+/*checkbox and button*/
+.form-check {
+  margin: 10px 0 20px;
+}
+
+.form-submit {
+  text-align: right;
+}
+
+.alt-option {
+  margin-top: 20px;
+  font-size: 14px;
 }
 
 .error {
   color: red;
+  font-size: 14px;
 }
 
 .friends-grid {
@@ -19,4 +129,32 @@ div.header {
   opacity: 60%;
   border-radius: 10px;
   padding: 10px;
+}
+
+/*main page button container*/
+.center-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  gap: 20px;
+}
+
+/*styling for the main page buttons*/
+.main-btn {
+  background-color: white;
+  color: black;
+  padding: 15px 30px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.main-btn:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
 }

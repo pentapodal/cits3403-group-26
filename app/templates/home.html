@@ -2,5 +2,9 @@
 
 {% block content %}
   <h1>Hi, {{ current_user.username }}</h1>
-  <div><p>Home</p></div>
+  <div class="center-buttons">
+    <a href="{{url_for('friends')}}" class="main-btn">Friends</a>
+    <a href="{{url_for('overshare')}}" class="main-btn">View</a>
+    <a hred="{{url_for('upload')}}" class="main-btn">Upload</a>
+  </div>
 {% endblock content %}

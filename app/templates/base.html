@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   {% if title %}
-  <title>{{ title }} - Overshare</title>  
+  <title>{{ title }} - Overshare</title>
   {% else %}
   <title>Overshare</title>
   {% endif %}
@@ -10,25 +10,27 @@
 </head>
 <body>
   <div class="header">
-    Overshare:
-    <a href="{{ url_for('index') }}">Home</a>
-    {% if current_user.is_anonymous %}
-    <a href="{{ url_for('login') }}">Login</a>
-    {% else %}
-    <a href="{{ url_for('logout') }}">Logout</a>
-    <a href="{{ url_for('friends') }}">Friends</a>
-    {% endif %}
+    <div class="nav-right">
+      {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}" class="nav-btn">Login</a>
+        <a href="{{ url_for('register') }}"class="nav-btn">Register</a>
+      {% else %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        <a href="{{ url_for('friends') }}">Friends</a>
+      {% endif %}
+    </div>
   </div>
-  <hr>
+
   {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   {% endwith %}
+
   {% block content %}{% endblock %}
 </body>
 </html>
