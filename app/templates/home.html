@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Hi, {{ current_user.username }}</h1>
+  <h1>Hi, {{ current_user.username }}</h1>
   <div class="center-buttons">
     <a href="{{url_for('friends')}}" class="main-btn">Friends</a>
     <a href="{{url_for('overshare')}}" class="main-btn">View</a>
