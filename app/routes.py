@@ -89,12 +89,9 @@ def upload():
 
 
 @app.route('/overshare')
-@login_required
-def overshare_self():
-  return overshare(current_user.username)
-
-
 @app.route('/overshare/<username>')
 @login_required
-def overshare(username):
+def overshare(username=None):
+  if username is None:
+    username = current_user.username
   return render_template('overshare.html', title='Overshare', username=username)
