@@ -73,9 +73,7 @@ def home():
 @login_required
 def friends():
     # Fetch the current user's friends
-    friends = db.session.scalars(
-        sa.select(User).join(Friend, Friend.friend_id == User.id).where(Friend.user_id == current_user.id, Friend.status == 'accepted')
-    ).all()
+    friends = db.session.scalars(sa.select(User).join(Friend, Friend.friend_id == User.id).where(Friend.user_id == current_user.id, Friend.status == 'accepted')).all()
     return render_template('friends.html', title='Friends', friends=friends)
 
 
@@ -98,11 +96,7 @@ def overshare(username=None):
 @login_required
 def add_friend(friend_id):
     # Check if the friendship already exists
-    existing_friendship = db.session.scalar(
-        sa.select(Friend).where(
-            (Friend.user_id == current_user.id) & (Friend.friend_id == friend_id)
-        )
-    )
+    existing_friendship = db.session.scalar(sa.select(Friend).where((Friend.user_id == current_user.id) & (Friend.friend_id == friend_id)))
     if existing_friendship:
         flash('You are already friends with this user.')
         return redirect(url_for('friends'))
@@ -121,9 +115,7 @@ def search():
     form = SearchForm()
     users = []
     if form.validate_on_submit():
-        users = db.session.scalars(
-            sa.select(User).where(User.username.ilike(f"%{form.username.data}%"))
-        ).all()
+        users = db.session.scalars(sa.select(User).where(User.username.ilike(f"%{form.username.data}%"))).all()
     return render_template('search.html', title='Search Users', form=form, users=users)
 
 
@@ -132,10 +124,7 @@ def search():
 def send_friend_request(friend_id):
     # Check if a request already exists
     existing_request = db.session.scalar(
-        sa.select(Friend).where(
-            (Friend.user_id == current_user.id) & (Friend.friend_id == friend_id)
-        )
-    )
+        sa.select(Friend).where((Friend.user_id == current_user.id) & (Friend.friend_id == friend_id)))
     if existing_request:
         flash('Friend request already sent.')
         return redirect(url_for('search'))
@@ -152,11 +141,7 @@ def send_friend_request(friend_id):
 @login_required
 def friend_requests():
     # Fetch incoming friend requests
-    requests = db.session.scalars(
-        sa.select(Friend).where(
-            (Friend.friend_id == current_user.id) & (Friend.status == 'pending')
-        )
-    ).all()
+    requests = db.session.scalars(sa.select(Friend).where((Friend.friend_id == current_user.id) & (Friend.status == 'pending'))).all()
     return render_template('friend_requests.html', title='Friend Requests', requests=requests)
 
 
