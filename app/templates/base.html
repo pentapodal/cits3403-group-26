@@ -17,9 +17,12 @@
       {% else %}
         <a href="{{ url_for('logout') }}">Logout</a>
         <a href="{{ url_for('friends') }}">Friends</a>
+        <a href="{{ url_for('search') }}">Search Users</a>
+        <a href="{{ url_for('friend_requests') }}">Friend Requests</a>
       {% endif %}
     </div>
   </div>
+
 
   {% with messages = get_flashed_messages() %}
     {% if messages %}
