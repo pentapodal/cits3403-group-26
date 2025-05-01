@@ -128,7 +128,7 @@ body {
 
 .friend-card {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   padding: 10px;
