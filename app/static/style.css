@@ -153,7 +153,6 @@ h1 {
 .friend-grid {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
