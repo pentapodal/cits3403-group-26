@@ -5,7 +5,7 @@
   <div class="friends-container">
 
     <p>Friends</p>
-    <button class="add-friend-btn" onclick="document.getElementById('add-friend-modal').style.display='block'">Add Friend</button>
+    <button id="add-friend-btn" class="nav-btn">Add Friend</button>
 
     <div id="add-friend-modal" class="modal">
       <div class="modal-content">
@@ -29,7 +29,6 @@
         if (event.target == modal) modal.style.display = "none";
       };
       </script>
-
     </div>
 
     <div class="friends-grid">
