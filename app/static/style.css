@@ -119,6 +119,14 @@ body {
 }
 
 /* Friend page styling */
+.friend-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
 .friend-grid {
   display: flex;
   flex-direction: column;
