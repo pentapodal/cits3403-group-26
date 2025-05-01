@@ -41,9 +41,9 @@
 
           
           {% if friend.profile_picture %}
-            <img src="{{ url_for('static', filename='images/profile_pictures/' + friend.profile_picture) }}" alt="pfp" width="50" height="50">
+            <img src="{{ url_for('static', filename='images/profile_pictures/' + friend.profile_picture) }}" class="pfp" alt="pfp">
           {% else %}
-            <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" width="50" height="50">
+            <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" class="pfp" alt="Default pfp">
           {% endif %}
           <span class="friend-username">{{friend.username}}</span>
 
