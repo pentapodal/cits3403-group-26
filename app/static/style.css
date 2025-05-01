@@ -135,7 +135,7 @@ body {
   max-width: 1500px;
   width: 400px;
   padding: 40px;
-  margin: 120px auto;
+  margin: 10px auto;
 }
 
 .friend-list {
@@ -151,11 +151,13 @@ body {
 
 .friend-grid {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   padding: 10px;
+  min-width: 500px;
+  margin: 0 auto;
 }
 
 .friend-card {
@@ -197,6 +199,12 @@ body {
   width: 80%;
   max-width: 500px;
   border-radius: 10px;
+}
+
+.close-btn {
+  color: black;
+  font-size: 24px; /* Optional: adjust size */
+  cursor: pointer; /* Optional: indicates it's clickable */
 }
 
 /*main page button container*/
