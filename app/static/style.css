@@ -119,6 +119,12 @@ body {
 }
 
 /* Friend page styling */
+.h1 {
+  font-size: 40px;
+  text-align: center;
+  margin-top: 20px;
+  color: white;
+}
 .friend-list {
   display: flex;
   flex-direction: row;
@@ -153,7 +159,7 @@ body {
 .friend-username {
   color: white;
   font-weight: 500;
-  font-family: 'Verdana', sans-serif;
+  font-family: 'Lobster', sans-serif;
   font-size: 20px;
   padding: 10px;
 }
