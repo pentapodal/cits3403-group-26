@@ -11,10 +11,23 @@
         <span class="close" onclick="document.getElementById('add-friend-modal').style.display='none'">&times;</span>
         <h2>Add friends</h2>
         <form action="{{ url_for('add_friend') }}" method="POST">
-          <input type="text" name="friend_username" placeholder="Enter friend's username" required>
-          <button type="submit">Send friend request</button>
+          <input type="text" name="friend-username" placeholder="Enter friend's username" required>
+          <button type="submit" class="nav-btn">Send friend request</button>
         </form>
       </div>
+
+      <script>
+      const modal = document.getElementById("add-friend-modal");
+      const btn = document.getElementById("add-friend-btn");
+      const closeBtn = document.querySelector(".close-btn");
+
+      btn.onclick = () => modal.style.display = "block";
+      closeBtn.onclick = () => modal.style.display = "none";
+
+      window.onclick = (event) => {
+        if (event.target == modal) modal.style.display = "none";
+      };
+      </script>
 
     <div class="friends-grid">
 
