@@ -118,6 +118,7 @@ body {
   font-size: 14px;
 }
 
+/* Friend page styling */
 .friend-grid {
   display: flex;
   flex-direction: column;

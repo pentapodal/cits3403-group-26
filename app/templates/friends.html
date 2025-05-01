@@ -5,6 +5,16 @@
   <div class="friends-container">
 
     <p>Friends</p>
+    <button class="add-friend-btn" onclick="document.getElementById('add-friend-modal').style.display='block'">Add Friend</button>
+    <div id="add-friend-modal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="document.getElementById('add-friend-modal').style.display='none'">&times;</span>
+        <h2>Add friends</h2>
+        <form action="{{ url_for('add_friend') }}" method="POST">
+          <input type="text" name="friend_username" placeholder="Enter friend's username" required>
+          <button type="submit">Send friend request</button>
+        </form>
+      </div>
 
     <div class="friends-grid">
 
