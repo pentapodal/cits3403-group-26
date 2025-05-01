@@ -2,58 +2,61 @@
 
 {% block content %}
 
-  <h1>Friends</h1>
-
   <div class="friend-container">
+
+    <h1>Friends</h1>
 
     <button id="add-friend-btn" class="nav-btn">Add Friend</button>
 
-    <div id="add-friend-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Add friends</h2>
-        <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
-          <input type="text" name="friend-username" placeholder="Enter friend's username" required>
-          <button type="submit" class="nav-btn">Send friend request</button>
-        </form>
+    <div class="friend-list">
+
+      <div id="add-friend-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn">&times;</span>
+          <h2>Add friends</h2>
+          <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
+            <input type="text" name="friend-username" placeholder="Enter friend's username" required>
+            <button type="submit" class="nav-btn">Send friend request</button>
+          </form>
+        </div>
+
+        <script>
+        const modal = document.getElementById("add-friend-modal");
+        const btn = document.getElementById("add-friend-btn");
+        const closeBtn = document.querySelector(".close-btn");
+
+        btn.onclick = () => modal.style.display = "block";
+        closeBtn.onclick = () => modal.style.display = "none";
+
+        window.onclick = (event) => {
+          if (event.target == modal) modal.style.display = "none";
+        };
+        </script>
       </div>
 
-      <script>
-      const modal = document.getElementById("add-friend-modal");
-      const btn = document.getElementById("add-friend-btn");
-      const closeBtn = document.querySelector(".close-btn");
+      <div class="friends-grid">
 
-      btn.onclick = () => modal.style.display = "block";
-      closeBtn.onclick = () => modal.style.display = "none";
+        {% for friend in friends %}
 
-      window.onclick = (event) => {
-        if (event.target == modal) modal.style.display = "none";
-      };
-      </script>
-    </div>
+        <div class="friend-card">
 
-    <div class="friends-grid">
+          
+          {% if friend.profile_picture %}
+            <img src="{{ url_for('static', filename='images/profile_pictures/' + friend.profile_picture) }}" alt="pfp" width="50" height="50">
+          {% else %}
+            <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" width="50" height="50">
+          {% endif %}
+          <span class="friend-username">{{friend.username}}</span>
 
-      {% for friend in friends %}
+        </div>
 
-      <div class="friend-card">
-
-        
-        {% if friend.profile_picture %}
-          <img src="{{ url_for('static', filename='images/profile_pictures/' + friend.profile_picture) }}" alt="pfp" width="50" height="50">
         {% else %}
-          <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" width="50" height="50">
-        {% endif %}
-        <span class="friend-username">{{friend.username}}</span>
+        <p>You have no friends yet.</p>
+
+        {% endfor %}
 
       </div>
 
-      {% else %}
-      <p>You have no friends yet.</p>
-
-      {% endfor %}
-
     </div>
-
   </div>
 {% endblock content %}
