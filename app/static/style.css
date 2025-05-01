@@ -135,7 +135,7 @@ h1 {
 
 .friend-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   max-width: 1500px;
