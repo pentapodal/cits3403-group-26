@@ -128,11 +128,6 @@ h1 {
   align-items: center;
 }
 
-.pfp {
-  width: 50%;
-  height: auto;
-}
-
 .friend-container {
   display: flex;
   flex-direction: row;
