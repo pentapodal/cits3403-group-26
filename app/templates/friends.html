@@ -9,20 +9,11 @@
     <div id="add-friend-modal" class="modal">
         <div class="modal-content">
           <span class="close-btn">&times;</span>
-          <h2>Add friends</h2>
-
-          {% for potential in potential_friend %}
+          
           <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
             <input type="text" name="friend-username" placeholder="Enter friend's username" required>
-            {% if potential.profile_picture %}
-              <img src="{{ url_for('static', filename='images/profile_pictures/' + potential.profile_picture) }}" alt="pfp" height="100" width="100">
-            {% else %}
-              <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
-            {% endif %}
-            <span class="friend-username">{{potential.username}}</span>
-            <button type="submit" class="request-btn">Send friend request</button>
+            <button type="submit" class="nav-btn">Send Friend Request</button>
           </form>
-          {% endfor %}
         </div>
 
         <script>
