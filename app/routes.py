@@ -95,3 +95,25 @@ def overshare(username=None):
   if username is None:
     username = current_user.username
   return render_template('overshare.html', title='Overshare', username=username)
+
+
+@app.route('/add_friend', methods=['POST'])
+@login_required
+def add_friend():
+  friend_username = request.form.get('username')
+  
+  user = User.query.filter_by(username=friend_username).first()
+  
+  if not user:
+    flash('User not found')
+    return redirect(url_for('friends'))
+  
+  if user in current_user.friends:
+    flash('You are already friends with this user')
+    return redirect(url_for('friends'))
+  else:
+    current_user.friends.append(user)
+    db.session.commit()
+    flash(f'Friend request sent to {friend_username}!', 'success')
+    
+  return redirect(url_for('friends'))
