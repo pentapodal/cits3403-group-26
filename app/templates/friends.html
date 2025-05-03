@@ -11,6 +11,14 @@
         <div class="modal-content">
           <span class="close-btn">&times;</span>
 
+          <div class="friend-card"
+            {% if current_user.profile_picture %}
+              <img src="{{ url_for('static', filename='images/profile_pictures/' + current_user.profile_picture) }}" alt="pfp" height="100" width="100">
+            {% else %}
+              <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
+            {% endif %}
+            <span class="friend-username">{{current_user.username}}</span>
+
           <!--Friend request form, edit to add route flask thing-->
           <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
             <input type="text" name="friend-username" placeholder="Enter friend's username" required>
