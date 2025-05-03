@@ -11,8 +11,14 @@
         <div class="modal-content">
           <span class="close-btn">&times;</span>
 
-          <!--wont really work, need a route for this, not sure if we will need a separate database for "friends" and "not friends"-->
+          <!--Friend request form, edit to add route flask thing-->
+          <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
+            <input type="text" name="friend-username" placeholder="Enter friend's username" required>
+            <button type="submit" class="nav-btn">Send Friend Request</button>
+          </form>
 
+          <!--wont really work, need a route for this, not sure if we will need a separate database for "friends" and "not friends"-->
+          <!--i added a temporary one in flask-->
           <div class="friend-card"
             {% if potential_friend.profile_picture %}
               <img src="{{ url_for('static', filename='images/profile_pictures/' + potential_friend.profile_picture) }}" alt="pfp" height="100" width="100">
@@ -21,11 +27,7 @@
             {% endif %}
             <span class="friend-username">{{potential_friend.username}}</span>
 
-          <!--Friend request form, edit to add route flask thing-->
-          <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
-            <input type="text" name="friend-username" placeholder="Enter friend's username" required>
-            <button type="submit" class="nav-btn">Send Friend Request</button>
-          </form>
+          
           
           </div>
         </div>
