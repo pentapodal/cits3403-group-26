@@ -10,7 +10,9 @@
         <div class="modal-content">
           <span class="close-btn">&times;</span>
           
-          <form action="{{ url_for('add_friend') }}" method="POST">
+          <!--Edit this part to add Friend functionality-->
+          <!-- <form action="{{ url_for('add_friend') }}" method="POST"> -->
+          <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
             <input type="text" name="friend-username" placeholder="Enter friend's username" required>
             <button type="submit" class="nav-btn">Send Friend Request</button>
           </form>
