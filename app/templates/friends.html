@@ -11,13 +11,15 @@
         <div class="modal-content">
           <span class="close-btn">&times;</span>
 
+          <!--wont really work, need a route for this, not sure if we will need a separate database for "friends" and "not friends"-->
+
           <div class="friend-card"
-            {% if current_user.profile_picture %}
-              <img src="{{ url_for('static', filename='images/profile_pictures/' + current_user.profile_picture) }}" alt="pfp" height="100" width="100">
+            {% if potential_friend.profile_picture %}
+              <img src="{{ url_for('static', filename='images/profile_pictures/' + potential_friend.profile_picture) }}" alt="pfp" height="100" width="100">
             {% else %}
               <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
             {% endif %}
-            <span class="friend-username">{{current_user.username}}</span>
+            <span class="friend-username">{{potential_friend.username}}</span>
 
           <!--Friend request form, edit to add route flask thing-->
           <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
