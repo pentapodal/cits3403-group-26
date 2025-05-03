@@ -9,13 +9,27 @@
     <div id="add-friend-modal" class="modal">
         <div class="modal-content">
           <span class="close-btn">&times;</span>
-          
-          <!--Edit this part to add Friend functionality-->
+
+          {% set placeholder_friends = ['Alice', 'Charlie', 'Ryan']%}
+          {% for user in placeholder_friends%}
+
+        <div class="friend-card">
+          {% if user.profile_picture %}
+            <img src="{{ url_for('static', filename='images/profile_pictures/' + user.profile_picture) }}" alt="pfp" height="100" width="100">
+          {% else %}
+            <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
+          {% endif %}
+          <span class="friend-username">{{user.username}}</span>
+
+          <!--Friend request form, edit to add route flask thing-->
           <!-- <form action="{{ url_for('add_friend') }}" method="POST"> -->
           <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
             <input type="text" name="friend-username" placeholder="Enter friend's username" required>
             <button type="submit" class="nav-btn">Send Friend Request</button>
           </form>
+
+          {% endfor %}
+          
         </div>
 
         <script>
