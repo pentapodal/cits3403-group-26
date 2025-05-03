@@ -181,8 +181,8 @@ h1 {
 
 /*modal window styling*/
 .modal {
-  display: none;
-  position: fixed;
+  display: flex;
+  flex-direction: column;
   z-index: 1000;
   left: 0;
   top: 0;
