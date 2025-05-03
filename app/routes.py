@@ -79,7 +79,12 @@ def friends():
     {'username': 'David', 'profile_picture': None},
     {'username': 'Eve', 'profile_picture': None},
   ]
-  return render_template('friends.html', title='Friends', friends=friends)
+  potential_friends = [
+        {"username": "Alice", "profile_picture": None},
+        {"username": "Ryna", "profile_picture": None},
+  ]
+     
+  return render_template('friends.html', title='Friends', friends=friends, potential_friends=potential_friends)
 
 
 @app.route('/upload')
