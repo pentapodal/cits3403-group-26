@@ -181,8 +181,8 @@ h1 {
 
 /*modal window styling*/
 .modal {
-  display: flex;
-  flex-direction: column;
+  display: none;
+  position: fixed;
   z-index: 1000;
   left: 0;
   top: 0;
@@ -192,6 +192,8 @@ h1 {
 }
 
 .modal-content {
+  display: flex;
+  flex-direction: column;
   background-color: white;
   margin: 15% auto;
   padding: 20px;
