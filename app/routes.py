@@ -5,7 +5,13 @@ import sqlalchemy as sa
 from app import app, db
 from app.forms import LoginForm, RegistrationForm
 from app.models import User
+import zipfile
 
+ALLOWED_EXTENSIONS = {'zip'}
+
+# Helper function to check allowed file extensions
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 @app.route('/index')
@@ -82,10 +88,34 @@ def friends():
   return render_template('friends.html', title='Friends', friends=friends)
 
 
-@app.route('/upload')
+@app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-  return render_template('upload.html', title='Upload')
+    if request.method == 'POST':
+        # Check if the POST request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If no file is selected
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        # Check if the file is allowed
+        if file and allowed_file(file.filename):
+            try:
+                # Verify if the file is a valid ZIP file
+                # Future ref: We will have to analyze ZIP file by calling a function in this try block
+                # from utlis.py
+                with zipfile.ZipFile(file.stream, 'r') as zip_ref:
+                    flash(f'Successfully received ZIP file: {file.filename}')
+            except zipfile.BadZipFile:
+                flash('The uploaded file is not a valid ZIP file.')
+            return redirect(url_for('upload'))
+        else:
+            flash('Only ZIP files are allowed')
+            return redirect(request.url)
+    return render_template('upload.html', title='Upload')
 
 
 @app.route('/overshare')
