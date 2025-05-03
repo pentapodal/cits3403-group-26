@@ -12,11 +12,11 @@
           <span class="close-btn">&times;</span>
 
           <!--Friend request form, edit to add route flask thing-->
-          <!-- This form is a placeholder and won't actually send a request -->
+          <!--this is a placeholder and won't actually send a request -->
           <!-- <form action="{{ url_for('friends') }}" method="POST" -->
           <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
             <input type="text" name="friend-username" placeholder="Enter friend's username" required>
-            <button type="submit" class="nav-btn">Send Friend Request</button>
+            
           </form>
 
           <!--wont really work, need a route for this, not sure if we will need a separate database for "friends" and "not friends"-->
@@ -29,8 +29,10 @@
             {% endif %}
             <span class="friend-username">{{potential_friend.username}}</span>
 
-          
-          
+            <!--this button is a placeholder and won't actually send a request, i will add a svg for it soon -->
+            <!-- <button class="send-request-btn" type="submit">Send Friend Request</button> -->
+            <button type="submit" class="nav-btn">Send Friend Request</button>
+
           </div>
         </div>
 
@@ -65,6 +67,7 @@
           {% endif %}
           <span class="friend-username">{{friend.username}}</span>
 
+          <!--this button is a placeholder and won't actually delete friend, i will add a svg for it soon -->
           <button class="unfriend-btn" onclick="alert('Unfriend functionality not implemented yet');">Unfriend</button>
 
         </div>
