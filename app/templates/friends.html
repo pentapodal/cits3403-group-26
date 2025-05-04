@@ -8,16 +8,17 @@
 
     <!---add friend dialog window -->
     <dialog id="add-friend-dialog" class="dialog">
-      <span class="close-btn" onclick="document.getElementById("add-friend-dialog").close()">&times;</span>
+      <span class="close-btn" onclick="document.getElementById('add-friend-dialog').close()">&times;</span>
 
       <!--Friend request form, edit to add route flask thing-->
       <!--this is a placeholder and won't actually send a request -->
       <!-- <form action="{{ url_for('friends') }}" method="POST" -->
-      <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
+      <form onsubmit="return false;">
         <label for="friend-username">Add friend's usernmae:</label>
         <input type="text" name="friend-username" placeholder="Enter friend's username" required>
         
         <div class="potential-friends-card">
+        <p>Potential friends to add</p>
         {% for potential in potential_friends%}
             <div class="friend-card">
               {% if potential_friends.profile_picture %}
