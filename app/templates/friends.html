@@ -8,37 +8,32 @@
 
     <!---add friend dialog window -->
     <dialog id="add-friend-dialog" class="modal">
-      <form method="dialog"
-          <span class="close-btn" onclick="document.getElementById("add-friend-dialog").close()">&times;</span>
+        <span class="close-btn" onclick="document.getElementById("add-friend-dialog").close()">&times;</span>
 
-          <label for="friend-username">Enter friend's username:</label>
-          <!--Friend request form, edit to add route flask thing-->
-          <!--this is a placeholder and won't actually send a request -->
-          <!-- <form action="{{ url_for('friends') }}" method="POST" -->
-          <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
-            <input type="text" name="friend-username" placeholder="Enter friend's username" required>
-          </form>
-
-          <!--wont really work, need a route for this, not sure if we will need a separate database for "friends" and "not friends"-->
-          <!--i added a temporary one in flask-->
-            {% for potential_friend in potential_friends%}
+        <!--Friend request form, edit to add route flask thing-->
+        <!--this is a placeholder and won't actually send a request -->
+        <!-- <form action="{{ url_for('friends') }}" method="POST" -->
+        <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
+        <label for="friend-username">Add friend's usernmae:</label>
+          <input type="text" name="friend-username" placeholder="Enter friend's username" required>
+        
+        <div class="potential-friend-card">
+        {% for potential in potential_friends%}
             <div class="friend-card">
               {% if potential_friend.profile_picture %}
-                <img src="{{ url_for('static', filename='images/profile_pictures/' + potential_friend.profile_picture) }}" alt="pfp" height="100" width="100">
-              {% else %}
-                <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
-              {% endif %}
-              <span class="friend-username">{{potential_friend.username}}</span>
+              <img src="{{ url_for('static', filename='images/profile_pictures/' + potential_friend.profile_picture) }}" alt="pfp" height="100" width="100">
+            {% else %}
+              <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
+            {% endif %}
+            <span class="friend-username">{{potential_friend.username}}</span>
               <!--this button is a placeholder and won't actually send a request, will set the svg for it soon -->
               <!-- <button class="send-request-btn" type="submit">Send Friend Request</button> -->
-              <button type="submit" class="nav-btn">Send Friend Request</button>
-
+            <button type="submit" class="nav-btn">Send Friend Request</button>
             </div>
-            {% endfor %}
-          </form>
+          {% endfor %}
         </div>
-        </div>
-        </dialog>
+      </form>
+    </dialog>
 
         <script>
         document.getElementById("add-friend-dialog").showModal();
