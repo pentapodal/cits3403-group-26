@@ -2,31 +2,86 @@
 
 {% block content %}
 
-  <div class="friends-container">
+  <div class="friend-container">
+    <h1>Friends</h1> 
+    <button id="add-friend-btn" class="nav-btn">Add Friend</button>
 
-    <p>Friends</p>
+    <!---add friend dialog window -->
+    <dialog id="add-friend-dialog" class="dialog">
+      <span class="close-btn" onclick="document.getElementById('add-friend-dialog').close()">&times;</span>
 
-    <div class="friends-grid">
+      <!--Friend request form, edit to add route flask thing-->
+      <!--this is a placeholder and won't actually send a request -->
+      <!-- <form action="{{ url_for('friends') }}" method="POST" -->
+      <form onsubmit="return false;">
+        <label for="friend-username">Add friend's usernmae:</label>
+        <input type="text" name="friend-username" placeholder="Enter friend's username" required>
+        
+        <div class="potential-friends-card">
+        <p>Potential friends to add</p>
+        {% for potential in potential_friends%}
+            <div class="friend-card">
+              {% if potential.profile_picture %}
+              <img src="{{ url_for('static', filename='images/profile_pictures/' + potential.profile_picture) }}" alt="pfp" height="100" width="100">
+            {% else %}
+              <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
+            {% endif %}
+            <span class="friend-username">{{potential.username}}</span>
+              <!--this button is a placeholder and won't actually send a request, will set the svg for it soon -->
+              <!-- <button class="send-request-btn" type="submit">Send Friend Request</button> -->
+            <button type="submit" class="nav-btn">Send Friend Request</button>
+            
+            </div>
 
-      {% for friend in friends %}
+          {% endfor %}
 
-      <div class="friend-card">
+        </div>
 
-        {{ friend.username }}
-        {% if friend.profile_picture %}
-          <img src="{{ url_for('static', filename='images/profile_pictures/' + friend.profile_picture) }}" alt="pfp" width="50" height="50">
+      </form>
+
+    </dialog>
+
+        <script>
+        const dialog = document.getElementById("add-friend-dialog");
+        const btn = document.getElementById("add-friend-btn");
+        const closeBtn = document.querySelector(".close-btn");
+
+        btn.onclick = () => dialog.showModal();
+
+        window.onclick = (event) => {
+          if (event.target == dialog) dialog.close();
+        };
+        </script>
+    </div>
+
+    <div class="friend-list">
+
+      <div class="friend-grid">
+
+        {% for friend in friends %}
+
+        <div class="friend-card">
+
+          
+          {% if friend.profile_picture %}
+            <img src="{{ url_for('static', filename='images/profile_pictures/' + friend.profile_picture) }}" alt="pfp" height="100" width="100">
+          {% else %}
+            <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
+          {% endif %}
+          <span class="friend-username">{{friend.username}}</span>
+
+          <!--this button is a placeholder and won't actually delete friend, will set svg for it soon -->
+          <button class="nav-btn" onclick="alert('Unfriend functionality not implemented yet');">Unfriend</button>
+
+        </div>
+
         {% else %}
-          <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" width="50" height="50">
-        {% endif %}
+        <p>You have no friends yet.</p>
+
+        {% endfor %}
 
       </div>
 
-      {% else %}
-      <p>You have no friends yet.</p>
-
-      {% endfor %}
-
     </div>
-
   </div>
 {% endblock content %}
