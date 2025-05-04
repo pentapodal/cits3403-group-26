@@ -17,15 +17,15 @@
         <label for="friend-username">Add friend's usernmae:</label>
           <input type="text" name="friend-username" placeholder="Enter friend's username" required>
         
-        <div class="potential-friend-card">
+        <div class="potential-friends-card">
         {% for potential in potential_friends%}
             <div class="friend-card">
-              {% if potential_friend.profile_picture %}
+              {% if potential_friends.profile_picture %}
               <img src="{{ url_for('static', filename='images/profile_pictures/' + potential_friend.profile_picture) }}" alt="pfp" height="100" width="100">
             {% else %}
               <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
             {% endif %}
-            <span class="friend-username">{{potential_friend.username}}</span>
+            <span class="friend-username">{{potential_friends.username}}</span>
               <!--this button is a placeholder and won't actually send a request, will set the svg for it soon -->
               <!-- <button class="send-request-btn" type="submit">Send Friend Request</button> -->
             <button type="submit" class="nav-btn">Send Friend Request</button>
