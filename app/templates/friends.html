@@ -7,15 +7,15 @@
     <button id="add-friend-btn" class="nav-btn">Add Friend</button>
 
     <!---add friend dialog window -->
-    <dialog id="add-friend-dialog" class="modal">
-        <span class="close-btn" onclick="document.getElementById("add-friend-dialog").close()">&times;</span>
+    <dialog id="add-friend-dialog" class="dialog">
+      <span class="close-btn" onclick="document.getElementById("add-friend-dialog").close()">&times;</span>
 
-        <!--Friend request form, edit to add route flask thing-->
-        <!--this is a placeholder and won't actually send a request -->
-        <!-- <form action="{{ url_for('friends') }}" method="POST" -->
-        <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
+      <!--Friend request form, edit to add route flask thing-->
+      <!--this is a placeholder and won't actually send a request -->
+      <!-- <form action="{{ url_for('friends') }}" method="POST" -->
+      <form onsubmit="alert('Friend request functionality not implemented yet'); return false;">
         <label for="friend-username">Add friend's usernmae:</label>
-          <input type="text" name="friend-username" placeholder="Enter friend's username" required>
+        <input type="text" name="friend-username" placeholder="Enter friend's username" required>
         
         <div class="potential-friends-card">
         {% for potential in potential_friends%}
@@ -29,10 +29,15 @@
               <!--this button is a placeholder and won't actually send a request, will set the svg for it soon -->
               <!-- <button class="send-request-btn" type="submit">Send Friend Request</button> -->
             <button type="submit" class="nav-btn">Send Friend Request</button>
+            
             </div>
+
           {% endfor %}
+
         </div>
+
       </form>
+
     </dialog>
 
         <script>
@@ -46,7 +51,6 @@
           if (event.target == dialog) dialog.close();
         };
         </script>
-
     </div>
 
     <div class="friend-list">
@@ -66,7 +70,7 @@
           <span class="friend-username">{{friend.username}}</span>
 
           <!--this button is a placeholder and won't actually delete friend, will set svg for it soon -->
-          <button class="unfriend-btn" onclick="alert('Unfriend functionality not implemented yet');">Unfriend</button>
+          <button class="nav-btn" onclick="alert('Unfriend functionality not implemented yet');">Unfriend</button>
 
         </div>
 
