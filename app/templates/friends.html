@@ -36,19 +36,14 @@
     </dialog>
 
         <script>
-        document.getElementById("add-friend-dialog").showModal();
-        document.getElementById("add-friend-dialog").close();
-
-
-        const modal = document.getElementById("add-friend-modal");
+        const dialog = document.getElementById("add-friend-dialog");
         const btn = document.getElementById("add-friend-btn");
         const closeBtn = document.querySelector(".close-btn");
 
-        btn.onclick = () => modal.style.display = "block";
-        closeBtn.onclick = () => modal.style.display = "none";
+        btn.onclick = () => dialog.showModal();
 
         window.onclick = (event) => {
-          if (event.target == modal) modal.style.display = "none";
+          if (event.target == dialog) dialog.close();
         };
         </script>
 
