@@ -55,13 +55,14 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
+
 
 .nav-right {
   display: flex;
   gap: 20px;
   align-items: center;
-  ;
 }
 
 .nav-btn:hover {
@@ -117,18 +118,100 @@ body {
   font-size: 14px;
 }
 
-.friends-grid {
-  display: grid;
+/* Friend page styling */
+h1 {
+  font-size: 40px;
+  text-align: center;
+  color: white;
+  margin: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.friend-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  max-width: 1500px;
+  width: 80%;
+  padding: 20px;
+  margin: 10px auto;
+}
+
+.friend-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  width: 80%;
+  padding: 40px;
+  margin: 10px auto;
+}
+
+.friend-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
+  padding: 10px;
+  margin: 0 auto;
+}
+
+.friend-card {
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  padding: 5px;
+  margin: 10px auto;
+  width: 280px;
+  height: 100px;
+}
+
+.friend-username {
+  color: white;
+  font-weight: 500;
+  font-family: 'Lobster', sans-serif;
+  font-size: 20px;
   padding: 10px;
 }
 
-.friends-card {
-  background-color: black;
-  opacity: 60%;
+/*modal window styling*/
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
   border-radius: 10px;
-  padding: 10px;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* optional spacing */
+}
+
+
+.close-btn {
+  color: black;
+  font-size: 24px; /* Optional: adjust size */
+  cursor: pointer; /* Optional: indicates it's clickable */
 }
 
 /*main page button container*/
