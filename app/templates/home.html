@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <h1 class="welcome-msg">Hi, {{ current_user.username }}</h1>
   <div class="center-buttons">
     <a href="{{url_for('overshare')}}" class="main-btn">View</a>
     <a href="{{url_for('upload')}}" class="main-btn">Upload Data</a>
