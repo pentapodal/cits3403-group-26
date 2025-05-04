@@ -7,7 +7,7 @@
     <button id="add-friend-btn" class="nav-btn">Add Friend</button>
 
     <!---add friend dialog window -->
-    <div id="add-friend-dialog" class="dialog">
+    <dialog id="add-friend-dialog" class="modal">
       <form method="dialog"
           <span class="close-btn" onclick="document.getElementById("add-friend-dialog").close()">&times;</span>
 
@@ -29,14 +29,16 @@
                 <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
               {% endif %}
               <span class="friend-username">{{potential_friend.username}}</span>
-            <!--this button is a placeholder and won't actually send a request, will set the svg for it soon -->
-            <!-- <button class="send-request-btn" type="submit">Send Friend Request</button> -->
-            <button type="submit" class="nav-btn">Send Friend Request</button>
+              <!--this button is a placeholder and won't actually send a request, will set the svg for it soon -->
+              <!-- <button class="send-request-btn" type="submit">Send Friend Request</button> -->
+              <button type="submit" class="nav-btn">Send Friend Request</button>
 
             </div>
             {% endfor %}
           </form>
         </div>
+        </div>
+        </dialog>
 
         <script>
         document.getElementById("add-friend-dialog").showModal();
