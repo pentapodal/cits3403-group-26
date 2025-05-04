@@ -1,9 +1,13 @@
+import os
 from urllib.parse import urlsplit
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
+from flask_wtf.file import FileStorage
+from werkzeug.utils import secure_filename
+from zipfile import ZipFile, BadZipFile
 import sqlalchemy as sa
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, UploadForm
 from app.models import User
 
 
@@ -80,17 +84,29 @@ def friends():
     {'username': 'Eve', 'profile_picture': None},
   ]
   potential_friends = [
-        {"username": "Alice", "profile_picture": None},
-        {"username": "Ryna", "profile_picture": None},
+    {"username": "Alice", "profile_picture": None},
+    {"username": "Ryna", "profile_picture": None},
   ]
-     
+
   return render_template('friends.html', title='Friends', friends=friends, potential_friends=potential_friends)
 
 
-@app.route('/upload')
+@app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-  return render_template('upload.html', title='Upload')
+  form = UploadForm()
+  if form.validate_on_submit():
+    file: FileStorage = form.file.data
+    try:
+      with ZipFile(file.stream) as archive:
+        pass
+      filename = secure_filename(file.filename)
+      file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+      return redirect(url_for('home'))
+    except BadZipFile as error:
+      flash(str(error))
+      return redirect(request.url)
+  return render_template('upload.html', title='Upload', form=form)
 
 
 @app.route('/overshare')
