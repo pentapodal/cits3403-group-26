@@ -9,8 +9,9 @@
     <!---add friend dialog window -->
     <div id="add-friend-dialog" class="dialog">
       <form method="dialog"
-          <span class="close-btn">&times;</span>
+          <span class="close-btn" onclick="document.getElementById("add-friend-dialog").close()">&times;</span>
 
+          <label for="friend-username">Enter friend's username:</label>
           <!--Friend request form, edit to add route flask thing-->
           <!--this is a placeholder and won't actually send a request -->
           <!-- <form action="{{ url_for('friends') }}" method="POST" -->
@@ -32,11 +33,16 @@
             <!-- <button class="send-request-btn" type="submit">Send Friend Request</button> -->
             <button type="submit" class="nav-btn">Send Friend Request</button>
 
-          </div>
+            </div>
             {% endfor %}
+          </form>
         </div>
 
         <script>
+        document.getElementById("add-friend-dialog").showModal();
+        document.getElementById("add-friend-dialog").close();
+
+
         const modal = document.getElementById("add-friend-modal");
         const btn = document.getElementById("add-friend-btn");
         const closeBtn = document.querySelector(".close-btn");
