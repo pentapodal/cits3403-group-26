@@ -1,9 +1,9 @@
+import json
 import os
 from urllib.parse import urlsplit
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_wtf.file import FileStorage
-from werkzeug.utils import secure_filename
 from zipfile import ZipFile, BadZipFile
 import sqlalchemy as sa
 from app import app, db
@@ -99,13 +99,15 @@ def upload():
     file: FileStorage = form.file.data
     try:
       with ZipFile(file.stream) as archive:
-        pass
-      filename = secure_filename(file.filename)
-      file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
-      return redirect(url_for('home'))
-    except BadZipFile as error:
+        with archive.open('your_instagram_activity/likes/liked_posts.json') as f:
+          likes_count = len(json.load(f)['likes_media_likes'])
+      path = os.path.join(app.config['UPLOAD_PATH'], f'{current_user.get_id()}.json')
+      with open(path, 'w') as f:
+        json.dump({'likes_count': likes_count}, f)
+    except (BadZipFile, OSError) as error:
       flash(str(error))
-      return redirect(request.url)
+    finally:
+      return redirect(url_for('upload'))
   return render_template('upload.html', title='Upload', form=form)
 
 
