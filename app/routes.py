@@ -101,6 +101,8 @@ def upload():
       with ZipFile(file.stream) as archive:
         with archive.open('your_instagram_activity/likes/liked_posts.json') as f:
           likes_count = len(json.load(f)['likes_media_likes'])
+      if not os.path.isdir(app.config['UPLOAD_PATH']):
+        os.mkdir(app.config['UPLOAD_PATH'])
       path = os.path.join(app.config['UPLOAD_PATH'], f'{current_user.get_id()}.json')
       with open(path, 'w') as f:
         json.dump({'likes_count': likes_count}, f)
