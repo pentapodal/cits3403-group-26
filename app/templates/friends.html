@@ -4,18 +4,21 @@
 
   <div class="container my-3 pt-5 pb-3 d-flex ">
     <div class="d-flex justify-content-center align-items-center">
-    <h1>Friends</h1> 
-    <button class="btn btn-secondary mb-3" style="text-decoration: none;">
-      <!--change url-->
-      <a href="{{ url_for('follow_requests') }}">Add Friend</a>
-    </button>
-    <button class="btn btn-secondary mb-3" style="text-decoration: none;">
-      <a href="{{ url_for('follow_requests') }}" class="text-white">Friend Requests</a>
-    </button>
+      <h1>Friends</h1> 
+      <div class="d-flex flex-column">
+        <button class="btn btn-info mb-3">
+          <!--change url-->
+          <a href="{{ url_for('follow_requests') }}" class="text-white" style="text-decoration: none;">Add Friend</a>
+        </button>
 
+        <button class="btn btn-info mb-3">
+          <a href="{{ url_for('follow_requests') }}" class="text-white" style="text-decoration: none;">Friend Requests</a>
+        </button>
+      </div>
     </div>
 
     <div class="container p-3 my-1 d-flex flex-column text-white hide-scrollbar" style="max-height: 200vh; overflow-y: auto;">
+      <h2> Following </h2>
       
       {% for friend in friends%}
         <div class="card text-white" style="background-color: rgba(0, 0, 0, 0.6);">

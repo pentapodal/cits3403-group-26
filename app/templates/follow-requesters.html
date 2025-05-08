@@ -1,0 +1,20 @@
+{% extends "base.html"%}
+
+{% block content%}
+
+    <div class="container my-3 pt-5 pb-3 d-flex ">
+        <div class="d-flex justify-content-center align-items-center">
+            <h1>Friends</h1>
+            
+            <button class="btn btn-info m-3" >
+                <!--change url-->
+                <a href="{{ url_for('follow_requests') }}" class="text-white" style="text-decoration: none;">Add Friend</a>
+              </button>
+              <button class="btn btn-info m-3">
+                <a href="{{ url_for('friends') }}" class="text-white" style="text-decoration: none;">Friends</a>
+              </button>
+
+        </div>
+    </div>
+
+{% endblock content%}
