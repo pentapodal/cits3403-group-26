@@ -2,13 +2,15 @@
 
 {% block content %}
 
-  <div class="container my-3 pt-5 pb-3 d-flex ">
+  <div class="container my-3 pt-1 pb-3 d-flex">
     <div class="d-flex justify-content-center align-items-center text-white">
       <h1 class="p-2">Friends</h1> 
       <div class="d-flex flex-column">
 
         <form action="{{ url_for('follow_requesters') }}" method="get" class="mb-3 p-2">
-          <button type="submit" class="btn btn-info w-100 text-white">Received</button>
+          <button type="submit" class="btn btn-info w-100 text-white">Received
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+          </button>
         </form>
         
         <form action="{{ url_for('follow_requestings') }}" method="get" class="mb-3 p-2">
@@ -17,11 +19,12 @@
       </div>
     </div>
 
-    <div class="container p-3 my-1 d-flex flex-column text-white hide-scrollbar" style="max-height: 200vh; overflow-y: auto;">
+    <div class="container p-3 my-1 d-flex flex-column text-white hide-scrollbar h-100" style="max-height: 200vh; overflow-y: auto;">
       <h2> Following </h2>
       
       {% for friend in friends%}
-      <div class="card text-white" style="background-color: rgba(0, 0, 0, 0.6);">
+      <div class="card text-white m-2" style="background-color: rgba(0, 0, 0, 0.6);">
+        <div class="d-flex justify-content-between align-items-center p-2">
           {% if friend.profile_picture%}
             <img src="{{ url_for('static', filename='images/profile_pictures/' + friend.profile_picture)}}" class="rounded-circle" alt="pfp" height="100" width="100">
           {% else%}
@@ -29,12 +32,12 @@
           {% endif%}
           <span class="fs-5"> {{friend.username}} </span>
 
-          <form method="POST" action="{{ url_for('cancel_follow_request', username=request.username) }}">
-              <button type="submit" class="btn btn-sm btn-success">Cancel</button>
+          <form method="POST" action="{{ url_for('remove_follower', username=request.username) }}">
+              <button type="submit" class="btn btn-m btn-warning justify-content-end">Remove</button>
           </form>
         </div>
-        
-        {% else%}
+      </div>
+      {% else%}
         <p>You have no friends yet </p>
       {% endfor%}
       </div>
