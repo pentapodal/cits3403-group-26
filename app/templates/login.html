@@ -1,38 +1,45 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="form-container">
-  <h1>Login</h1>
-  <form action="" method="post" novalidate>
-    {{ form.hidden_tag() }}
+<div class="container mt-5 pt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="form-container">
+        <h1 class="text-center mb-4">Login</h1>
+        <form action="" method="post" novalidate>
+          {{ form.hidden_tag() }}
 
-    <div class="form-group">
-      {{ form.username.label }}
-      {{ form.username(class="form-input") }}
-      {% for error in form.username.errors %}
-        <span class="error">[{{ error }}]</span>
-      {% endfor %}
+          <div class="form-group mb-3">
+            {{ form.username.label }}
+            {{ form.username(class="form-input form-control") }}
+            {% for error in form.username.errors %}
+              <span class="error">[{{ error }}]</span>
+            {% endfor %}
+          </div>
+
+          <div class="form-group mb-3">
+            {{ form.password.label }}
+            {{ form.password(class="form-input form-control") }}
+            {% for error in form.password.errors %}
+              <span class="error">[{{ error }}]</span>
+            {% endfor %}
+          </div>
+
+          <div class="form-check mb-3">
+            {{ form.remember_me(class="form-check-input") }}
+            {{ form.remember_me.label(class="form-check-label") }}
+          </div>
+
+          <div class="form-submit text-end">
+            {{ form.submit(class="nav-btn") }}
+          </div>
+
+          <p class="alt-option text-center">
+            New User? <a href="{{ url_for('register') }}">Click to Register!</a>
+          </p>
+        </form>
+      </div>
     </div>
-
-    <div class="form-group">
-      {{ form.password.label }}
-      {{ form.password(class="form-input") }}
-      {% for error in form.password.errors %}
-        <span class="error">[{{ error }}]</span>
-      {% endfor %}
-    </div>
-
-    <div class="form-check">
-      {{ form.remember_me() }} {{ form.remember_me.label }}
-    </div>
-
-    <div class="form-submit">
-      {{ form.submit(class="nav-btn") }}
-    </div>
-
-    <p class="alt-option">
-      New User? <a href="{{ url_for('register') }}">Click to Register!</a>
-    </p>
-  </form>
+  </div>
 </div>
 {% endblock %}
