@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed, FileSize
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 import sqlalchemy as sa
@@ -32,3 +33,14 @@ class RegistrationForm(FlaskForm):
       User.email == email.data))
     if user is not None:
       raise ValidationError('Please use a different email address.')
+
+
+class UploadForm(FlaskForm):
+  file = FileField('File', validators=[
+    FileRequired(), FileAllowed(['zip']), FileSize(100_000_000)
+  ])
+  submit = SubmitField('Upload')
+
+
+class EmptyForm(FlaskForm):
+  submit = SubmitField('Submit')
