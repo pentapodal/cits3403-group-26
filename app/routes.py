@@ -100,3 +100,8 @@ def overshare(username=None):
   if username is None:
     username = current_user.username
   return render_template('overshare.html', title='Overshare', username=username)
+
+@app.route('/follow-request')
+@login_required
+def follow_requests():
+    return render_template('follow-request.html', title='Follow Request')

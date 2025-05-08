@@ -1,0 +1,34 @@
+{% extends "base.html"%}
+
+{% block content%}
+
+    <<div class="container my-3 pt-5 pb-3 d-flex ">
+        <div class="d-flex justify-content-center align-items-center">
+            <h1>Friend Requests</h1>
+            
+            <button class="btn btn-secondary mb-3" style="text-decoration: none;">
+                <!--change url-->
+                <a href="{{ url_for('follow_requests') }}">Add Friend</a>
+              </button>
+              <button class="btn btn-secondary mb-3" style="text-decoration: none;">
+                <a href="{{ url_for('friends') }}" class="text-white">Friends</a>
+              </button>
+
+        </div>
+
+        <div class="container p-3 my-1 d-flex flex-column text-white hide-scrollbar" style="max-height: 200vh; overflow-y: auto;">
+            {% for request in friend_requests %}
+                <div class="card text-white" style="background-color: rgba(0, 0, 0, 0.6);">
+                    {% if request.profile_picture %}
+                        <img src="{{ url_for('static', filename='images/profile_pictures/' + request.profile_picture) }}" class="rounded-circle" alt="pfp" height="100" width="100">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" class="rounded-circle" alt="pfp" height="100" width="100">
+                    {% endif %}
+                    <span class="friend-username">{{ request.username }}</span>
+                    <button class="btn btn-success" onclick="alert('Accept functionality not implemented yet');">Accept</button>
+                    <button class="btn btn-danger" onclick="alert('Decline functionality not implemented yet');">Decline</button>
+                </div>
+            {% endfor %}
+        </div>
+
+{% endblock content%}

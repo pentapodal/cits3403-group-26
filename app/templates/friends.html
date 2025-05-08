@@ -2,51 +2,20 @@
 
 {% block content %}
 
-  <div class="container my-3 d-flex bg-dark ">
-    <!--added color to help visualize containers-->
+  <div class="container my-3 pt-5 pb-3 d-flex ">
     <div class="d-flex justify-content-center align-items-center">
     <h1>Friends</h1> 
-    <button id="add-friend-btn" class="btn btn-primary mb-3">Add Friend</button>
+    <button class="btn btn-secondary mb-3" style="text-decoration: none;">
+      <!--change url-->
+      <a href="{{ url_for('follow_requests') }}">Add Friend</a>
+    </button>
+    <button class="btn btn-secondary mb-3" style="text-decoration: none;">
+      <a href="{{ url_for('follow_requests') }}" class="text-white">Friend Requests</a>
+    </button>
 
-    <!---add friend dialog window -->
-    <dialog id="add-friend-dialog" class="p-4 rounded" style="border: none; max-width: 600px;">
-      <span class="btn-close float-end" onclick="document.getElementById('add-friend-dialog').close()"></span>
-
-      <!--Friend request form, edit to add route flask thing-->
-      <!--this is a placeholder and won't actually send a request -->
-      <!-- <form action="{{ url_for('friends') }}" method="POST" -->
-      <form onsubmit="return false;">
-        <label for="friend-username">Add friend's usernmae:</label>
-        <input type="text" name="friend-username" placeholder="Enter friend's username" required>
-        
-        <div class="mb-3">
-          <p>Potential friends to add</p>
-          <div class="row">
-            {% for potential in potential_friends%}
-                <div class="col-md-3 mb-6 card text-center">
-                  {% if potential.profile_picture %}
-                  <img src="{{ url_for('static', filename='images/profile_pictures/' + potential.profile_picture) }}" class="rounded-circle" height="100" width="100">
-                {% else %}
-                  <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" class="rounded-circle" height="100" width="100">
-                {% endif %}
-                <span class="friend-username">{{potential.username}}</span>
-                  <!--this button is a placeholder and won't actually send a request, will set the svg for it soon -->
-                  <!-- <button class="send-request-btn" type="submit">Send Friend Request</button> -->
-                <button type="submit" class="nav-btn">Send Friend Request</button>
-                
-                </div>
-
-              {% endfor %}
-
-            </div>
-          </div>
-
-      </form>
-
-    </dialog>
     </div>
 
-    <div class="container p-3 my-1 d-flex flex-column text-white bg-info hide-scrollbar" style="max-height: 200vh; overflow-y: auto;">
+    <div class="container p-3 my-1 d-flex flex-column text-white hide-scrollbar" style="max-height: 200vh; overflow-y: auto;">
       
       {% for friend in friends%}
         <div class="card text-white" style="background-color: rgba(0, 0, 0, 0.6);">
