@@ -2,26 +2,11 @@
 body {
   margin: 0;
   padding: 0;
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(135deg, #f000b8 0%, #ff6c00 100%);
   font-family: 'Lobster', sans-serif;
   color: white;
-  display: flex;
 
-}
-
-/* Header with absolute positioned buttons */
-.header {
-  position: absolute;
-  top: 20px;
-  /* adds spacing from very top */
-  right: 40px;
-  /* adds spacing from right side */
-  display: flex;
-  justify-content: flex-end;
-  /* push .nav-right to the right */
-  width: 100%;
-  z-index: 1000;
 }
 
 /* Logo styling */
@@ -57,12 +42,6 @@ body {
   transition: all 0.3s ease;
 }
 
-.nav-right {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  ;
-}
 
 .nav-btn:hover {
   background-color: #f0f0f0;
@@ -91,20 +70,6 @@ body {
   border-radius: 8px;
   box-sizing: border-box;
   font-size: 16px;
-}
-
-/*labels*/
-.form-group label {
-  font-weight: 600;
-}
-
-/*checkbox and button*/
-.form-check {
-  margin: 10px 0 20px;
-}
-
-.form-submit {
-  text-align: right;
 }
 
 .alt-option {

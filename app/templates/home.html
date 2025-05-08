@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Hi, {{ current_user.username }}</h1>
+<div class="container pt-5 mt-5 text-center">
+  <h1 class="mb-4">Hi, {{ current_user.username }}</h1>
   <div class="center-buttons">
     <a href="{{url_for('friends')}}" class="main-btn">Friends</a>
     <a href="{{url_for('overshare')}}" class="main-btn">View</a>
     <a href="{{url_for('upload')}}" class="main-btn">Upload</a>
   </div>
-{% endblock content %}
+</div>
+{% endblock %}
