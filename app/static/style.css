@@ -84,14 +84,7 @@ body {
 }
 
 /* Friend page styling */
-h1 {
-  font-size: 40px;
-  text-align: center;
-  color: white;
-  margin: 10px;
-  justify-content: center;
-  align-items: center;
-}
+
 
 .friend-container {
   display: flex;
@@ -113,27 +106,6 @@ h1 {
   width: 80%;
   padding: 40px;
   margin: 10px auto;
-}
-
-.friend-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  padding: 10px;
-  margin: 0 auto;
-}
-
-.friend-card {
-  display: flex;
-  flex-direction: row;
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 10px;
-  padding: 5px;
-  margin: 10px auto;
-  width: 280px;
-  height: 100px;
 }
 
 .friend-username {
@@ -170,13 +142,6 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 10px; /* optional spacing */
-}
-
-
-.close-btn {
-  color: black;
-  font-size: 24px; /* Optional: adjust size */
-  cursor: pointer; /* Optional: indicates it's clickable */
 }
 
 /*main page button container*/

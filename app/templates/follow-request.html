@@ -2,34 +2,49 @@
 
 {% block content%}
 
-    <div class="container my-3 pt-5 pb-3 d-flex ">
-        <div class="d-flex justify-content-center align-items-center">
-            <h1>Friends</h1> 
-            <div class="d-flex flex-column">
+  <div class="container my-3 pt-5 pb-3 d-flex ">
+    <div class="d-flex justify-content-center align-items-center text-white">
+      <h1 class="p-2">Friends</h1> 
+      <div class="d-flex flex-column">
+        <button class="btn btn-info mb-3">
+          <!--change url-->
+          <a href="{{ url_for('friends') }}" class="text-white" style="text-decoration: none;">Friends</a>
+        </button>
 
-              <button class="btn btn-info mb-3">
-                <a href="{{ url_for('friends') }}" class="text-white" style="text-decoration: none;">Friends</a>
-              </button>
+        <button class="btn btn-info mb-3">
+          <a href="{{ url_for('follow_requestings') }}" class="text-white" style="text-decoration: none;">Sent</a>
+        </button>
+      </div>
+    </div>
 
-              <button class="btn btn-info mb-3">
-                <a href="{{ url_for('follow_requestings') }}" class="text-white" style="text-decoration: none;">Sent</a>
-              </button>
+    <div class="container p-3 my-1 d-flex flex-column text-white hide-scrollbar" style="max-height: 200vh; overflow-y: auto; background-color: rgba(0, 0, 0, 0.6);">
+      <h2> Incoming Friend Requests </h2>
 
-            </div>
-          </div>
+      <div class="mb-3">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search for friends">
+      </div>
 
-        <div class="container p-3 my-1 d-flex flex-column text-white hide-scrollbar" style="max-height: 200vh; overflow-y: auto; background-color: rgba(0, 0, 0, 0.6);">
-            <h2> Incoming Friend Requests </h2>
+      {% if friend_requests|length == 0 %}
+        <p>You have no incoming friend requests.</p>
+      {% endif %}
+      
+      {% for request in friend_requests%}
+      <div class="card text-white" style="background-color: rgba(0, 0, 0, 0.6);">
+          {% if friend.profile_picture%}
+            <img src="{{ url_for('static', filename='images/profile_pictures/' + request.profile_picture)}}" class="rounded-circle" alt="pfp" height="100" width="100">
+          {% else%}
+            <img src="{{ url_for('static', filename="images/profile_pictures/default.png")}}" class="rounded-circle" alt="pfp" height="100" width="100">
+          {% endif%}
+          <span class="fs-5"> {{request.username}} </span>
 
-            <div class="mb-3">
-              <input type="text" class="form-control" id="searchInput" placeholder="Search for friends">
-            </div>
+          <form method="POST" action="{{ url_for('cancel_follow_request', username=request.username) }}">
+              <button type="submit" class="btn btn-sm btn-success">Cancel</button>
+          </form>
+        </div>
+        {% endfor%}
+        
 
-            {% if friend_requests|length == 0 %}
-                <p>You have no incoming friend requests.</p>
-            {% endif %}
-
-            {% for request in friend_requests%}
+        {% for request in friend_requests%}
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
                     {% if user.profile_picture%}
@@ -41,18 +56,17 @@
                 </div>
 
                 <form method="POST" action="{{ url_for('accept_friend_request', username=request.username) }}">
-                  {{ form.hidden_tag() }}
                     <button type="submit" class="btn btn-sm btn-success">Accept</button>
                 </form>
                 <form method="POST" action="{{ url_for('dismiss_follow_requester', username=request.username) }}">
-                  {{ form.hidden_tag() }}
                     <button type="submit" class="btn btn-sm btn-warning">Decline</button>
                 </form>
-            {% endfor%}
-            
-        </div>
+            </li>
+        {% endfor%}
 
+      </div>
     </div>
+  </div>
 
     <script>
       document.getElementById('searchInput').addEventListener('input', function () {
