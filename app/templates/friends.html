@@ -2,9 +2,9 @@
 
 {% block content %}
 
-  <div class="container-fluid min-h-100 my-3 d-flex flex-column bg-dark">
+  <div class="container my-3 d-flex bg-dark ">
     <!--added color to help visualize containers-->
-    <div class=" justify-content-end align-items-center">
+    <div class="d-flex justify-content-center align-items-center">
     <h1>Friends</h1> 
     <button id="add-friend-btn" class="btn btn-primary mb-3">Add Friend</button>
 
@@ -25,9 +25,9 @@
             {% for potential in potential_friends%}
                 <div class="col-md-3 mb-6 card text-center">
                   {% if potential.profile_picture %}
-                  <img src="{{ url_for('static', filename='images/profile_pictures/' + potential.profile_picture) }}" alt="pfp" height="100" width="100">
+                  <img src="{{ url_for('static', filename='images/profile_pictures/' + potential.profile_picture) }}" class="rounded-circle" height="100" width="100">
                 {% else %}
-                  <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" alt="Default pfp" height="100" width="100">
+                  <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" class="rounded-circle" height="100" width="100">
                 {% endif %}
                 <span class="friend-username">{{potential.username}}</span>
                   <!--this button is a placeholder and won't actually send a request, will set the svg for it soon -->
@@ -44,38 +44,37 @@
       </form>
 
     </dialog>
-
-        <script>
-        const dialog = document.getElementById("add-friend-dialog");
-        const btn = document.getElementById("add-friend-btn");
-        const closeBtn = document.querySelector(".close-btn");
-
-        btn.onclick = () => dialog.showModal();
-
-        window.onclick = (event) => {
-          if (event.target == dialog) dialog.close();
-        };
-        </script>
     </div>
 
-    <div class="container p-5 my-1 text-white bg-info">
-      <div class="flex-column">
+    <div class="container p-3 my-1 d-flex flex-column text-white bg-info hide-scrollbar" style="max-height: 200vh; overflow-y: auto;">
+      
       {% for friend in friends%}
-      <div class="col-md-4 mb-3">
         <div class="card text-white" style="background-color: rgba(0, 0, 0, 0.6);">
           {% if friend.profile_picture%}
-          <img src="{{ url_for('static', filename='images/profile_pictures/' + friend.profile_picture)}}" class="card-img-left" alt="pfp" height="100" width="100">
+          <img src="{{ url_for('static', filename='images/profile_pictures/' + friend.profile_picture)}}" class="rounded-circle" alt="pfp" height="100" width="100">
           {% else%}
-          <img src="{{ url_for('static', filename="images/profile_pictures/default.png")}}" class="card-img-left" alt="pfp" height="100" width="100">
+          <img src="{{ url_for('static', filename="images/profile_pictures/default.png")}}" class="rounded-circle" alt="pfp" height="100" width="100">
           {% endif%}
           <span class="friend-username">{{friend.username}}</span>
           <button class="btn btn-danger" onclick="alert("Unfriend functionality not implemented yet");">Unfriend</button>
         </div>
-      </div>
+      
       {% else%}
       <p>You have no friends yet :(</p>
       {% endfor%}
     </div>
     </div>
   </div>
+
+  <script>
+    const dialog = document.getElementById("add-friend-dialog");
+    const btn = document.getElementById("add-friend-btn");
+    const closeBtn = document.querySelector(".close-btn");
+
+    btn.onclick = () => dialog.showModal();
+
+    window.onclick = (event) => {
+      if (event.target == dialog) dialog.close();
+    };
+    </script>
 {% endblock content %}
