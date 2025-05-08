@@ -261,9 +261,9 @@ def overshare(username=None):
     username = current_user.username
   return render_template('overshare.html', title='Overshare', username=username)
 
-@app.route('/follow-request')
+@app.route('/follow-requester')
 @login_required
-def follow_requests():
+def follow_requesters():
   return render_template('follow-request.html', title='Follow Request')
   
 @app.route('/follow-requestings')
