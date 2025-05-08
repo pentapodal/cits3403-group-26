@@ -40,3 +40,7 @@ class UploadForm(FlaskForm):
     FileRequired(), FileAllowed(['zip']), FileSize(100_000_000)
   ])
   submit = SubmitField('Upload')
+
+
+class EmptyForm(FlaskForm):
+  submit = SubmitField('Submit')
