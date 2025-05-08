@@ -2,35 +2,84 @@
 
 {% block content%}
 
-    <<div class="container my-3 pt-5 pb-3 d-flex ">
+    <div class="container my-3 pt-5 pb-3 d-flex ">
         <div class="d-flex justify-content-center align-items-center">
             <h1>Friends</h1> 
             <div class="d-flex flex-column">
-              <button class="btn btn-info mb-3">
-                <!--change url-->
-                <a href="{{ url_for('follow_requests') }}" class="text-white" style="text-decoration: none;">Add Friend</a>
-              </button>
-      
+
               <button class="btn btn-info mb-3">
                 <a href="{{ url_for('friends') }}" class="text-white" style="text-decoration: none;">Friends</a>
               </button>
+
+              <button class="btn btn-info mb-3">
+                <a href="{{ url_for('follow_requestings') }}" class="text-white" style="text-decoration: none;">Sent</a>
+              </button>
+
             </div>
           </div>
 
         <div class="container p-3 my-1 d-flex flex-column text-white hide-scrollbar" style="max-height: 200vh; overflow-y: auto; background-color: rgba(0, 0, 0, 0.6);">
             <h2> Incoming Friend Requests </h2>
-            {% for request in friend_requests %}
-                <div class="card text-white" style="background-color: rgba(0, 0, 0, 0.6);">
-                    {% if request.profile_picture %}
-                        <img src="{{ url_for('static', filename='images/profile_pictures/' + request.profile_picture) }}" class="rounded-circle" alt="pfp" height="100" width="100">
-                    {% else %}
-                        <img src="{{ url_for('static', filename='images/profile_pictures/default.png') }}" class="rounded-circle" alt="pfp" height="100" width="100">
-                    {% endif %}
-                    <span class="friend-username">{{ request.username }}</span>
-                    <button class="btn btn-success" onclick="alert('Accept functionality not implemented yet');">Accept</button>
-                    <button class="btn btn-danger" onclick="alert('Decline functionality not implemented yet');">Decline</button>
+
+            <div class="mb-3">
+              <input type="text" class="form-control" id="searchInput" placeholder="Search for friends">
+            </div>
+
+            {% if friend_requests|length == 0 %}
+                <p>You have no incoming friend requests.</p>
+            {% endif %}
+
+            {% for request in friend_requests%}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    {% if user.profile_picture%}
+                    <img src="{{ url_for('static', filename='images/profile_pictures/' + user.profile_picture)}}" class="rounded-circle" alt="pfp" height="100" width="100">
+                    {% else%}
+                    <img src="{{ url_for('static', filename="images/profile_pictures/default.png")}}" class="rounded-circle" alt="pfp" height="100" width="100">
+                    {% endif%}
+                    <span class="friend-username">{{request.username}}</span>
                 </div>
-            {% endfor %}
+
+                <form method="POST" action="{{ url_for('accept_friend_request', username=request.username) }}">
+                  {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-sm btn-success">Accept</button>
+                </form>
+                <form method="POST" action="{{ url_for('dismiss_follow_requester', username=request.username) }}">
+                  {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-sm btn-warning">Decline</button>
+                </form>
+            {% endfor%}
+            
         </div>
+
+    </div>
+
+    <script>
+      document.getElementById('searchInput').addEventListener('input', function () {
+          const query = this.value.trim();
+          const resultsList = document.getElementById('searchResults');
+          resultsList.innerHTML = ''; // Clear previous results
+      
+          if (query.length === 0) return;
+      
+          fetch(`/search_users/${encodeURIComponent(query)}`)
+              .then(response => response.json())
+              .then(data => {
+                  data.result.forEach(user => {
+                      const li = document.createElement('li');
+                      li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                      li.innerHTML = `
+                          ${user.username}
+                          <span class="badge bg-${user.is_follower ? 'success' : 'secondary'}">
+                              ${user.is_follower ? 'Follows You' : 'Not Following'}
+                          </span>`;
+                      resultsList.appendChild(li);
+                  });
+              })
+              .catch(err => {
+                  console.error('Search error:', err);
+              });
+      });
+      </script>      
 
 {% endblock content%}
