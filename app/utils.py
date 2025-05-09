@@ -114,6 +114,42 @@ def process_zip_and_save(file_stream, upload_path, user_id):
                 total_stories_posted = len(stories_data['ig_stories'])
 
 
+            # Your messages (I have to take a different approach here)
+            # because there are heaps of messages JSON file for each different chat
+            # that are in a different folder with different folder names
+            inbox_path = 'your_instagram_activity/messages/inbox'
+            message_counts = Counter()
+            total_users_messaged = 0
+
+            for folder_name in archive.namelist():
+                if folder_name.startswith(inbox_path) and folder_name.endswith('message_1.json'):
+                    with archive.open(folder_name) as f:
+                        messages_data = json.load(f)
+                        if 'participants' in messages_data and 'messages' in messages_data:
+                            participants = [p['name'] for p in messages_data['participants']]
+                            # The second participant is the user, so we dont count it
+                            yourself = participants[1]
+                            # The rest are the people messaged
+                            other_participants = [p for p in participants if p != yourself]
+
+                            if other_participants:
+                                for participant in other_participants:
+                                    # Count the number of messages sent by the user to this participant
+                                    user_messages_to_participant = [
+                                        msg for msg in messages_data['messages']
+                                        if msg.get('sender_name') == yourself
+                                    ]
+                                    message_counts[participant] += len(user_messages_to_participant)
+                                total_users_messaged += len(other_participants)
+
+            if message_counts:
+                # Get the person the user messaged the most
+                most_messaged_person, most_messages_count = message_counts.most_common(1)[0]
+            else:
+                most_messaged_person = None
+                most_messages_count = 0
+
+
         # Ensure the upload directory exists, if not create it
         if not os.path.isdir(upload_path):
             os.mkdir(upload_path)
@@ -137,7 +173,11 @@ def process_zip_and_save(file_stream, upload_path, user_id):
                 'total_reels_comments': total_reels_comments,
                 'most_commented_account_for_reels': most_commented_account_for_reels,
                 'most_commented_account_count_for_reels': most_commented_account_count_for_reels,
-                
+
+                'total_people_messaged': total_users_messaged,
+                'most_messaged_person': most_messaged_person,
+                'most_messages_count': most_messages_count,
+
                 'total_stories_posted': total_stories_posted
             }, f)
 
