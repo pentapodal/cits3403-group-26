@@ -106,6 +106,11 @@ def process_zip_and_save(file_stream, upload_path, user_id):
                     total_reels_comments = 0
             
 
+            # Stories posted
+            with archive.open('your_instagram_activity/media/stories.json') as f:
+                stories_data = json.load(f)
+                total_stories_posted = len(stories_data['ig_stories'])
+
 
         # Ensure the upload directory exists, if not create it
         if not os.path.isdir(upload_path):
@@ -126,7 +131,8 @@ def process_zip_and_save(file_stream, upload_path, user_id):
                 'most_commented_account_count_for_posts': most_commented_account_count_for_posts,
                 'total_reels_comments': total_reels_comments,
                 'most_commented_account_for_reels': most_commented_account_for_reels,
-                'most_commented_account_count_for_reels': most_commented_account_count_for_reels
+                'most_commented_account_count_for_reels': most_commented_account_count_for_reels,
+                'total_stories_posted': total_stories_posted
             }, f)
 
         return path
