@@ -1,20 +1,6 @@
-{% extends "base.html"%}
+{% extends "friends-base.html"%}
 
-{% block content%}
-
-  <div class="container my-3 pt-1 pb-3 d-flex">
-    <div class="d-flex justify-content-center align-items-center text-white">
-      <h1 class="p-2">Friends</h1> 
-      <div class="d-flex flex-column">
-        <form action="{{ url_for('friends') }}" method="get" class="mb-3 p-2">
-          <button type="submit" class="btn btn-info w-100 text-white">Friends</button>
-        </form>
-
-        <form action="{{ url_for('follow_requesters') }}" method="get" class="mb-3 p-2">
-          <button type="submit" class="btn btn-info w-100 text-white">Received</button>
-        </form>
-      </div>
-    </div>
+{% block friends_content%}
 
     <div class="container p-0 text-white h-100 d-flex flex-column">
       <div class="p-3">
@@ -82,4 +68,4 @@
       });
     </script>      
 
-{% endblock content%}
+{% endblock friends_content%}

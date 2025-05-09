@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container my-3 pt-3 pb-3 d-flex flex-column">
+        <div class="d-flex flex-column justify-content-center align-items-center text-white">
+            <a class="navbar-brand fw-bold fs-3" href="{{ url_for('friends') }}">Friends</a>
+            <div class="d-flex">
+
+                <form action="{{ url_for('follow_requesters') }}" method="get" class="mb-3 p-2">
+                <button type="submit" class="btn btn-info w-100 text-white">Requests
+                    <!--add {{received_count}} for notifs-->
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+                </button>
+                </form>
+                
+                <form action="{{ url_for('follow_requestings') }}" method="get" class="mb-3 p-2">
+                <button type="submit" class="btn btn-info w-100 text-white">Sent</button>
+                </form>
+
+            </div>
+        </div>
+
+        {% block friends_content%}{% endblock%}
+   
+    </div>
+{% endblock content %}

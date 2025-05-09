@@ -1,26 +1,7 @@
-{% extends "base.html" %}
+{% extends "friends-base.html" %}
 
-{% block content %}
-
-  <div class="container my-3 pt-1 pb-3 d-flex">
-    <div class="d-flex justify-content-center align-items-center text-white">
-      <h1 class="p-2">Friends</h1> 
-      <div class="d-flex flex-column">
-
-        <form action="{{ url_for('follow_requesters') }}" method="get" class="mb-3 p-2">
-          <button type="submit" class="btn btn-info w-100 text-white">Received
-            <!--add {{received_count}} for notifs-->
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
-          </button>
-        </form>
-        
-        <form action="{{ url_for('follow_requestings') }}" method="get" class="mb-3 p-2">
-          <button type="submit" class="btn btn-info w-100 text-white">Sent</button>
-        </form>
-      </div>
-    </div>
-
-    <div class="container p-0 text-white h-100 d-flex flex-column">
+{% block friends_content %}
+    <div class="container p-0 text-white h-100 d-flex">
       <div class="p-3">
         <h2> Following </h2>
       </div>
@@ -56,5 +37,4 @@
         </div>
       </div>
     </div>
-  </div>
-{% endblock content %}
+{% endblock friends_content %}
