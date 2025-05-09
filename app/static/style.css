@@ -6,7 +6,7 @@ body {
   background: linear-gradient(135deg, #f000b8 0%, #ff6c00 100%);
   font-family: 'Lobster', sans-serif;
   color: white;
-
+  display: flex;
 }
 
 /* Logo styling */
@@ -81,67 +81,6 @@ body {
 .error {
   color: red;
   font-size: 14px;
-}
-
-/* Friend page styling */
-
-
-.friend-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  max-width: 1500px;
-  width: 80%;
-  padding: 20px;
-  margin: 10px auto;
-}
-
-.friend-list {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  max-width: 1200px;
-  width: 80%;
-  padding: 40px;
-  margin: 10px auto;
-}
-
-.friend-username {
-  color: white;
-  font-weight: 500;
-  font-family: 'Lobster', sans-serif;
-  font-size: 20px;
-  padding: 10px;
-}
-
-/*modal window styling*/
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
-
-.modal-content {
-  background-color: white;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 500px;
-  border-radius: 10px;
-}
-
-.modal-content form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px; /* optional spacing */
 }
 
 /*main page button container*/

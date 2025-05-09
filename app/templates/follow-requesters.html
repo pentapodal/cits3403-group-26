@@ -17,36 +17,43 @@
       </div>
     </div>
 
-    <div class="container p-3 my-1 d-flex flex-column text-white hide-scrollbar" style="max-height: 200vh; overflow-y: auto;">
-      <h2> Incoming Friend Requests </h2>
+    <div class="container p-0 text-white h-100 d-flex flex-column">
+      <div class="p-3">
+        <h2> Incoming Friend Requests </h2>
+      </div>
 
+      <!--search bar-->
       <div class="input-group">
         <input type="text" class="form-control" placeholder="Search for friends">
         <button class="btn btn-light" type="button" id="searchButton">Search</button>
       </div>
 
-        {% for request in friend_requests%}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                    {% if user.profile_picture%}
-                    <img src="{{ url_for('static', filename='images/profile_pictures/' + user.profile_picture)}}" class="rounded-circle" alt="pfp" height="100" width="100">
-                    {% else%}
-                    <img src="{{ url_for('static', filename="images/profile_pictures/default.png")}}" class="rounded-circle" alt="pfp" height="100" width="100">
-                    {% endif%}
-                    <span class="friend-username">{{request.username}}</span>
-                </div>
+      <div class="flex-grow-1 overflow-auto px-3 pb-3 hide-scrollbar">
 
-                <form method="POST" action="{{ url_for('accept_friend_request', username=request.username) }}">
-                    <button type="submit" class="btn btn-sm btn-success">Accept</button>
-                </form>
-                <form method="POST" action="{{ url_for('dismiss_follow_requester', username=request.username) }}">
-                    <button type="submit" class="btn btn-sm btn-warning">Decline</button>
-                </form>
-            </li>
+          {% for request in friend_requests%}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                      {% if user.profile_picture%}
+                      <img src="{{ url_for('static', filename='images/profile_pictures/' + user.profile_picture)}}" class="rounded-circle" alt="pfp" height="100" width="100">
+                      {% else%}
+                      <img src="{{ url_for('static', filename="images/profile_pictures/default.png")}}" class="rounded-circle" alt="pfp" height="100" width="100">
+                      {% endif%}
+                      <span class="friend-username">{{request.username}}</span>
+                  </div>
 
-            {% else%}
-            <p>You have no friend requests yet </p>
-        {% endfor%}
+                  <form method="POST" action="{{ url_for('accept_friend_request', username=request.username) }}">
+                      <button type="submit" class="btn btn-sm btn-success">Accept</button>
+                  </form>
+                  <form method="POST" action="{{ url_for('dismiss_follow_requester', username=request.username) }}">
+                      <button type="submit" class="btn btn-sm btn-warning">Decline</button>
+                  </form>
+              </li>
+
+              {% else%}
+              <p>You have no friend requests yet </p>
+          {% endfor%}
+
+      </div>
 
       </div>
     </div>

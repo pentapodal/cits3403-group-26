@@ -16,7 +16,7 @@
 
 <body>
   <!-- Bootstrap Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-4 sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-4 fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand fw-bold fs-3" href="{{ url_for('index') }}">Overshare</a>
       <div class="ms-auto d-flex gap-2">
@@ -26,6 +26,7 @@
         {% else %}
           <a href="{{ url_for('friends') }}" class="btn btn-outline-light">Friends</a>
           <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+          <a href="{{ url_for('home')}}" class="btn btn-outline-light">Home</a>
         {% endif %}
       </div>
     </div>
