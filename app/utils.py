@@ -18,15 +18,15 @@ def process_zip_and_save(file_stream, upload_path, user_id):
                         if 'title' in post
                     )
                     if liked_posts_count:
-                        most_liked_account, most_liked_account_count = liked_posts_count.most_common(1)[0]
+                        most_liked_account_for_posts, most_liked_account_count_for_posts = liked_posts_count.most_common(1)[0]
                     else:
-                        most_liked_account = None
-                        most_liked_account_count = 0
+                        most_liked_account_for_posts = None
+                        most_liked_account_count_for_posts = 0
 
                     total_liked_posts = len(liked_posts_data['likes_media_likes'])
                 else:
-                    most_liked_account = None
-                    most_liked_account_count = 0
+                    most_liked_account_for_posts = None
+                    most_liked_account_count_for_posts = 0
                     total_liked_posts = 0
 
 
@@ -116,8 +116,8 @@ def process_zip_and_save(file_stream, upload_path, user_id):
         with open(path, 'w') as f:
             json.dump({
                 'total_liked_posts': total_liked_posts,
-                'most_liked_account': most_liked_account,
-                'most_liked_account_count': most_liked_account_count,
+                'most_liked_account_for_posts': most_liked_account_for_posts,
+                'most_liked_account_count_for_posts': most_liked_account_count_for_posts,
                 "total_liked_comments": total_liked_comments,
                 'most_liked_account_for_comments': most_liked_account_for_comments,
                 'most_liked_account_count_for_comments': most_liked_account_count_for_comments,
