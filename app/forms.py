@@ -37,7 +37,7 @@ class RegistrationForm(FlaskForm):
 
 class UploadForm(FlaskForm):
   file = FileField('File', validators=[
-    FileRequired(), FileAllowed(['zip']), FileSize(100_000_000)
+    FileRequired(), FileAllowed(['zip']), FileSize(200_000_000)
   ])
   submit = SubmitField('Upload')
 

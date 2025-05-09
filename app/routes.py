@@ -9,6 +9,7 @@ import sqlalchemy as sa
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm
 from app.models import User
+from app.utils import process_zip_and_save
 current_user: User
 
 
@@ -234,23 +235,18 @@ def search_users(query):
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-  form = UploadForm()
-  if form.validate_on_submit():
-    file: FileStorage = form.file.data
-    try:
-      with ZipFile(file.stream) as archive:
-        with archive.open('your_instagram_activity/likes/liked_posts.json') as f:
-          likes_count = len(json.load(f)['likes_media_likes'])
-      if not os.path.isdir(app.config['UPLOAD_PATH']):
-        os.mkdir(app.config['UPLOAD_PATH'])
-      path = os.path.join(app.config['UPLOAD_PATH'], f'{current_user.get_id()}.json')
-      with open(path, 'w') as f:
-        json.dump({'likes_count': likes_count}, f)
-    except (BadZipFile, OSError) as error:
-      flash(str(error))
-    finally:
-      return redirect(url_for('upload'))
-  return render_template('upload.html', title='Upload', form=form)
+    form = UploadForm()
+    if form.validate_on_submit():
+        file: FileStorage = form.file.data
+        try:
+            # Call the utility function to process the ZIP file and save the JSON
+            path = process_zip_and_save(file.stream, app.config['UPLOAD_PATH'], current_user.get_id())
+            flash(f'File processed and saved to {path}')
+        except (BadZipFile, OSError) as error:
+            flash(str(error))
+        finally:
+            return redirect(url_for('upload'))
+    return render_template('upload.html', title='Upload', form=form)
 
 
 @app.route('/overshare')
