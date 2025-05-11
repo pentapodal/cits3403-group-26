@@ -1,10 +1,9 @@
 {% extends "friends-base.html" %}
-
+{% block heading%}Following{% endblock%}
 {% block friends_content %}
+
     <div class="container p-0 text-white h-100 d-flex">
-      <div class="p-3">
-        <h2> Following </h2>
-      </div>
+      
 
       <div class="flex-grow-1 overflow-auto px-3 pb-3 hide-scrollbar">
       
@@ -37,4 +36,4 @@
         </div>
       </div>
     </div>
-{% endblock friends_content %}
+{% endblock %}
