@@ -20,8 +20,8 @@
             </div>
 
             <div>
-              <form method="POST" action="{{ url_for('remove_follower', username=request.username) }}">
-                <button type="submit" class="btn btn-m btn-warning justify-content-end">Remove</button>
+              <form method="POST" action="{{ url_for('stop_following', username=username) }}">
+                <button type="submit" class="btn btn-m btn-warning justify-content-end">Unfollow</button>
               </form>
             </div>
 
