@@ -24,6 +24,7 @@
           <a href="{{ url_for('login') }}" class="btn btn-outline-light">Login</a>
           <a href="{{ url_for('register') }}" class="btn btn-outline-light">Register</a>
         {% else %}
+          <a href="{{ url_for('home') }}" class="btn btn-outline-light">Home</a>
           <a href="{{ url_for('logout') }}" class="btn btn-outline-light">Logout</a>
           
         {% endif %}
