@@ -1,6 +1,82 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Hi, {{ current_user.username }}</h1>
-  <div><p>Viewing {{ username }}'s Overshare</p></div>
-{% endblock content %}
+<div class="container mt-5">
+  <h1>Welcome, {{ username }}</h1>
+  <h2>Your Data:</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Total Liked Posts</td>
+        <td>{{ user_data.total_liked_posts }}</td>
+      </tr>
+      <tr>
+        <td>Most Liked Account for Posts</td>
+        <td>{{ user_data.most_liked_account_for_posts }} ({{ user_data.most_liked_account_count_for_posts }} likes)</td>
+      </tr>
+      <tr>
+        <td>Total Liked Comments</td>
+        <td>{{ user_data.total_liked_comments }}</td>
+      </tr>
+      <tr>
+        <td>Most Liked Account for Comments</td>
+        <td>{{ user_data.most_liked_account_for_comments }} ({{ user_data.most_liked_account_count_for_comments }} likes)</td>
+      </tr>
+      <tr>
+        <td>Total Posts Comments</td>
+        <td>{{ user_data.total_posts_comments }}</td>
+      </tr>
+      <tr>
+        <td>Most Commented Account for Posts</td>
+        <td>{{ user_data.most_commented_account_for_posts }} ({{ user_data.most_commented_account_count_for_posts }} comments)</td>
+      </tr>
+      <tr>
+        <td>Total Reels Comments</td>
+        <td>{{ user_data.total_reels_comments }}</td>
+      </tr>
+      <tr>
+        <td>Most Commented Account for Reels</td>
+        <td>{{ user_data.most_commented_account_for_reels }} ({{ user_data.most_commented_account_count_for_reels }} comments)</td>
+      </tr>
+      <tr>
+        <td>Total People Messaged</td>
+        <td>{{ user_data.total_people_messaged }}</td>
+      </tr>
+      <tr>
+        <td>Most Messaged Person</td>
+        <td>{{ user_data.most_messaged_person }} ({{ user_data.most_messages_count }} messages)</td>
+      </tr>
+      <tr>
+        <td>Total Stories Posted</td>
+        <td>{{ user_data.total_stories_posted }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Top 3 Most Messaged People:</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Message Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for person in user_data.top_3_most_messaged_people %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ person.name }}</td>
+        <td>{{ person.message_count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

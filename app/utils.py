@@ -4,7 +4,7 @@ from collections import Counter
 from zipfile import ZipFile, BadZipFile
 
 
-def process_zip_and_save(file_stream, upload_path, user_id):
+def process_zip_and_save(file_stream, upload_path, username):
 
     try:
         with ZipFile(file_stream) as archive:
@@ -143,11 +143,21 @@ def process_zip_and_save(file_stream, upload_path, user_id):
                                 total_users_messaged += len(other_participants)
 
             if message_counts:
-                # Get the person the user messaged the most
-                most_messaged_person, most_messages_count = message_counts.most_common(1)[0]
+                # Remove the user's own name (yourself) from the message counts
+                if yourself in message_counts:
+                    del message_counts[yourself]
+
+                # Get the top 3 most messaged people
+                top_3_most_messaged = message_counts.most_common(3)
+                most_messaged_person, most_messages_count = top_3_most_messaged[0] if top_3_most_messaged else (None, 0)
+                top_3_most_messaged_people = [
+                    {'name': person, 'message_count': count}
+                    for person, count in top_3_most_messaged
+                ]
             else:
                 most_messaged_person = None
                 most_messages_count = 0
+                top_3_most_messaged_people = []
 
 
         # Ensure the upload directory exists, if not create it
@@ -155,7 +165,7 @@ def process_zip_and_save(file_stream, upload_path, user_id):
             os.mkdir(upload_path)
 
         # Save the analysis result to a JSON file
-        path = os.path.join(upload_path, f'{user_id}.json')
+        path = os.path.join(upload_path, f'{username}.json')
         with open(path, 'w') as f:
             json.dump({
                 'total_liked_posts': total_liked_posts,
@@ -177,6 +187,7 @@ def process_zip_and_save(file_stream, upload_path, user_id):
                 'total_people_messaged': total_users_messaged,
                 'most_messaged_person': most_messaged_person,
                 'most_messages_count': most_messages_count,
+                'top_3_most_messaged_people': top_3_most_messaged_people,
 
                 'total_stories_posted': total_stories_posted
             }, f)
