@@ -14,7 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
-<body>
+<body class="{% block page_class %}{% endblock %}">
   <!-- Bootstrap Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-4 fixed-top">
     <div class="container-fluid">
@@ -30,6 +30,23 @@
       </div>
     </div>
   </nav>
+
+  {% block strips %}
+  {% if 'home-page' in self.page_class() %}
+  <div class="photo-strips">
+    {% for i in range(6) %}
+    <div class="photo-column {{ 'up' if i % 2 == 0 else 'down' }}">
+      <img src="https://images.pexels.com/photos/31914032/pexels-photo-31914032/free-photo-of-sunset-over-mount-fuji-viewed-from-fujisawa.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="photo">
+      <img src="https://images.pexels.com/photos/31672030/pexels-photo-31672030/free-photo-of-charming-flower-shopfront-in-muswell-hill-london.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" alt="photo">
+      <img src="https://images.pexels.com/photos/30303984/pexels-photo-30303984/free-photo-of-charming-coffee-setup-with-flowers-and-sweets.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="photo">
+      <img src="https://images.pexels.com/photos/11497213/pexels-photo-11497213.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="photo">
+      <img src="https://images.pexels.com/photos/31983555/pexels-photo-31983555/free-photo-of-black-and-white-desert-landscape-in-baja-california.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+    </div>
+  {% endfor %}
+  </div>
+  {% endif %}
+  {% endblock %}
+
 
   <!-- Flash Messages -->
   {% with messages = get_flashed_messages() %}
