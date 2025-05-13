@@ -31,21 +31,51 @@
     </div>
   </nav>
 
-  {% block strips %}
-  {% if 'home-page' in self.page_class() %}
-  <div class="photo-strips">
-    {% for i in range(6) %}
-    <div class="photo-column {{ 'up' if i % 2 == 0 else 'down' }}">
-      <img src="https://images.pexels.com/photos/31914032/pexels-photo-31914032/free-photo-of-sunset-over-mount-fuji-viewed-from-fujisawa.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="photo">
-      <img src="https://images.pexels.com/photos/31672030/pexels-photo-31672030/free-photo-of-charming-flower-shopfront-in-muswell-hill-london.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" alt="photo">
-      <img src="https://images.pexels.com/photos/30303984/pexels-photo-30303984/free-photo-of-charming-coffee-setup-with-flowers-and-sweets.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="photo">
-      <img src="https://images.pexels.com/photos/11497213/pexels-photo-11497213.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="photo">
-      <img src="https://images.pexels.com/photos/31983555/pexels-photo-31983555/free-photo-of-black-and-white-desert-landscape-in-baja-california.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
-    </div>
-  {% endfor %}
+{% block strips %}
+{% if 'home-page' in self.page_class() %}
+{% set photo_urls = [
+    url_for('static', filename='images/background-images/photo1.jpg'),
+    url_for('static', filename='images/background-images/photo2.jpg'),
+    url_for('static', filename='images/background-images/photo3.jpg'),
+    url_for('static', filename='images/background-images/photo4.jpg'),
+    url_for('static', filename='images/background-images/photo5.jpg'),
+    url_for('static', filename='images/background-images/photo6.jpg'),
+    url_for('static', filename='images/background-images/photo7.jpg'),
+    url_for('static', filename='images/background-images/photo8.jpg'),
+    url_for('static', filename='images/background-images/photo9.jpg'),
+    url_for('static', filename='images/background-images/photo10.jpg'),
+    url_for('static', filename='images/background-images/photo11.jpg'),
+    url_for('static', filename='images/background-images/photo12.jpg'),
+    url_for('static', filename='images/background-images/photo13.jpg'),
+    url_for('static', filename='images/background-images/photo14.jpg'),
+    url_for('static', filename='images/background-images/photo15.jpg'),
+    url_for('static', filename='images/background-images/photo16.jpg'),
+    url_for('static', filename='images/background-images/photo17.jpg'),
+    url_for('static', filename='images/background-images/photo18.jpg'),
+    url_for('static', filename='images/background-images/photo19.jpg'),
+    url_for('static', filename='images/background-images/photo20.jpg'),
+    url_for('static', filename='images/background-images/photo21.jpg'),
+    url_for('static', filename='images/background-images/photo22.jpg'),
+    url_for('static', filename='images/background-images/photo23.jpg'),
+    url_for('static', filename='images/background-images/photo24.jpg'),
+    url_for('static', filename='images/background-images/photo25.jpg'),
+    url_for('static', filename='images/background-images/photo26.jpg'),
+    url_for('static', filename='images/background-images/photo27.jpg'),
+    url_for('static', filename='images/background-images/photo28.jpg'),
+    url_for('static', filename='images/background-images/photo29.jpg'),
+    url_for('static', filename='images/background-images/photo30.jpg')
+] %}
+<div class="photo-strips">
+  {% for col in range(6) %}
+  <div class="photo-column {{ 'up' if col % 2 == 0 else 'down' }}">
+    {% for row in range(5) %}
+      <img src="{{ photo_urls[col * 5 + row] }}" alt="photo">
+    {% endfor %}
   </div>
-  {% endif %}
-  {% endblock %}
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
 
 
   <!-- Flash Messages -->
