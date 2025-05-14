@@ -61,6 +61,29 @@ def process_zip_and_save(file_stream, upload_path, username):
                     total_liked_comments = 0
 
 
+            # Your liked stories
+            with archive.open('your_instagram_activity/story_interactions/story_likes.json') as f:
+                liked_stories_data = json.load(f)
+
+                if liked_stories_data:
+                    liked_stories_count = Counter(
+                        story['title']
+                        for story in liked_stories_data['story_activities_story_likes']
+                        if 'title' in story
+                        )
+                    if liked_stories_count:
+                        most_liked_account_for_stories, most_liked_account_count_for_stories = liked_stories_count.most_common(1)[0]
+                    else:
+                        most_liked_account_for_stories = None
+                        most_liked_account_count_for_stories = 0
+
+                    total_liked_stories = len(liked_stories_data['story_activities_story_likes'])
+                else:
+                    most_liked_account_for_stories = None
+                    most_liked_account_count_for_stories = 0
+                    total_liked_stories = 0   
+
+
             # Your comments on posts
             with archive.open('your_instagram_activity/comments/post_comments_1.json') as f:
                 posts_comments_data = json.load(f) 
@@ -149,14 +172,14 @@ def process_zip_and_save(file_stream, upload_path, username):
 
                 # Get the top 3 most messaged people
                 top_3_most_messaged = message_counts.most_common(3)
-                most_messaged_person, most_messages_count = top_3_most_messaged[0] if top_3_most_messaged else (None, 0)
+                #most_messaged_person, most_messages_count = top_3_most_messaged[0] if top_3_most_messaged else (None, 0)
                 top_3_most_messaged_people = [
                     {'name': person, 'message_count': count}
                     for person, count in top_3_most_messaged
                 ]
             else:
-                most_messaged_person = None
-                most_messages_count = 0
+                #most_messaged_person = None
+                #most_messages_count = 0
                 top_3_most_messaged_people = []
 
 
@@ -176,6 +199,10 @@ def process_zip_and_save(file_stream, upload_path, username):
                 'most_liked_account_for_comments': most_liked_account_for_comments,
                 'most_liked_account_count_for_comments': most_liked_account_count_for_comments,
 
+                'total_liked_stories': total_liked_stories,
+                'most_liked_account_for_stories': most_liked_account_for_stories,
+                'most_liked_account_count_for_stories': most_liked_account_count_for_stories,
+
                 'total_posts_comments': total_posts_comments,
                 'most_commented_account_for_posts': most_commented_account_for_posts,
                 'most_commented_account_count_for_posts': most_commented_account_count_for_posts,
@@ -185,8 +212,6 @@ def process_zip_and_save(file_stream, upload_path, username):
                 'most_commented_account_count_for_reels': most_commented_account_count_for_reels,
 
                 'total_people_messaged': total_users_messaged,
-                'most_messaged_person': most_messaged_person,
-                'most_messages_count': most_messages_count,
                 'top_3_most_messaged_people': top_3_most_messaged_people,
 
                 'total_stories_posted': total_stories_posted
