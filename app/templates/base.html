@@ -18,7 +18,7 @@
   <!-- Bootstrap Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-4 fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand fw-bold fs-3" href="{{ url_for('home') }}">Overshare</a>
+      <a class="navbar-brand fw-bold fs-3" href="{{ url_for('index') }}">Overshare</a>
       <div class="ms-auto d-flex gap-2">
         {% if current_user.is_anonymous %}
           <a href="{{ url_for('login') }}" class="btn btn-outline-light">Login</a>
