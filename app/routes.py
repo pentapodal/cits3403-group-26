@@ -264,7 +264,7 @@ def overshare(username=None):
 
     json_file_path = os.path.join(app.config['UPLOAD_PATH'], f'{username}.json')
 
-    if not os.path.exists(json_file_path):
+    if not os.path.isfile(json_file_path): 
         flash("No data available for this user.")
         return redirect(url_for('upload'))
 
