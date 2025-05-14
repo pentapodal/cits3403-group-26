@@ -23,6 +23,9 @@
             {% for account in user_data.top_3_most_liked_account_for_posts %}
               <li>{{ account.name }} ({{ account.liked_posts_count }} likes)</li>
             {% endfor %}
+            {% for i in range(3 - user_data.top_3_most_liked_account_for_posts|length) %}
+              <li>No data found</li>
+            {% endfor %}
           </ul>
         </td>
       </tr>
@@ -36,6 +39,9 @@
           <ul>
             {% for account in user_data.top_3_most_liked_account_for_comments %}
               <li>{{ account.name }} ({{ account.liked_comments_count }} likes)</li>
+            {% endfor %}
+            {% for i in range(3 - user_data.top_3_most_liked_account_for_comments|length) %}
+              <li>No data found</li>
             {% endfor %}
           </ul>
         </td>
@@ -51,6 +57,9 @@
             {% for account in user_data.top_3_most_liked_account_for_stories %}
               <li>{{ account.name }} ({{ account.story_activities_story_likes }} likes)</li>
             {% endfor %}
+            {% for i in range(3 - user_data.top_3_most_liked_account_for_stories|length) %}
+              <li>No data found</li>
+            {% endfor %}
           </ul>
         </td>
       </tr>
@@ -64,6 +73,9 @@
           <ul>
             {% for account in user_data.top_3_most_commented_accounts_for_posts %}
               <li>{{ account.name }} ({{ account.comment_count }} comments)</li>
+            {% endfor %}
+            {% for i in range(3 - user_data.top_3_most_commented_accounts_for_posts|length) %}
+              <li>No data found</li>
             {% endfor %}
           </ul>
         </td>
@@ -79,6 +91,9 @@
             {% for account in user_data.top_3_most_commented_accounts_for_reels %}
               <li>{{ account.name }} ({{ account.comment_count }} comments)</li>
             {% endfor %}
+            {% for i in range(3 - user_data.top_3_most_commented_accounts_for_reels|length) %}
+              <li>No data found</li>
+            {% endfor %}
           </ul>
         </td>
       </tr>
@@ -92,6 +107,9 @@
           <ul>
             {% for person in user_data.top_3_most_messaged_people %}
               <li>{{ person.name }} ({{ person.message_count }} messages)</li>
+            {% endfor %}
+            {% for i in range(3 - user_data.top_3_most_messaged_people|length) %}
+              <li>No data found</li>
             {% endfor %}
           </ul>
         </td>
