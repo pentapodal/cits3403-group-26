@@ -14,7 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
-<body class="{% block page_class %}{% endblock %}">
+<body>
   <!-- Bootstrap Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-transparent px-4 fixed-top">
     <div class="container-fluid">
@@ -33,12 +33,11 @@
   </nav>
 
 {% block strips %}
-{% if 'home-page' in self.page_class() %}
-{% set photo_urls = [
-    url_for('static', filename='images/background-images/photo' ~ i ~ '.jpg')
-    for i in range(1, 31)
-] %}
-
+{% set ns = namespace(photo_urls=[]) %}
+{% for i in range(1, 31) %}
+    {% set _ = ns.photo_urls.append(url_for('static', filename='images/background-images/photo' ~ i ~ '.jpg')) %}
+{% endfor %}
+{% set photo_urls = ns.photo_urls %}
 <div class="photo-strips">
   {% for col in range(6) %}
   <div class="photo-column {{ 'up' if col % 2 == 0 else 'down' }}">
@@ -48,7 +47,6 @@
   </div>
   {% endfor %}
 </div>
-{% endif %}
 {% endblock %}
 
 

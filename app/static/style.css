@@ -219,7 +219,7 @@ h1 {
   transform: translateY(-2px);
 }
 
-body.home-page {
+body {
   background: linear-gradient(135deg, #f000b8 0%, #ff6c00 100%);
 }
 
