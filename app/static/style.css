@@ -6,7 +6,7 @@ body:not(.home-page) {
   background: linear-gradient(135deg, #f000b8 0%, #ff6c00 100%);
   font-family: 'Lobster', sans-serif;
   color: white;
-
+  display: flex;
 }
 
 /* Logo styling */

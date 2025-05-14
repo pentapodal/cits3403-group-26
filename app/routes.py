@@ -9,6 +9,7 @@ import sqlalchemy as sa
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm
 from app.models import User
+from app.utils import process_zip_and_save
 current_user: User
 
 
@@ -74,22 +75,30 @@ def home():
   return render_template('home.html', title='Home')
 
 
-@app.route('/friends')
+@app.route('/following')
 #@login_required # Uncomment this line to require login for the friends page
-def friends():
-  friends = [
+def following():
+  following_list = [
     {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
     {'username': 'Andrea', 'profile_picture': 'andrea.png'},
     {'username': 'Jia', 'profile_picture': 'jia.png'},
     {'username': 'David', 'profile_picture': None},
     {'username': 'Eve', 'profile_picture': None},
   ]
-  potential_friends = [
-    {"username": "Alice", "profile_picture": None},
-    {"username": "Ryna", "profile_picture": None},
-  ]
 
-  return render_template('friends.html', title='Friends', friends=friends, potential_friends=potential_friends)
+  return render_template('following.html', title='Following', following=following_list)
+
+@app.route('/followers')
+@login_required
+def followers():
+  followers_list = [
+    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
+    {'username': 'Andrea', 'profile_picture': 'andrea.png'},
+    {'username': 'Jia', 'profile_picture': 'jia.png'},
+    {'username': 'Anna', 'profile_picture': None},
+    {'username': 'Ryan', 'profile_picture': None},
+  ]
+  return render_template('followers.html', title='Followers', followers=followers_list)
 
 
 @app.route('/send_follow_request/<username>', methods=['POST'])
@@ -234,23 +243,18 @@ def search_users(query):
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-  form = UploadForm()
-  if form.validate_on_submit():
-    file: FileStorage = form.file.data
-    try:
-      with ZipFile(file.stream) as archive:
-        with archive.open('your_instagram_activity/likes/liked_posts.json') as f:
-          likes_count = len(json.load(f)['likes_media_likes'])
-      if not os.path.isdir(app.config['UPLOAD_PATH']):
-        os.mkdir(app.config['UPLOAD_PATH'])
-      path = os.path.join(app.config['UPLOAD_PATH'], f'{current_user.get_id()}.json')
-      with open(path, 'w') as f:
-        json.dump({'likes_count': likes_count}, f)
-    except (BadZipFile, OSError) as error:
-      flash(str(error))
-    finally:
-      return redirect(url_for('upload'))
-  return render_template('upload.html', title='Upload', form=form)
+    form = UploadForm()
+    if form.validate_on_submit():
+        file: FileStorage = form.file.data
+        try:
+            # Call the utility function to process the ZIP file and save the JSON
+            path = process_zip_and_save(file.stream, app.config['UPLOAD_PATH'], current_user.get_id())
+            flash(f'File processed and saved to {path}')
+        except (BadZipFile, OSError) as error:
+            flash(str(error))
+        finally:
+            return redirect(url_for('upload'))
+    return render_template('upload.html', title='Upload', form=form)
 
 
 @app.route('/overshare')
@@ -260,3 +264,14 @@ def overshare(username=None):
   if username is None:
     username = current_user.username
   return render_template('overshare.html', title='Overshare', username=username)
+
+@app.route('/follow-requesters')
+@login_required
+def follow_requesters():
+  return render_template('follow-requesters.html', title='Follow Request')
+  
+@app.route('/follow-requestings')
+@login_required
+def follow_requestings():
+  return render_template('follow-requesting.html', title='Follow Requesting')
+
