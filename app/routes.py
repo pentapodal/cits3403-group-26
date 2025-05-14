@@ -75,22 +75,30 @@ def home():
   return render_template('home.html', title='Home')
 
 
-@app.route('/friends')
+@app.route('/following')
 #@login_required # Uncomment this line to require login for the friends page
-def friends():
-  friends = [
+def following():
+  following_list = [
     {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
     {'username': 'Andrea', 'profile_picture': 'andrea.png'},
     {'username': 'Jia', 'profile_picture': 'jia.png'},
     {'username': 'David', 'profile_picture': None},
     {'username': 'Eve', 'profile_picture': None},
   ]
-  potential_friends = [
-    {"username": "Alice", "profile_picture": None},
-    {"username": "Ryna", "profile_picture": None},
-  ]
 
-  return render_template('friends.html', title='Friends', friends=friends, potential_friends=potential_friends)
+  return render_template('following.html', title='Following', following=following_list)
+
+@app.route('/followers')
+@login_required
+def followers():
+  followers_list = [
+    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
+    {'username': 'Andrea', 'profile_picture': 'andrea.png'},
+    {'username': 'Jia', 'profile_picture': 'jia.png'},
+    {'username': 'Anna', 'profile_picture': None},
+    {'username': 'Ryan', 'profile_picture': None},
+  ]
+  return render_template('followers.html', title='Followers', followers=followers_list)
 
 
 @app.route('/send_follow_request/<username>', methods=['POST'])
@@ -264,3 +272,14 @@ def overshare(username=None):
         user_data = json.load(json_file)
 
     return render_template('overshare.html', title='Overshare', username=username, user_data=user_data)
+
+@app.route('/follow-requesters')
+@login_required
+def follow_requesters():
+  return render_template('follow-requesters.html', title='Follow Request')
+  
+@app.route('/follow-requestings')
+@login_required
+def follow_requestings():
+  return render_template('follow-requesting.html', title='Follow Requesting')
+
