@@ -35,37 +35,10 @@
 {% block strips %}
 {% if 'home-page' in self.page_class() %}
 {% set photo_urls = [
-    url_for('static', filename='images/background-images/photo1.jpg'),
-    url_for('static', filename='images/background-images/photo2.jpg'),
-    url_for('static', filename='images/background-images/photo3.jpg'),
-    url_for('static', filename='images/background-images/photo4.jpg'),
-    url_for('static', filename='images/background-images/photo5.jpg'),
-    url_for('static', filename='images/background-images/photo6.jpg'),
-    url_for('static', filename='images/background-images/photo7.jpg'),
-    url_for('static', filename='images/background-images/photo8.jpg'),
-    url_for('static', filename='images/background-images/photo9.jpg'),
-    url_for('static', filename='images/background-images/photo10.jpg'),
-    url_for('static', filename='images/background-images/photo11.jpg'),
-    url_for('static', filename='images/background-images/photo12.jpg'),
-    url_for('static', filename='images/background-images/photo13.jpg'),
-    url_for('static', filename='images/background-images/photo14.jpg'),
-    url_for('static', filename='images/background-images/photo15.jpg'),
-    url_for('static', filename='images/background-images/photo16.jpg'),
-    url_for('static', filename='images/background-images/photo17.jpg'),
-    url_for('static', filename='images/background-images/photo18.jpg'),
-    url_for('static', filename='images/background-images/photo19.jpg'),
-    url_for('static', filename='images/background-images/photo20.jpg'),
-    url_for('static', filename='images/background-images/photo21.jpg'),
-    url_for('static', filename='images/background-images/photo22.jpg'),
-    url_for('static', filename='images/background-images/photo23.jpg'),
-    url_for('static', filename='images/background-images/photo24.jpg'),
-    url_for('static', filename='images/background-images/photo25.jpg'),
-    url_for('static', filename='images/background-images/photo26.jpg'),
-    url_for('static', filename='images/background-images/photo27.jpg'),
-    url_for('static', filename='images/background-images/photo28.jpg'),
-    url_for('static', filename='images/background-images/photo29.jpg'),
-    url_for('static', filename='images/background-images/photo30.jpg')
+    url_for('static', filename='images/background-images/photo' ~ i ~ '.jpg')
+    for i in range(1, 31)
 ] %}
+
 <div class="photo-strips">
   {% for col in range(6) %}
   <div class="photo-column {{ 'up' if col % 2 == 0 else 'down' }}">
