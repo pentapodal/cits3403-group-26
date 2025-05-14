@@ -175,3 +175,6 @@ cython_debug/
 
 # Flask database
 app.db
+
+# Uploads directory
+uploads/

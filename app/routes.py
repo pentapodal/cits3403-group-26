@@ -247,13 +247,11 @@ def upload():
     if form.validate_on_submit():
         file: FileStorage = form.file.data
         try:
-            # Call the utility function to process the ZIP file and save the JSON
-            path = process_zip_and_save(file.stream, app.config['UPLOAD_PATH'], current_user.get_id())
-            flash(f'File processed and saved to {path}')
+            path = process_zip_and_save(file.stream, app.config['UPLOAD_PATH'], current_user.username)
+            flash(f'File Successfully Uploaded')
+            return redirect(url_for('overshare', username=current_user.username))
         except (BadZipFile, OSError) as error:
             flash(str(error))
-        finally:
-            return redirect(url_for('upload'))
     return render_template('upload.html', title='Upload', form=form)
 
 
@@ -261,9 +259,19 @@ def upload():
 @app.route('/overshare/<username>')
 @login_required
 def overshare(username=None):
-  if username is None:
-    username = current_user.username
-  return render_template('overshare.html', title='Overshare', username=username)
+    if username is None:
+        username = current_user.username
+
+    json_file_path = os.path.join(app.config['UPLOAD_PATH'], f'{username}.json')
+
+    if not os.path.isfile(json_file_path): 
+        flash("No data available for this user.")
+        return redirect(url_for('upload'))
+
+    with open(json_file_path, 'r') as json_file:
+        user_data = json.load(json_file)
+
+    return render_template('overshare.html', title='Overshare', username=username, user_data=user_data)
 
 @app.route('/follow-requesters')
 @login_required
