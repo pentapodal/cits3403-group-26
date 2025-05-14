@@ -10,125 +10,135 @@ def process_zip_and_save(file_stream, upload_path, username):
         with ZipFile(file_stream) as archive:
             # Your liked posts
             with archive.open('your_instagram_activity/likes/liked_posts.json') as f:
-                # Load the liked posts JSON file
-                liked_posts_data = json.load(f)
-                # Ensure data is not empty
-                if liked_posts_data:
-                    # Count the number of likes per account
-                    liked_posts_count = Counter(
-                        post['title']
-                        for post in liked_posts_data['likes_media_likes']
-                        if 'title' in post
-                    )
-                    # Find the account with the most likes
-                    if liked_posts_count:
-                        most_liked_account_for_posts, most_liked_account_count_for_posts = liked_posts_count.most_common(1)[0]
-                    else:
-                        # Handle case where no likes are found
-                        most_liked_account_for_posts = None
-                        most_liked_account_count_for_posts = 0
+                try:
+                    liked_posts_data = json.load(f)
 
-                    # Total number of liked posts
-                    total_liked_posts = len(liked_posts_data['likes_media_likes'])
-                else:
-                    # Handle case where the data is empty
-                    most_liked_account_for_posts = None
-                    most_liked_account_count_for_posts = 0
+                    if 'likes_media_likes' in liked_posts_data and liked_posts_data['likes_media_likes']:
+                        account_likes_counter = Counter(
+                            post['title']
+                            for post in liked_posts_data['likes_media_likes']
+                            if 'title' in post
+                        )
+
+                        top_3_most_liked_account_for_posts = [
+                            {'name': person, 'liked_posts_count': count}
+                            for person, count in account_likes_counter.most_common(3)
+                        ]
+
+                        total_liked_posts = len(liked_posts_data['likes_media_likes'])
+                    else:
+                        top_3_most_liked_account_for_posts = []
+                        total_liked_posts = 0
+
+                except (KeyError, json.JSONDecodeError) as e:
+                    top_3_most_liked_account_for_posts = []
                     total_liked_posts = 0
+                    print(f"Error processing liked posts: {e}")
 
 
             # Your liked comments 
             with archive.open('your_instagram_activity/likes/liked_comments.json') as f:
-                liked_comments_data = json.load(f)
+                try:
+                    liked_comments_data = json.load(f)
 
-                if liked_comments_data:
-                    liked_comments_count = Counter(
-                        comment['title']
-                        for comment in liked_comments_data['likes_comment_likes']
-                        if 'title' in comment
-                        )
-                    if liked_comments_count:
-                        most_liked_account_for_comments, most_liked_account_count_for_comments = liked_comments_count.most_common(1)[0]
+                    if 'likes_comment_likes' in liked_comments_data and liked_comments_data['likes_comment_likes']:
+                        liked_comments_count = Counter(
+                            comment['title']
+                            for comment in liked_comments_data['likes_comment_likes']
+                            if 'title' in comment
+                            )
+                        
+                        top_3_most_liked_account_for_comments = [
+                            {'name': person, 'liked_comments_count': count}
+                            for person, count in liked_comments_count.most_common(3)
+                        ]
+
+                        total_liked_comments = len(liked_comments_data['likes_comment_likes'])
                     else:
-                        most_liked_account_for_comments = None
-                        most_liked_account_count_for_comments = 0
+                        top_3_most_liked_account_for_comments
+                        total_liked_comments = 0
 
-                    total_liked_comments = len(liked_comments_data['likes_comment_likes'])
-
-                else:
-                    most_liked_account_for_comments = None
-                    most_liked_account_count_for_comments = 0
+                except (KeyError, json.JSONDecodeError) as e:
                     total_liked_comments = 0
 
 
             # Your liked stories
             with archive.open('your_instagram_activity/story_interactions/story_likes.json') as f:
-                liked_stories_data = json.load(f)
+                try:
+                    liked_stories_data = json.load(f)
 
-                if liked_stories_data:
-                    liked_stories_count = Counter(
-                        story['title']
-                        for story in liked_stories_data['story_activities_story_likes']
-                        if 'title' in story
-                        )
-                    if liked_stories_count:
-                        most_liked_account_for_stories, most_liked_account_count_for_stories = liked_stories_count.most_common(1)[0]
+                    if 'story_activities_story_likes' in liked_stories_data and liked_stories_data['story_activities_story_likes']:
+                        liked_stories_count = Counter(
+                            story['title']
+                            for story in liked_stories_data['story_activities_story_likes']
+                            if 'title' in story
+                            )
+                        
+                        top_3_most_liked_account_for_stories = [
+                            {'name': person, 'story_activities_story_likes': count}
+                            for person, count in liked_stories_count.most_common(3)
+                        ]
+
+                        total_liked_stories = len(liked_stories_data['story_activities_story_likes'])
                     else:
-                        most_liked_account_for_stories = None
-                        most_liked_account_count_for_stories = 0
+                        top_3_most_liked_account_for_stories = []
+                        total_liked_stories = 0
 
-                    total_liked_stories = len(liked_stories_data['story_activities_story_likes'])
-                else:
-                    most_liked_account_for_stories = None
-                    most_liked_account_count_for_stories = 0
-                    total_liked_stories = 0   
+                except (KeyError, json.JSONDecodeError) as e:
+                    total_liked_comments = 0
 
 
             # Your comments on posts
             with archive.open('your_instagram_activity/comments/post_comments_1.json') as f:
-                posts_comments_data = json.load(f) 
+                try:
+                    posts_comments_data = json.load(f)
 
-                if posts_comments_data:
-                    account_posts_comments_counts = Counter(
-                        comment['string_map_data']['Media Owner']['value']
-                        for comment in posts_comments_data
-                        if 'string_map_data' in comment and 'Media Owner' in comment['string_map_data']
+                    if posts_comments_data:
+                        account_posts_comments_counts = Counter(
+                            comment['string_map_data']['Media Owner']['value']
+                            for comment in posts_comments_data
+                            if 'string_map_data' in comment and 'Media Owner' in comment['string_map_data']
                         )
-                    if account_posts_comments_counts:
-                        most_commented_account_for_posts, most_commented_account_count_for_posts = account_posts_comments_counts.most_common(1)[0]
-                    else:
-                        most_commented_account_for_posts = None
-                        most_commented_account_count_for_posts = 0
 
-                    total_posts_comments = len(posts_comments_data)
-                else:
-                    most_commented_account_for_posts = None
-                    most_commented_account_count_for_posts = 0
+                        top_3_most_commented_accounts_for_posts = [
+                            {'name': account, 'comment_count': count}
+                            for account, count in account_posts_comments_counts.most_common(3)
+                        ]
+
+                        total_posts_comments = len(posts_comments_data)
+                    else:
+                        top_3_most_commented_accounts_for_posts = []
+                        total_posts_comments = 0
+                except (KeyError, json.JSONDecodeError) as e:
+                    top_3_most_commented_accounts_for_posts = []
                     total_posts_comments = 0
+                    print(f"Error processing posts comments: {e}")
                         
 
             # Your comments on reels
             with archive.open('your_instagram_activity/comments/reels_comments.json') as f:
-                reels_comments_data = json.load(f)
+                try:
+                    reels_comments_data = json.load(f)
 
-                if 'comments_reels_comments' in reels_comments_data:
-                    account_reels_comments_counts = Counter(
-                        comment['string_map_data']['Media Owner']['value']
-                        for comment in reels_comments_data['comments_reels_comments']
-                        if 'string_map_data' in comment and 'Media Owner' in comment['string_map_data']
+                    if 'comments_reels_comments' in reels_comments_data and reels_comments_data['comments_reels_comments']:
+                        account_reels_comments_counts = Counter(
+                            comment['string_map_data']['Media Owner']['value']
+                            for comment in reels_comments_data['comments_reels_comments']
+                            if 'string_map_data' in comment and 'Media Owner' in comment['string_map_data']
                         )
-                    if account_reels_comments_counts:
-                        most_commented_account_for_reels, most_commented_account_count_for_reels = account_reels_comments_counts.most_common(1)[0]
+                        top_3_most_commented_accounts_for_reels = [
+                            {'name': account, 'comment_count': count}
+                            for account, count in account_reels_comments_counts.most_common(3)
+                        ]
+
+                        total_reels_comments = len(reels_comments_data)
                     else:
-                        most_commented_account_for_reels = None
-                        most_commented_account_count_for_reels = 0
-
-                    total_reels_comments = len(reels_comments_data)
-
-                else:
-                    most_commented_account_for_reels = None
-                    most_commented_account_count_for_reels = 0
+                        top_3_most_commented_accounts_for_reels = []
+                        total_reels_comments = 0
+                except (KeyError, json.JSONDecodeError) as e:
+                    top_3_most_commented_accounts_for_reels = []
                     total_reels_comments = 0
+                    print(f"Error processing posts comments: {e}")
             
 
             # Your stories posted
@@ -192,24 +202,19 @@ def process_zip_and_save(file_stream, upload_path, username):
         with open(path, 'w') as f:
             json.dump({
                 'total_liked_posts': total_liked_posts,
-                'most_liked_account_for_posts': most_liked_account_for_posts,
-                'most_liked_account_count_for_posts': most_liked_account_count_for_posts,
+                'top_3_most_liked_account_for_posts': top_3_most_liked_account_for_posts,
 
                 "total_liked_comments": total_liked_comments,
-                'most_liked_account_for_comments': most_liked_account_for_comments,
-                'most_liked_account_count_for_comments': most_liked_account_count_for_comments,
+                'top_3_most_liked_account_for_comments': top_3_most_liked_account_for_comments,
 
                 'total_liked_stories': total_liked_stories,
-                'most_liked_account_for_stories': most_liked_account_for_stories,
-                'most_liked_account_count_for_stories': most_liked_account_count_for_stories,
+                'top_3_most_liked_account_for_stories': top_3_most_liked_account_for_stories,
 
                 'total_posts_comments': total_posts_comments,
-                'most_commented_account_for_posts': most_commented_account_for_posts,
-                'most_commented_account_count_for_posts': most_commented_account_count_for_posts,
+                'top_3_most_commented_accounts_for_posts': top_3_most_commented_accounts_for_posts,
 
                 'total_reels_comments': total_reels_comments,
-                'most_commented_account_for_reels': most_commented_account_for_reels,
-                'most_commented_account_count_for_reels': most_commented_account_count_for_reels,
+                'top_3_most_commented_accounts_for_reels': top_3_most_commented_accounts_for_reels,
 
                 'total_people_messaged': total_users_messaged,
                 'top_3_most_messaged_people': top_3_most_messaged_people,
