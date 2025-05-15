@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="masonry-background">
+        {% for i in range(30) %}
+        <img src="{{ url_for('static', filename='images/background-images/photo' ~ i ~ '.webp') }}" alt="photo" loading="lazy">
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -224,37 +224,42 @@ body {
 }
 
 /* Multi Photo Strips background */
-.photo-strips {
+#background-frame {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  display: flex;
   height: 100%;
   z-index: -1;
-  overflow: hidden;
-
+  border: none;
+  pointer-events: none;
 }
 
-.photo-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1vh;
-  /* small consistent vertical gap, scales with screen height */
-  animation-name: slide-strip;
-  animation-duration: 40s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-  animation-direction: alternate;
+/* Masonry-style background with slow vertical scroll */
+.masonry-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  column-count: 5;
+  /* Adjust columns based on your preference */
+  column-gap: 10px;
+  animation: scroll-up 100s linear infinite;
   will-change: transform;
+  z-index: -1;
 }
 
-.photo-column[data-direction="down"] {
-  animation-direction: alternate-reverse;
+.masonry-background img {
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  opacity: 0.9;
 }
 
-@keyframes slide-strip {
+@keyframes scroll-up {
   0% {
     transform: translateY(0);
   }
@@ -262,14 +267,4 @@ body {
   100% {
     transform: translateY(-50%);
   }
-}
-
-.photo-column img {
-  width: 80%;
-  aspect-ratio: 2 / 3;
-  border-radius: 8px;
-  object-fit: cover;
-  object-position: center;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-  opacity: 0.9;
 }

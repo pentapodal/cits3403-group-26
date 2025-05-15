@@ -13,6 +13,11 @@ from app.utils import process_zip_and_save
 current_user: User
 
 
+@app.route('/background')
+def background_page():
+    return render_template('background.html')
+
+
 @app.route('/')
 @app.route('/index')
 def index():
