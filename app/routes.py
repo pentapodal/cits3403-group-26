@@ -10,11 +10,12 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm
 from app.models import User
 from app.utils import process_zip_and_save
+from app.blueprints import blueprint
 current_user: User
 
 
-@app.route('/')
-@app.route('/index')
+@blueprint.route('/')
+@blueprint.route('/index')
 def index():
   posts = [
     {
@@ -29,35 +30,35 @@ def index():
   return render_template('index.html', posts=posts)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@blueprint.route('/login', methods=['GET', 'POST'])
 def login():
   if current_user.is_authenticated:
-    return redirect(url_for('home'))
+    return redirect(url_for('main.home'))
   form = LoginForm()
   if form.validate_on_submit():
     user = db.session.scalar(
       sa.select(User).where(User.username == form.username.data))
     if user is None or not user.check_password(form.password.data):
       flash('Invalid username or password')
-      return redirect(url_for('login'))
+      return redirect(url_for('main.login'))
     login_user(user, remember=form.remember_me.data)
     next_page = request.args.get('next')
     if not next_page or urlsplit(next_page).netloc != '':
-      next_page = url_for('home')
+      next_page = url_for('main.home')
     return redirect(next_page)
   return render_template('login.html', title='Sign In', form=form)
 
 
-@app.route('/logout')
+@blueprint.route('/logout')
 def logout():
   logout_user()
-  return redirect(url_for('index'))
+  return redirect(url_for('main.index'))
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@blueprint.route('/register', methods=['GET', 'POST'])
 def register():
   if current_user.is_authenticated:
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
   form = RegistrationForm()
   if form.validate_on_submit():
     user = User(username=form.username.data, email=form.email.data)
@@ -65,17 +66,17 @@ def register():
     db.session.add(user)
     db.session.commit()
     flash('Congratulations, you are now a registered user!')
-    return redirect(url_for('login'))
+    return redirect(url_for('main.login'))
   return render_template('register.html', title='Register', form=form)
 
 
-@app.route('/home')
+@blueprint.route('/home')
 @login_required
 def home():
   return render_template('home.html', title='Home')
 
 
-@app.route('/following')
+@blueprint.route('/following')
 #@login_required # Uncomment this line to require login for the friends page
 def following():
   following_list = [
@@ -88,7 +89,7 @@ def following():
 
   return render_template('following.html', title='Following', following=following_list)
 
-@app.route('/followers')
+@blueprint.route('/followers')
 @login_required
 def followers():
   followers_list = [
@@ -101,7 +102,7 @@ def followers():
   return render_template('followers.html', title='Followers', followers=followers_list)
 
 
-@app.route('/send_follow_request/<username>', methods=['POST'])
+@blueprint.route('/send_follow_request/<username>', methods=['POST'])
 @login_required
 def send_follow_request(username):
   form = EmptyForm()
@@ -119,10 +120,10 @@ def send_follow_request(username):
       current_user.send_follow_request(user)
       db.session.commit()
       flash(f'You have sent a follow request to {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('main.friends'))
 
 
-@app.route('/cancel_follow_request/<username>', methods=['POST'])
+@blueprint.route('/cancel_follow_request/<username>', methods=['POST'])
 @login_required
 def cancel_follow_request(username):
   form = EmptyForm()
@@ -138,10 +139,10 @@ def cancel_follow_request(username):
       current_user.cancel_follow_request(user)
       db.session.commit()
       flash(f'You have cancelled a follow request to {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('main.friends'))
 
 
-@app.route('/accept_follow_requester/<username>', methods=['POST'])
+@blueprint.route('/accept_follow_requester/<username>', methods=['POST'])
 @login_required
 def accept_follow_requester(username):
   form = EmptyForm()
@@ -159,10 +160,10 @@ def accept_follow_requester(username):
       current_user.accept_follow_requester(user)
       db.session.commit()
       flash(f'You have accepted a follow request from {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('main.friends'))
 
 
-@app.route('/dismiss_follow_requester/<username>', methods=['POST'])
+@blueprint.route('/dismiss_follow_requester/<username>', methods=['POST'])
 @login_required
 def dismiss_follow_requester(username):
   form = EmptyForm()
@@ -178,10 +179,10 @@ def dismiss_follow_requester(username):
       current_user.dismiss_follow_requester(user)
       db.session.commit()
       flash(f'You have dismissed a follow request from {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('main.friends'))
 
 
-@app.route('/stop_following/<username>', methods=['POST'])
+@blueprint.route('/stop_following/<username>', methods=['POST'])
 @login_required
 def stop_following(username):
   form = EmptyForm()
@@ -197,10 +198,10 @@ def stop_following(username):
       current_user.stop_following(user)
       db.session.commit()
       flash(f'You have stopped following {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('main.friends'))
 
 
-@app.route('/remove_follower/<username>', methods=['POST'])
+@blueprint.route('/remove_follower/<username>', methods=['POST'])
 @login_required
 def remove_follower(username):
   form = EmptyForm()
@@ -216,10 +217,10 @@ def remove_follower(username):
       current_user.remove_follower(user)
       db.session.commit()
       flash(f'You have removed the follower {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('main.friends'))
 
 
-@app.route('/search_users/<query>')
+@blueprint.route('/search_users/<query>')
 @login_required
 def search_users(query):
   # Need to use .from_statement() because selecting ORM, see:
@@ -240,7 +241,7 @@ def search_users(query):
   ]}
 
 
-@app.route('/upload', methods=['GET', 'POST'])
+@blueprint.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
     form = UploadForm()
@@ -249,14 +250,14 @@ def upload():
         try:
             path = process_zip_and_save(file.stream, app.config['UPLOAD_PATH'], current_user.username)
             flash(f'File Successfully Uploaded')
-            return redirect(url_for('overshare', username=current_user.username))
+            return redirect(url_for('main.overshare', username=current_user.username))
         except (BadZipFile, OSError) as error:
             flash(str(error))
     return render_template('upload.html', title='Upload', form=form)
 
 
-@app.route('/overshare')
-@app.route('/overshare/<username>')
+@blueprint.route('/overshare')
+@blueprint.route('/overshare/<username>')
 @login_required
 def overshare(username=None):
     if username is None:
@@ -266,19 +267,19 @@ def overshare(username=None):
 
     if not os.path.isfile(json_file_path): 
         flash("No data available for this user.")
-        return redirect(url_for('upload'))
+        return redirect(url_for('main.upload'))
 
     with open(json_file_path, 'r') as json_file:
         user_data = json.load(json_file)
 
     return render_template('overshare.html', title='Overshare', username=username, user_data=user_data)
 
-@app.route('/follow-requesters')
+@blueprint.route('/follow-requesters')
 @login_required
 def follow_requesters():
   return render_template('follow-requesters.html', title='Follow Request')
   
-@app.route('/follow-requestings')
+@blueprint.route('/follow-requestings')
 @login_required
 def follow_requestings():
   return render_template('follow-requesting.html', title='Follow Requesting')

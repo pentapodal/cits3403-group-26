@@ -2,7 +2,7 @@ import multiprocessing
 import unittest
 import time
 
-from app.controllers import try_to_login_user
+#from app.controllers import try_to_login_user
 from app.models import User
 from app import create_application, db
 from config import TestingConfig
@@ -44,7 +44,7 @@ class SystemTests(unittest.TestCase):
 
     user_id_field = self.driver.find_element(By.NAME, 'username')
     password_field = self.driver.find_element(By.NAME, 'password')
-    submit_button = self.driver.find_element(By.ID 'submit')
+    submit_button = self.driver.find_element(By.ID, 'submit')
 
     user_id_field.send_keys('testuser')
     password_field.send_keys('testpassword')

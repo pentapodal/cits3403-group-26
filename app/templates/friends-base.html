@@ -7,22 +7,22 @@
             <h2 class="navbar-brand fw-bold fs-3">{% block heading%}Default{% endblock%}</h2>
             <div class="d-flex">
 
-                <form action="{{ url_for('following') }}" method="get" class="mb-3 p-2">
+                <form action="{{ url_for('main.following') }}" method="get" class="mb-3 p-2">
                 <button type="submit" class="btn btn-info w-100 text-white">Following</button>
                 </form>
 
-                <form action="{{ url_for('followers') }}" method="get" class="mb-3 p-2">
+                <form action="{{ url_for('main.followers') }}" method="get" class="mb-3 p-2">
                 <button type="submit" class="btn btn-info w-100 text-white">Followers</button>
                 </form>
 
-                <form action="{{ url_for('follow_requesters') }}" method="get" class="mb-3 p-2">
+                <form action="{{ url_for('main.follow_requesters') }}" method="get" class="mb-3 p-2">
                 <button type="submit" class="btn btn-info w-100 text-white">Requests
                     <!--add {{received_count}} for notifs-->
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
                 </button>
                 </form>
                 
-                <form action="{{ url_for('follow_requestings') }}" method="get" class="mb-3 p-2">
+                <form action="{{ url_for('main.follow_requestings') }}" method="get" class="mb-3 p-2">
                 <button type="submit" class="btn btn-info w-100 text-white">Sent</button>
                 </form>
 
