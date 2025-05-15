@@ -1,7 +1,11 @@
+import multiprocessing
 import unittest
-
 import time
+
+from app.controllers import try_to_login_user
 from app.models import User
+from app import create_application, db
+from config import TestingConfig
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
