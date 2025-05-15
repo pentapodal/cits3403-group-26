@@ -120,26 +120,6 @@ body {
   transform: translateY(-2px);
 }
 
-
-.story-title {
-  font-family: 'Lobster', sans-serif;
-  color: white;
-  text-align: center;
-}
-
-
-.story-box {
-  font-family: 'Lobster', sans-serif;
-  font-size: 2rem;
-  background: rgba(255,255,255,0.15);
-  color: white;
-  border-radius: 20px;
-  padding: 30px;
-  margin-bottom: 30px;
-  min-height: 120px;
-  transition: opacity 1s;
-}
-
 .data-table h2 {
   color: white;
   font-family: 'Lobster', sans-serif;
