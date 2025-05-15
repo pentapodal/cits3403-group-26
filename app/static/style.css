@@ -119,3 +119,45 @@ body {
   background-color: #f0f0f0;
   transform: translateY(-2px);
 }
+
+
+.story-title {
+  font-family: 'Lobster', sans-serif;
+  color: white;
+  text-align: center;
+}
+
+
+.story-box {
+  font-family: 'Lobster', sans-serif;
+  font-size: 2rem;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+  min-height: 120px;
+  transition: opacity 1s;
+}
+
+.data-table h2 {
+  color: white;
+  font-family: 'Lobster', sans-serif;
+}
+
+.table.table-striped {
+  background: rgba(255,255,255,0.85);
+  border-radius: 10px;
+}
+
+.skip-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  margin: 0;
+}
+
+.story-box {
+  position: relative; /* Ensure positioning context for the button */
+  min-height: 180px;  /* Make sure there's room for the button */
+}
