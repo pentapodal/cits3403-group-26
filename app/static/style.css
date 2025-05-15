@@ -161,3 +161,7 @@ body {
   position: relative; /* Ensure positioning context for the button */
   min-height: 180px;  /* Make sure there's room for the button */
 }
+
+#story-step {
+  transition: opacity 0.3s ease;
+}

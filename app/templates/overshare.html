@@ -9,7 +9,7 @@
 <div class="container mt-5">
   <h1 class="story-title">Day in the Life of {{ current_user.username }} Instagram Persona</h1>
   <div id="story-box" class="story-box" style="position:relative;">
-    <span id="typewriter"></span>
+    <span id="story-step" class="story-step"></span>
     <button id="skip-btn" class="btn btn-secondary skip-btn">Skip</button>
   </div>
 
@@ -135,145 +135,93 @@
 </div>
 
 <script>
-  // Prepare story steps
   const storySteps = [
-    `As you open your eyes first thing in the morning, you reach to your phone and eagerly check your Instagram. You came accross lots of interesting posts and
-    decided to like them. Over the past year, you’ve liked a total of {{ user_data.total_liked_posts }} post(s) while scrolling through your feed!
-    {% if user_data.top_3_most_liked_account_for_posts %}
-      Your top liked account(s) for posts were:
-      <ul>
-        {% for account in user_data.top_3_most_liked_account_for_posts %}
-          <li>{{ account.name }} ({{ account.liked_posts_count }} like(s))</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      Oh no! You didn't like any posts this year.
-    {% endif %}`,
-
-    `As you are doom scrolling in bed, you come across a funny comment section and decided to like some comments! You've liked a total of {{ user_data.total_liked_comments }} comment(s).
-    {% if user_data.top_3_most_liked_account_for_comments %}
-      The comment(s) you liked most came from:
-      <ul>
-        {% for account in user_data.top_3_most_liked_account_for_comments %}
-          <li>{{ account.name }} ({{ account.liked_comments_count }} like(s))</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      Oh no! You didn't like any comments this year.
-    {% endif %}`,
-
-    `You decided to post a funny comment on the post. In the past year, you've commented on {{ user_data.total_posts_comments }} post(s).
-    {% if user_data.top_3_most_commented_accounts_for_posts %}
-      Most of your comments went to:
-      <ul>
-        {% for account in user_data.top_3_most_commented_accounts_for_posts %}
-          <li>{{ account.name }} ({{ account.comment_count }} comment(s))</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      Oh no! You didn't comment on any posts this year.
-    {% endif %}`,
-
-    `Your midday scroll is all about Stories. As you sit on the couch, you decided to look at some stories posted from your friends! You have liked {{ user_data.total_liked_stories }} stories this year.
-    {% if user_data.top_3_most_liked_account_for_stories %}
-      Most liked stories were from:
-      <ul>
-        {% for account in user_data.top_3_most_liked_account_for_stories %}
-          <li>{{ account.name }} ({{ account.story_activities_story_likes }} like(s))</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      Oh no! You didn't like any stories this year.
-    {% endif %}`,
-
-    `As the day winds down, you decided to take a stroll into Instagram reels, you came accross a KBBQ reel and a drool came down your lips and you decided to comment on it.
-    This past year, you have commented on {{ user_data.total_reels_comments }} reel(s).
-    {% if user_data.top_3_most_commented_accounts_for_reels %}
-      Most of your reel comments went to:
-      <ul>
-        {% for account in user_data.top_3_most_commented_accounts_for_reels %}
-          <li>{{ account.name }} ({{ account.comment_count }} comment(s))</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      Oh no! You didn't comment on any reels this year.
-    {% endif %}`,
-
-    `You couldn't take it anymore so you drive to the closest KBBQ restaurant you know and ordered some food. Before eating, you take a photo of the food to post as a Story 
-    to flex to your friends. This past year, you shared {{ user_data.total_stories_posted }} stories of your own.`,
-
-    `As you eat, you receive so many messages from your jealous friends. This past year, you messaged {{ user_data.total_people_messaged }} people.
-    {% if user_data.top_3_most_messaged_people %}
-      Your top conversations were with:
-      <ul>
-        {% for person in user_data.top_3_most_messaged_people %}
-          <li>{{ person.name }} ({{ person.message_count }} messages)</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      Oh no! You didn't message anyone this year.
-    {% endif %}`
+    {
+      content: ""
+    },
+    {
+      content: "As you open your eyes, you reach for your phone and instantly open Instagram."
+    },
+    {
+      content: "You scroll through your feed, and you see a post from your favorite account, giving it a like!"
+    },
+    {
+      content: "You liked a total of {{ user_data.total_liked_posts }} posts this year. <br> Your top 3 most liked accounts for posts are: {{ user_data.top_3_most_liked_account_for_posts|map(attribute='name')|join(', ') }}."
+    },
+    {
+      title: "Total Liked Comments",
+      content: "You liked a total of {{ user_data.total_liked_comments }} comments this year."
+    },
+    {
+      title: "Total Liked Stories",
+      content: "You liked a total of {{ user_data.total_liked_stories }} stories this year."
+    },
+    {
+      title: "Total Posts Commented",
+      content: "You commented on a total of {{ user_data.total_posts_comments }} posts this year."
+    },
+    {
+      title: "Total Reels Commented",
+      content: "You commented on a total of {{ user_data.total_reels_comments }} reels this year."
+    },
+    {
+      title: "Total Stories Posted",
+      content: "You posted a total of {{ user_data.total_stories_posted }} stories this year."
+    },
+    {
+      title: "Total People Messaged",
+      content: "You messaged a total of {{ user_data.total_people_messaged }} people this year."
+    }
   ];
 
-  // Typewriter effect
+  const storyStepDiv = document.getElementById("story-step");
   const storyBox = document.getElementById("story-box");
-  const typewriter = document.getElementById("typewriter");
   const dataTable = document.getElementById("data-table");
-  let step = 0;
+  const skipBtn = document.getElementById("skip-btn");
 
-  function typeWriterEffect(text, i, cb) {
-    if (i < text.length) {
-      typewriter.innerHTML += text.charAt(i);
-      setTimeout(() => typeWriterEffect(text, i + 1, cb), 30);
-    } else if (cb) {
-      cb();
-    }
-  }
+  let currentStep = 0;
 
-  function showStoryStep() {
-    typewriter.innerHTML = "";
-    // Fade in HTML tags (ul/li) instantly, not typewriter
-    let html = storySteps[step];
-    // Split at first <ul> if present
-    let ulIndex = html.indexOf("<ul>");
-    if (ulIndex !== -1) {
-      let beforeUl = html.substring(0, ulIndex);
-      let afterUl = html.substring(ulIndex);
-      typeWriterEffect(beforeUl, 0, () => {
-        typewriter.innerHTML += afterUl;
-        setTimeout(nextStep, 3500);
-      });
-    } else {
-      typeWriterEffect(html, 0, () => setTimeout(nextStep, 4500));
-    }
+  function showStep(index) {
+    storyStepDiv.style.opacity = 0;
+    setTimeout(() => {
+      if (index < storySteps.length) {
+        const step = storySteps[index];
+        storyStepDiv.innerHTML = '<h2>' + step.title + '</h2><p>' + step.content + '</p>';
+      } else {
+        storyBox.style.display = "none";
+        dataTable.style.opacity = 1;
+      }
+      storyStepDiv.style.opacity = 1;
+    }, 500);
+    
   }
 
   function nextStep() {
-    step++;
-    if (step < storySteps.length) {
-      showStoryStep();
-    } else {
-      // Fade out story box, fade in table
-      storyBox.style.transition = "opacity 1s";
-      storyBox.style.opacity = 0;
-      setTimeout(() => {
-        storyBox.style.display = "none";
-        dataTable.style.opacity = 1;
-      }, 1000);
-    }
+    currentStep++;
+    showStep(currentStep);
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    showStoryStep();
+  storyBox.addEventListener("touchstart", e => {
+    touchStarti = e.changedTouches[0].screenX;
   });
 
-  document.getElementById("skip-btn").onclick = function() {
-    storyBox.style.transition = "opacity 1s";
-    storyBox.style.opacity = 0;
-    setTimeout(() => {
-      storyBox.style.display = "none";
-      dataTable.style.opacity = 1;
-    }, 1000);
-  };
+  storyBox.addEventListener("touchend", e => {
+    touchEndi = e.changedTouches[0].screenX;
+    if (touchEndi < touchStarti - 30) {
+      nextStep();
+    }
+  });
+
+  storyBox.addEventListener("click", function() {
+    nextStep();
+  });
+
+  skipBtn.addEventListener("click", function() {
+    storyBox.style.display = "none";
+    dataTable.style.opacity = 1;
+  });
+
+  showNextStep();
+
 </script>
 {% endblock %}
