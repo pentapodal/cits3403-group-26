@@ -76,8 +76,9 @@ def home():
 
 
 @app.route('/following')
-#@login_required # Uncomment this line to require login for the friends page
+@login_required
 def following():
+  form = EmptyForm()
   following_list = [
     {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
     {'username': 'Andrea', 'profile_picture': 'andrea.png'},
@@ -85,12 +86,14 @@ def following():
     {'username': 'David', 'profile_picture': None},
     {'username': 'Eve', 'profile_picture': None},
   ]
+  # following_list = db.session.scalars(current_user.following.select()).all()
+  return render_template('following.html', title='Following', form=form, following=following_list)
 
-  return render_template('following.html', title='Following', following=following_list)
 
 @app.route('/followers')
 @login_required
 def followers():
+  form = EmptyForm()
   followers_list = [
     {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
     {'username': 'Andrea', 'profile_picture': 'andrea.png'},
@@ -98,7 +101,32 @@ def followers():
     {'username': 'Anna', 'profile_picture': None},
     {'username': 'Ryan', 'profile_picture': None},
   ]
-  return render_template('followers.html', title='Followers', followers=followers_list)
+  return render_template('followers.html', title='Followers', form=form, followers=followers_list)
+
+
+@app.route('/follow-requesters')
+@login_required
+def follow_requesters():
+  requesters_list = [
+    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
+    {'username': 'Andrea', 'profile_picture': 'andrea.png'},
+    {'username': 'Jia', 'profile_picture': 'jia.png'},
+    {'username': 'Anna', 'profile_picture': None},
+    {'username': 'Ryan', 'profile_picture': None},
+  ]
+  return render_template('follow-requesters.html', title='Follow Requests', friend_requests=requesters_list)
+
+@app.route('/follow-requesting')
+@login_required
+def follow_requesting():
+  requesting_list = [
+    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
+    {'username': 'Andrea', 'profile_picture': 'andrea.png'},
+    {'username': 'Jia', 'profile_picture': 'jia.png'},
+    {'username': 'Anna', 'profile_picture': None},
+    {'username': 'Ryan', 'profile_picture': None},
+  ]
+  return render_template('follow-requesting.html', title='Follow Requesting', friend_requests=requesting_list)
 
 
 @app.route('/send_follow_request/<username>', methods=['POST'])
@@ -119,7 +147,7 @@ def send_follow_request(username):
       current_user.send_follow_request(user)
       db.session.commit()
       flash(f'You have sent a follow request to {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('follow_requesting'))
 
 
 @app.route('/cancel_follow_request/<username>', methods=['POST'])
@@ -138,7 +166,7 @@ def cancel_follow_request(username):
       current_user.cancel_follow_request(user)
       db.session.commit()
       flash(f'You have cancelled a follow request to {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('follow_requesting'))
 
 
 @app.route('/accept_follow_requester/<username>', methods=['POST'])
@@ -159,7 +187,7 @@ def accept_follow_requester(username):
       current_user.accept_follow_requester(user)
       db.session.commit()
       flash(f'You have accepted a follow request from {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('follow_requesters'))
 
 
 @app.route('/dismiss_follow_requester/<username>', methods=['POST'])
@@ -178,7 +206,7 @@ def dismiss_follow_requester(username):
       current_user.dismiss_follow_requester(user)
       db.session.commit()
       flash(f'You have dismissed a follow request from {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('follow_requesters'))
 
 
 @app.route('/stop_following/<username>', methods=['POST'])
@@ -197,7 +225,7 @@ def stop_following(username):
       current_user.stop_following(user)
       db.session.commit()
       flash(f'You have stopped following {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('following'))
 
 
 @app.route('/remove_follower/<username>', methods=['POST'])
@@ -216,7 +244,7 @@ def remove_follower(username):
       current_user.remove_follower(user)
       db.session.commit()
       flash(f'You have removed the follower {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('followers'))
 
 
 @app.route('/search_users/<query>')
@@ -272,14 +300,3 @@ def overshare(username=None):
         user_data = json.load(json_file)
 
     return render_template('overshare.html', title='Overshare', username=username, user_data=user_data)
-
-@app.route('/follow-requesters')
-@login_required
-def follow_requesters():
-  return render_template('follow-requesters.html', title='Follow Request')
-  
-@app.route('/follow-requestings')
-@login_required
-def follow_requestings():
-  return render_template('follow-requesting.html', title='Follow Requesting')
-
