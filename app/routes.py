@@ -6,7 +6,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from flask_wtf.file import FileStorage
 from zipfile import ZipFile, BadZipFile
 import sqlalchemy as sa
-from app import app, db
+from app import db
+from flask import current_app
 from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm
 from app.models import User
 from app.utils import process_zip_and_save
@@ -248,7 +249,7 @@ def upload():
     if form.validate_on_submit():
         file: FileStorage = form.file.data
         try:
-            path = process_zip_and_save(file.stream, app.config['UPLOAD_PATH'], current_user.username)
+            path = process_zip_and_save(file.stream, current_app.config['UPLOAD_PATH'], current_user.username)
             flash(f'File Successfully Uploaded')
             return redirect(url_for('main.overshare', username=current_user.username))
         except (BadZipFile, OSError) as error:
@@ -263,7 +264,7 @@ def overshare(username=None):
     if username is None:
         username = current_user.username
 
-    json_file_path = os.path.join(app.config['UPLOAD_PATH'], f'{username}.json')
+    json_file_path = os.path.join(current_app.config['UPLOAD_PATH'], f'{username}.json')
 
     if not os.path.isfile(json_file_path): 
         flash("No data available for this user.")

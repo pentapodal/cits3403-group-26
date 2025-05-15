@@ -12,12 +12,13 @@ def create_application(config):
   app = Flask(__name__)
   app.config.from_object(config)
 
-  from app.blueprints import blueprint
-  app.register_blueprint(blueprint)
-
   db.init_app(app)
   login.init_app(app)
 
+  from app import routes
+  from app.blueprints import blueprint
+  app.register_blueprint(blueprint)
+
   return app
 
-from app import routes, models
+
