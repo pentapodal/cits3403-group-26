@@ -19,14 +19,14 @@
   <nav class="navbar navbar-expand-lg navbar-dark px-4 fixed-top" style="text-shadow: 1px 1px 3px black;">
 
     <div class="container-fluid">
-      <a class="navbar-brand fw-bold fs-3" href="{{ url_for('index') }}">Overshare</a>
+      <a class="navbar-brand fw-bold fs-3" href="{{ url_for('index') }} style="text-shadow: 1px 1px 3px black;"">Overshare</a>
       <div class="ms-auto d-flex gap-2">
         {% if current_user.is_anonymous %}
-          <a href="{{ url_for('login') }}" class="btn btn-outline-light">Login</a>
-          <a href="{{ url_for('register') }}" class="btn btn-outline-light">Register</a>
+          <a href="{{ url_for('login') }}" class="btn btn-outline-light" style="text-shadow: 1px 1px 3px black;">Login</a>
+          <a href="{{ url_for('register') }}" class="btn btn-outline-light" style="text-shadow: 1px 1px 3px black;">Register</a>
         {% else %}
-          <a href="{{ url_for('home') }}" class="btn btn-outline-light">Home</a>
-          <a href="{{ url_for('logout') }}" class="btn btn-outline-light">Logout</a>
+          <a href="{{ url_for('home') }}" class="btn btn-outline-light" style="text-shadow: 1px 1px 3px black;">Home</a>
+          <a href="{{ url_for('logout') }}" class="btn btn-outline-light" style="text-shadow: 1px 1px 3px black;">Logout</a>
           
         {% endif %}
       </div>
