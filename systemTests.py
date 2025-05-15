@@ -22,6 +22,8 @@ class SystemTests(unittest.TestCase):
     self.app_ctx.push()
     db.create_all()
 
+    self.add_user('testuser', 'testuser@example.com', 'testpassword')
+
     self.server_thread = threading.Thread(
         target=self.testApplication.run,
         kwargs={'debug': False, 'use_reloader': False}
