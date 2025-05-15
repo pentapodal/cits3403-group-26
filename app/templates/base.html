@@ -32,23 +32,22 @@
     </div>
   </nav>
 
-{% block strips %}
-{% set ns = namespace(photo_urls=[]) %}
-{% for i in range(1, 31) %}
-    {% set _ = ns.photo_urls.append(url_for('static', filename='images/background-images/photo' ~ i ~ '.jpg')) %}
-{% endfor %}
-{% set photo_urls = ns.photo_urls %}
-<div class="photo-strips">
-  {% for col in range(6) %}
-  <div class="photo-column {{ 'up' if col % 2 == 0 else 'down' }}">
-    {% for row in range(5) %}
-      <img src="{{ photo_urls[col * 5 + row] }}" alt="photo">
+  {% set ns = namespace(photo_urls=[]) %}
+  {% for i in range(1, 31) %}
+      {% set _ = ns.photo_urls.append(url_for('static', filename='images/background-images/photo' ~ i ~ '.webp')) %}
+  {% endfor %}
+  {% set photo_urls = ns.photo_urls %}
+
+  <!-- Photo strips -->
+  <div class="photo-strips">
+    {% for col in range(6) %}
+    <div class="photo-column" data-direction="{{ 'up' if col % 2 == 0 else 'down' }}">
+      {% for row in range(5) %}
+        <img src="{{ photo_urls[col * 5 + row] }}" alt="photo" loading="lazy">
+      {% endfor %}
+    </div>
     {% endfor %}
   </div>
-  {% endfor %}
-</div>
-{% endblock %}
-
 
   <!-- Flash Messages -->
   {% with messages = get_flashed_messages() %}

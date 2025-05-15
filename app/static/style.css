@@ -242,47 +242,34 @@ body {
   align-items: center;
   gap: 1vh;
   /* small consistent vertical gap, scales with screen height */
+  animation-name: slide-strip;
   animation-duration: 40s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+  animation-direction: alternate;
+  will-change: transform;
+}
+
+.photo-column[data-direction="down"] {
+  animation-direction: alternate-reverse;
+}
+
+@keyframes slide-strip {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-50%);
+  }
 }
 
 .photo-column img {
   width: 80%;
-  /* photo takes 80% of column width, will scale with window */
   aspect-ratio: 2 / 3;
-  /* always portrait ratio, even if window resizes */
   border-radius: 8px;
   object-fit: cover;
   object-position: center;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
   opacity: 0.9;
-}
-
-.photo-column.up {
-  animation-name: slide-up-strip;
-}
-
-.photo-column.down {
-  animation-name: slide-down-strip;
-}
-
-@keyframes slide-up-strip {
-  from {
-    transform: translateY(0%);
-  }
-
-  to {
-    transform: translateY(-50%);
-  }
-}
-
-@keyframes slide-down-strip {
-  from {
-    transform: translateY(-50%);
-  }
-
-  to {
-    transform: translateY(0%);
-  }
 }
