@@ -1,4 +1,4 @@
-import multiprocessing
+import threading
 import unittest
 import time
 
@@ -17,16 +17,19 @@ local_host =  'http://localhost:5000'
 class SystemTests(unittest.TestCase):
 
   def setUp(self):
-    testApplication = create_application(TestingConfig)
-    self.app_ctx = testApplication.app_context()
+    self.testApplication = create_application(TestingConfig)
+    self.app_ctx = self.testApplication.app_context()
     self.app_ctx.push()
     db.create_all()
 
-    self.server_thread = multiprocessing.Process(target=self.testApplication.run)
+    self.server_thread = threading.Thread(
+        target=self.testApplication.run,
+        kwargs={'debug': False, 'use_reloader': False}
+    )
+    self.server_thread.daemon = True
     self.server_thread.start()
+    time.sleep(1)  # Give the server time to start
 
-    #options = webdriver.ChromeOptions()
-    #options.add_argument('--headless=new')
     self.driver = webdriver.Chrome()
 
     return super().setUp()
