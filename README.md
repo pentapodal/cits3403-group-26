@@ -28,7 +28,9 @@ Overshare is a web application that lets users to upload their Instagram data an
 - The Following page shows the Overshares you're following.
   
 ## Group details
-23509629	Enrichson Paris	        Enrichson
-23952666	Andrea Cheng Ern Bong	  andreabong
-23463523	Jia Xin Yeo	            1sdfghjx10n
-23846903	Chen Lim                pentopodal
+| Student ID | Full name             | GitHub username                               |
+|------------|-----------------------|-----------------------------------------------|
+| 23509629   | Enrichson Paris       | [Enrichson](https://github.com/Enrichson)     |
+| 23952666   | Andrea Cheng Ern Bong | [andreabong](https://github.com/andreabong)   |
+| 23463523   | Jia Xin Yeo           | [1sdfghjx10n](https://github.com/1sdfghjx10n) |
+| 23846903   | Chen Yu Lim           | [pentapodal](https://github.com/pentapodal)   |
