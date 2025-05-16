@@ -9,13 +9,13 @@
 
   <h1 class="story-title text-white m-3 pt-">Results of {{ current_user.username }} Instagram Persona</h1>
   <div class="d-flex justify-content-between p-2">
-    <div class="story-bar bg-white flex-fill mx-1"></div>
-    <div class="story-bar bg-white flex-fill mx-1"></div>
-    <div class="story-bar bg-white flex-fill mx-1"></div>
-    <div class="story-bar bg-white flex-fill mx-1"></div>
-    <div class="story-bar bg-white flex-fill mx-1"></div>
-    <div class="story-bar bg-white flex-fill mx-1"></div>
-    <div class="story-bar bg-white flex-fill mx-1"></div>
+    <div class="story-bar flex-fill mx-1"></div>
+    <div class="story-bar flex-fill mx-1"></div>
+    <div class="story-bar flex-fill mx-1"></div>
+    <div class="story-bar flex-fill mx-1"></div>
+    <div class="story-bar flex-fill mx-1"></div>
+    <div class="story-bar flex-fill mx-1"></div>
+    <div class="story-bar flex-fill mx-1"></div>
   </div>
   <div id="story-title" class="story-title text-white m-3 fw-bold fs-2 text-center"></div>
   <div id="story-box" class="story-box m-3 p-3" style="position: relative; min-height: 180px; background-color: rgba(0, 0, 0, 0.4); border-radius: 10px;">
@@ -268,14 +268,11 @@
     return content;
   }
 
-  // Show a specific story step
   function showStep(index) {
     if (isTyping) return;
     
-    // Clear the typewriter
     typewriter.innerHTML = "";
     
-    // Check if we've reached the end of steps
     if (index >= storySteps.length) {
       endStory();
       return;
@@ -289,24 +286,22 @@
       document.getElementById("story-title").innerHTML = step.title;
     }
     
-    // Add content based on step type
     if (step.template_key) {
       displayContent += renderStepContent(step);
     } else if (step.content) {
       displayContent += step.content;
     }
     
-    // Check if content contains a list
     const hasUl = displayContent.includes("<ul>");
     
     isTyping = true;
     
     if (hasUl) {
-      // Split content before and after the list
+      //split content before and after the list
       const beforeUl = displayContent.substring(0, displayContent.indexOf("<ul>"));
       const afterUl = displayContent.substring(displayContent.indexOf("<ul>"));
       
-      // Type out text before the list, then add the list all at once
+      //type out text before the list, then add the list all at once
       typeWriterEffect(beforeUl, 0, () => {
         typewriter.innerHTML += afterUl;
       });
@@ -316,10 +311,10 @@
     }
   }
 
-  // Move to the next step
+  //move to the next step
   function nextStep() {
     if (isTyping) {
-      // If still typing, show full content immediately
+      //if still typing, show full content immediately
       isTyping = false;
       typewriter.innerHTML = "";
       
@@ -366,7 +361,6 @@
     }
   });
 
-  // Click handler for story box
   storyBox.addEventListener("click", function() {
     nextStep();
   });
@@ -383,5 +377,21 @@
   
   // Start showing steps (redundant with DOMContentLoaded but keeping for safety)
   showStep(currentStep);
+
+  const bars = document.querySelectorAll('.story-bar');
+    let current = 0;
+
+    function updateBars() {
+      bars.forEach((bar, i) => {
+        bar.classList.toggle('active', i === current);
+      });
+    }
+
+    updateBars(); // Initialize first bar
+
+    document.addEventListener('click', () => {
+      current = (current + 1) % bars.length;
+      updateBars();
+    });
 </script>
 {% endblock %}

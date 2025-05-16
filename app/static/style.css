@@ -151,5 +151,5 @@ body {
 }
 
 .story-bar.active {
-  background-color: rgba(255, 255, 255, 1); /* active */
+  background-color: white; /* active */
 }

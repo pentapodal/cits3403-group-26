@@ -274,10 +274,6 @@ def overshare(username=None):
     # Define story steps with proper structure
     storySteps = [
         {
-            "title": "", 
-            "content": "As you open your eyes first thing in the morning, you reach to your phone and eagerly check your Instagram. You came across lots of interesting posts and decided to like them!"
-        },
-        {
             "title": "Total Liked Posts", 
             "template_key": "total_liked_posts"
         },
