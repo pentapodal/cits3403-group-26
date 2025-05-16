@@ -121,3 +121,73 @@ body {
   background-color: #f0f0f0;
   transform: translateY(-2px);
 }
+
+
+.story-title {
+  font-family: 'Lobster', sans-serif;
+  color: white;
+  text-align: center;
+}
+
+
+.story-box {
+  font-family: 'Lobster', sans-serif;
+  font-size: 2rem;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+  min-height: 120px;
+  transition: opacity 1s;
+}
+
+.story-title {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.data-table h2 {
+  color: white;
+  font-family: 'Lobster', sans-serif;
+}
+
+.table.table-striped {
+  background: rgba(255,255,255,0.85);
+  border-radius: 10px;
+}
+
+.skip-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  margin: 0;
+}
+
+.story-box {
+  position: relative; /* Ensure positioning context for the button */
+  min-height: 180px;  /* Make sure there's room for the button */
+}
+
+.table-cute {
+  background: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+.numbered-list {
+  margin-left: 1.5em;
+  padding-left: 0.5em;
+}
+.table thead th {
+  background: #b8e0fc;
+  color: #222;
+  border-bottom: 2px solid #a0c4ff;
+}
+.table td, .table th {
+  vertical-align: middle;
+}
+
+.value-align {
+  padding-left: 0.5em;
+}
