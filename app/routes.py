@@ -9,7 +9,8 @@ import sqlalchemy as sa
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm
 from app.models import User
-from app.utils import process_zip_and_save
+from app.utils import process_and_save_all
+
 current_user: User
 
 
@@ -247,7 +248,7 @@ def upload():
     if form.validate_on_submit():
         file: FileStorage = form.file.data
         try:
-            path = process_zip_and_save(file.stream, app.config['UPLOAD_PATH'], current_user.username)
+            process_and_save_all(file.stream, current_user.username)
             flash(f'File Successfully Uploaded')
             return redirect(url_for('overshare', username=current_user.username))
         except (BadZipFile, OSError) as error:
