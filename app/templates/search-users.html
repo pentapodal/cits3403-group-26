@@ -1,0 +1,42 @@
+{% extends "friends-base.html" %}
+
+{% block heading %}Search Users{% endblock %}
+{% block friends_content %}
+<form id="search" method="GET" action="{{ url_for('search_users') }}">
+  <div class="input-group">
+    {{ search_form.q(class="form-control", placeholder=search_form.q.label.text) }}
+  </div>
+</form>
+
+<div class="flex-grow-1 overflow-auto px-3 pb-3">
+
+  {% if results %}
+  {% for user in results %}
+    <div class="card text-white m-2" style="background-color: rgba(0, 0, 0, 0.6);">
+      <div class="d-flex justify-content-between align-items-center p-2 flex-wrap">
+
+        <div class="d-flex align-items-center">
+
+          {% if user.profile_picture %}
+            <img src="{{ url_for('static', filename='images/profile-pictures/' + user.profile_picture) }}" class="rounded-circle" alt="pfp" height="100" width="100">
+          {% else %}
+            <img src="{{ url_for('static', filename='images/profile-pictures/default.png') }}" class="rounded-circle" alt="pfp" height="100" width="100">
+          {% endif %}
+          <span class="fs-5 p-2">{{ user.username }}</span>
+
+        </div>
+
+        <div>
+          <form method="POST" action="{{ url_for('send_follow_request', username=user.username) }}">
+            {{ follow_form.hidden_tag() }}
+            {{ follow_form.submit(class="btn btn-m btn-success justify-content-end", value="Send") }}
+          </form>
+        </div>
+
+      </div>
+    </div>
+  {% endfor %}
+  {% endif %}
+
+</div>
+{% endblock friends_content %}

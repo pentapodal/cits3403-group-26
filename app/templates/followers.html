@@ -1,36 +1,36 @@
 {% extends "friends-base.html" %}
-{% block heading%}Followers{% endblock%}
+
+{% block heading %}Followers{% endblock %}
 {% block friends_content %}
+<div class="flex-grow-1 overflow-auto px-3 pb-3">
 
-      <div class="flex-grow-1 overflow-auto px-3 pb-3">
-      
-        {% for follow in followers%}
-        <div class="card text-white m-2" style="background-color: rgba(0, 0, 0, 0.6);">
-          <div class="d-flex justify-content-between align-items-center p-2 flex-wrap">
+  {% for follow in followers %}
+    <div class="card text-white m-2" style="background-color: rgba(0, 0, 0, 0.6);">
+      <div class="d-flex justify-content-between align-items-center p-2 flex-wrap">
 
-            <div class="d-flex align-items-center">
-              
-              {% if follow.profile_picture%}
-                <img src="{{ url_for('static', filename='images/profile_pictures/' + follow.profile_picture)}}" class="rounded-circle" alt="pfp" height="100" width="100">
-              {% else%}
-                <img src="{{ url_for('static', filename="images/profile_pictures/default.png")}}" class="rounded-circle" alt="pfp" height="100" width="100">
-              {% endif%}
-              <span class="fs-5 p-2"> {{follow.username}} </span>
+        <div class="d-flex align-items-center">
 
-            </div>
+          {% if follow.has_pic() %}
+            <img src="{{ url_for('static', filename='images/profile-pictures/' + follow.profile_picture) }}" class="rounded-circle" alt="pfp" height="100" width="100">
+          {% else %}
+            <img src="{{ url_for('static', filename='images/profile-pictures/default.png') }}" class="rounded-circle" alt="pfp" height="100" width="100">
+          {% endif %}
+          <span class="fs-5 p-2">{{ follow.username }}</span>
 
-            <div>
-              <form method="POST" action="{{ url_for('remove_follower', username=request.username) }}">
-                <button type="submit" class="btn btn-m btn-warning justify-content-end">Remove</button>
-              </form>
-            </div>
-
-          </div>
         </div>
-        {% else%}
-          <p class="text-white">You have no friends yet </p>
-        {% endfor%}
+
+        <div>
+          <form method="POST" action="{{ url_for('remove_follower', username=follow.username) }}">
+            {{ form.hidden_tag() }}
+            {{ form.submit(class="btn btn-m btn-warning justify-content-end", value="Remove") }}
+          </form>
         </div>
+
       </div>
-    
+    </div>
+  {% else %}
+    <p class="text-white">You are not being followed by anyone yet.</p>
+  {% endfor %}
+
+</div>
 {% endblock %}
