@@ -178,5 +178,6 @@ app.db
 
 # Some directories to ignore
 uploads/
-profile_pics/
+app/static/images/profile-pictures/
+!app/static/images/profile-pictures/default.png
 

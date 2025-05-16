@@ -273,7 +273,7 @@ def upload():
         try:
             process_and_save_all(file.stream, current_user.username)
             flash(f'File Successfully Uploaded')
-            return redirect(url_for('overshare', username=current_user.username))
+            return redirect(url_for('overshare'))
         except (BadZipFile, OSError) as error:
             flash(str(error))
     return render_template('upload.html', title='Upload', form=form)
@@ -285,7 +285,7 @@ def upload():
 def overshare(username: str | None = None):
   if username is None:
     username = current_user.username
-  else:
+  elif username != current_user.username:
     user = db.session.scalar(sa.select(User).where(User.username == username))
     if user is None:
       flash(f'User {username} not found.')

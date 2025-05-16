@@ -250,7 +250,7 @@ def extract_and_save_profile_pic_from_json(file_stream, username):
     from zipfile import ZipFile
     import os
 
-    upload_path = app.config['PROFILE_PICS_PATH']
+    profile_pics_path = app.config['PROFILE_PICS_PATH']
     try:
         with ZipFile(file_stream) as archive:
             try:
@@ -262,9 +262,9 @@ def extract_and_save_profile_pic_from_json(file_stream, username):
 
             # Now extract the photo using the URI
             if uri in archive.namelist():
-                if not os.path.isdir(upload_path):
-                    os.makedirs(upload_path, exist_ok=True)
-                save_path = os.path.join(upload_path, f'{username}_profile_pic.jpg')
+                if not os.path.isdir(profile_pics_path):
+                    os.makedirs(profile_pics_path, exist_ok=True)
+                save_path = os.path.join(profile_pics_path, f'{username}.jpg')
                 with archive.open(uri) as pic_file:
                     photo_bytes = pic_file.read()
                     with open(save_path, 'wb') as out_pic:
