@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <div class ="masonry-container">
+  <div class="masonry-container">
     {% for col in range(4) %}
-    <div class="masonry-column" data-direction="{{ 'up' if col % 2 == 0 else 'down' }}">
-      {% for i in range(5) %}
-        {% set index = col * 5 + i %}
-        <img src="{{ url_for('static', filename='images/background-images/photo' ~ index ~ '.webp') }}" alt="photo" loading="lazy">
-      {% endfor %}
-    </div>
-  {% endfor %}
+      <div class="masonry-column" data-direction="{{ 'up' if col % 2 == 0 else 'down' }}">
+        {% for i in range(5) %}
+          {% set index = col * 5 + i %}
+          <img src="{{ url_for('static', filename='images/background-images/photo' ~ index ~ '.webp') }}" alt="photo" loading="lazy">
+        {% endfor %}
+      </div>
+    {% endfor %}
   </div>
 </body>
 </html>
