@@ -10,7 +10,7 @@
 
         <div class="d-flex align-items-center">
 
-          {% if follow.profile_picture %}
+          {% if follow.has_pic() %}
             <img src="{{ url_for('static', filename='images/profile-pictures/' + follow.profile_picture) }}" class="rounded-circle" alt="pfp" height="100" width="100">
           {% else %}
             <img src="{{ url_for('static', filename='images/profile-pictures/default.png') }}" class="rounded-circle" alt="pfp" height="100" width="100">
