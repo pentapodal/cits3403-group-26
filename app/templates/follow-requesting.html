@@ -1,68 +1,35 @@
-{% extends "friends-base.html"%}
-{% block heading%}Sent Friend Requests{% endblock%}
-{% block friends_content%}
+{% extends "friends-base.html" %}
 
-    <div class="container p-0 text-white h-100 d-flex flex-column">
+{% block heading %}Sent Follow Requests{% endblock %}
+{% block friends_content %}
+<div class="flex-grow-1 overflow-auto px-3 pb-3">
 
-    <!--search bar-->  
-    <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search for friends">
-        <button class="btn btn-light" type="button" id="searchButton">Search</button>
+  {% for request in friend_requests %}
+    <div class="card text-white m-2" style="background-color: rgba(0, 0, 0, 0.6);">
+      <div class="d-flex justify-content-between align-items-center p-2 flex-wrap">
+
+        <div class="d-flex align-items-center">
+
+          {% if request.has_pic() %}
+            <img src="{{ url_for('main.static', filename='images/profile-pictures/' + request.profile_picture) }}" class="rounded-circle" alt="pfp" height="100" width="100">
+          {% else %}
+            <img src="{{ url_for('main.static', filename='images/profile-pictures/default.png') }}" class="rounded-circle" alt="pfp" height="100" width="100">
+          {% endif %}
+          <span class="fs-5 p-2">{{ request.username }}</span>
+        </div>
+
+        <div>
+          <form method="POST" action="{{ url_for('main.cancel_follow_request', username=request.username) }}">
+            {{ form.hidden_tag() }}
+            {{ form.submit(class="btn btn-m btn-warning justify-content-end", value="Cancel") }}
+          </form>
+        </div>
+
+      </div>
     </div>
+  {% else %}
+    <p class="text-white">You have not sent any follow requests yet.</p>
+  {% endfor %}
 
-    <div class="flex-grow-1 overflow-auto px-3 pb-3 hide-scrollbar">
-
-        {% if friend_requests|length == 0 %}
-            <p>You have not sent any friend requests.</p>
-        {% endif %}
-
-        {% for request in friend_requests%}
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                {% if user.profile_picture%}
-                <img src="{{ url_for('main.static', filename='images/profile_pictures/' + user.profile_picture)}}" class="rounded-circle" alt="pfp" height="100" width="100">
-                {% else%}
-                <img src="{{ url_for('main.static', filename="images/profile_pictures/default.png")}}" class="rounded-circle" alt="pfp" height="100" width="100">
-                {% endif%}
-                <span class="friend-username">{{request.username}}</span>
-            </div>
-
-            <form method="POST" action="{{ url_for('main.stop_following', username=request.username) }}">
-                <button type="submit" class="btn btn-sm btn-success">Cancel</button>
-            </form>
-
-          </li>
-        {% endfor%}
-            
-    </div>
-  </div>
-
-    <script>
-      document.getElementById('searchInput').addEventListener('input', function () {
-          const query = this.value.trim();
-          const resultsList = document.getElementById('searchResults');
-          resultsList.innerHTML = ''; // Clear previous results
-      
-          if (query.length === 0) return;
-      
-          fetch(`/search_users/${encodeURIComponent(query)}`)
-              .then(response => response.json())
-              .then(data => {
-                  data.result.forEach(user => {
-                      const li = document.createElement('li');
-                      li.className = 'list-group-item d-flex justify-content-between align-items-center';
-                      li.innerHTML = `
-                          ${user.username}
-                          <span class="badge bg-${user.is_follower ? 'success' : 'secondary'}">
-                              ${user.is_follower ? 'Follows You' : 'Not Following'}
-                          </span>`;
-                      resultsList.appendChild(li);
-                  });
-              })
-              .catch(err => {
-                  console.error('Search error:', err);
-              });
-      });
-    </script>      
-
-{% endblock friends_content%}
+</div>
+{% endblock %}

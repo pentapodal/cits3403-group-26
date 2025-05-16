@@ -1,37 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container my-3 pt-3 pb-3 d-flex flex-column">
+  <div class="d-flex flex-column justify-content-center align-items-center text-white">
+    <h2 class="navbar-brand fw-bold fs-3">{% block heading %}Default{% endblock %}</h2>
+    <div class="d-flex">
 
-    <div class="container my-3 pt-3 pb-3 d-flex flex-column">
-        <div class="d-flex flex-column justify-content-center align-items-center text-white">
-            <h2 class="navbar-brand fw-bold fs-3">{% block heading%}Default{% endblock%}</h2>
-            <div class="d-flex">
+      <div class="mb-3 p-2">
+        <a href="{{ url_for('main.following') }}" class="btn btn-info w-100 text-white">Following</a>
+      </div>
 
-                <form action="{{ url_for('main.following') }}" method="get" class="mb-3 p-2">
-                <button type="submit" class="btn btn-info w-100 text-white">Following</button>
-                </form>
+      <div class="mb-3 p-2">
+        <a href="{{ url_for('main.followers') }}" class="btn btn-info w-100 text-white">Followers</a>
+      </div>
 
-                <form action="{{ url_for('main.followers') }}" method="get" class="mb-3 p-2">
-                <button type="submit" class="btn btn-info w-100 text-white">Followers</button>
-                </form>
+      <div class="mb-3 p-2">
+        <a href="{{ url_for('main.follow_requesters') }}" class="btn btn-info w-100 text-white">
+          Received
+          <!--add {{received_count}} for notifs-->
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
+        </a>
+      </div>
 
-                <form action="{{ url_for('main.follow_requesters') }}" method="get" class="mb-3 p-2">
-                <button type="submit" class="btn btn-info w-100 text-white">Requests
-                    <!--add {{received_count}} for notifs-->
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
-                </button>
-                </form>
-                
-                <form action="{{ url_for('main.follow_requestings') }}" method="get" class="mb-3 p-2">
-                <button type="submit" class="btn btn-info w-100 text-white">Sent</button>
-                </form>
+      <div class="mb-3 p-2">
+        <a href="{{ url_for('main.follow_requesting') }}" class="btn btn-info w-100 text-white">Sent</a>
+      </div>
 
-                
-
-            </div>
-        </div>
-
-        {% block friends_content%}{% endblock%}
-   
+      <div class="mb-3 p-2">
+        <a href="{{ url_for('main.search_users') }}" class="btn btn-info w-100 text-white">Search</a>
+      </div>
+      
     </div>
+  </div>
+
+  {% block friends_content %}{% endblock %}
+</div>
 {% endblock content %}
