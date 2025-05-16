@@ -28,7 +28,7 @@ Overshare is a web application that lets users to upload their Instagram data an
 - The Following page shows the Overshares you're following.
   
 ## Group details
-23509629	Enrichson Paris	
-23952666	Andrea Cheng Ern Bong	
-23463523	Jia Xin Yeo	
-23846903	Chen Lim
+23509629	Enrichson Paris	        Enrichson
+23952666	Andrea Cheng Ern Bong	  andreabong
+23463523	Jia Xin Yeo	            1sdfghjx10n
+23846903	Chen Lim                pentopodal
