@@ -191,3 +191,8 @@ body {
 .value-align {
   padding-left: 0.5em;
 }
+
+.profile-pic:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(250, 169, 115, 0.5);
+}
