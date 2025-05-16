@@ -270,8 +270,45 @@ def overshare(username=None):
 
     with open(json_file_path, 'r') as json_file:
         user_data = json.load(json_file)
+        
+    # Define story steps with proper structure
+    storySteps = [
+        {
+            "title": "", 
+            "content": "As you open your eyes first thing in the morning, you reach to your phone and eagerly check your Instagram. You came across lots of interesting posts and decided to like them!"
+        },
+        {
+            "title": "Total Liked Posts", 
+            "template_key": "total_liked_posts"
+        },
+        {
+            "title": "Total Liked Comments", 
+            "template_key": "total_liked_comments"
+        },
+        {
+            "title": "Total Liked Stories", 
+            "template_key": "total_liked_stories"
+        },
+        {
+            "title": "Total Posts Commented", 
+            "template_key": "total_posts_commented"
+        },
+        {
+            "title": "Total Reels Commented", 
+            "template_key": "total_reels_commented"
+        },
+        {
+            "title": "Total Stories Posted", 
+            "template_key": "total_stories_posted"
+        },
+        {
+            "title": "Total People Messaged", 
+            "template_key": "total_people_messaged"
+        }
+    ]
 
-    return render_template('overshare.html', title='Overshare', username=username, user_data=user_data)
+    # Render the template directly (no need for story_content.html)
+    return render_template('overshare.html', title='Overshare', username=username, user_data=user_data, storySteps=storySteps)
 
 @app.route('/follow-requesters')
 @login_required
@@ -282,4 +319,3 @@ def follow_requesters():
 @login_required
 def follow_requestings():
   return render_template('follow-requesting.html', title='Follow Requesting')
-

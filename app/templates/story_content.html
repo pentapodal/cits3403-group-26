@@ -1,0 +1,62 @@
+
+{% for step in storySteps %}
+
+  <h2> {{ step.title }}</h2>
+   
+  {% if step.template_key == 'total_liked_posts'%}
+   You liked a total of {{ user_data.total_liked_posts }} posts.
+    {% if user_data.top_3_most_liked_account_for_posts%}
+    <ul> 
+      {% for acc in user_data.top_3_most_liked_account_for_posts%}
+        <li> {{ acc.name }} ({{ acc.liked_posts_count }} like(s))</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      No data found
+    {% endif %}
+  {% elif step.template_key == 'total_liked_comments'%}
+    You liked a total of {{ user_data.total_liked_comments }} comments.
+    {% if user_data.top_3_most_liked_account_for_comments%}
+    <ul> 
+      {% for acc in user_data.top_3_most_liked_account_for_comments%}
+        <li> {{ acc.name }} ({{ acc.liked_comments_count }} like(s))</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      No data found
+    {% endif %}
+  {% elif step.template_key == 'total_liked_stories'%}
+    You liked a total of {{ user_data.total_liked_stories }} stories.
+    {% if user_data.top_3_most_liked_account_for_stories%}
+    <ul> 
+      {% for acc in user_data.top_3_most_liked_account_for_stories%}
+        <li> {{ acc.name }} ({{ acc.story_activities_story_likes }} like(s))</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      No data found
+    {% endif %}
+  {% elif step.template_key == 'total_posts_commented'%}
+    You commented on a total of {{ user_data.total_posts_comments }} posts.
+    {% if user_data.top_3_most_commented_accounts_for_posts%}
+    <ul> 
+      {% for acc in user_data.top_3_most_commented_accounts_for_posts%}
+        <li> {{ acc.name }} ({{ acc.comment_count }} comment(s))</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      No data found
+    {% endif %}
+  {% elif step.template_key == 'total_reels_commented'%}
+    You commented on a total of {{ user_data.total_reels_comments }} reels.
+    {% if user_data.top_3_most_commented_accounts_for_reels%}
+    <ul> 
+      {% for acc in user_data.top_3_most_commented_accounts_for_reels%}
+        <li> {{ acc.name }} ({{ acc.comment_count }} comment(s))</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      No data found
+    {% endif %}
+  {% endif%}
+{% endfor %}

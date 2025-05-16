@@ -2,18 +2,29 @@
 
 {% block head %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-  <h1 class="story-title text-white">Day in the Life of {{ current_user.username }} Instagram Persona</h1>
-  <div id="story-box" class="story-box" style="position:relative;">
-    <span id="story-step" class="story-step p-3 m-1 text-white"></span>
+
+  <h1 class="story-title text-white m-3 pt-">Results of {{ current_user.username }} Instagram Persona</h1>
+  <div class="d-flex justify-content-between p-2">
+    <div class="story-bar bg-white flex-fill mx-1"></div>
+    <div class="story-bar bg-white flex-fill mx-1"></div>
+    <div class="story-bar bg-white flex-fill mx-1"></div>
+    <div class="story-bar bg-white flex-fill mx-1"></div>
+    <div class="story-bar bg-white flex-fill mx-1"></div>
+    <div class="story-bar bg-white flex-fill mx-1"></div>
+    <div class="story-bar bg-white flex-fill mx-1"></div>
+  </div>
+  <div id="story-title" class="story-title text-white m-3 fw-bold fs-2 text-center"></div>
+  <div id="story-box" class="story-box m-3 p-3" style="position: relative; min-height: 180px; background-color: rgba(0, 0, 0, 0.4); border-radius: 10px;">
+    <div id="story-title" class="story-title text-white m-3" style="font-size: 24px"></div>
+    <div id="typewriter" class="typewriter text-white"></div>
     <button id="skip-btn" class="btn btn-secondary skip-btn">Skip</button>
   </div>
 
-  <div id="data-table" class="data-table" style="opacity:0; transition: opacity 1s;">
+  <div id="data-table" class="data-table m-3" style="opacity:0; transition: opacity 1s;">
     <h2>Your Year in Review</h2>
     <table class="table table-striped">
       <tbody>
@@ -135,93 +146,242 @@
 </div>
 
 <script>
-  const storySteps = [
-    {
-      content: ""
-    },
-    {
-      content: "As you open your eyes, you reach for your phone and instantly open Instagram."
-    },
-    {
-      content: "You scroll through your feed, and you see a post from your favorite account, giving it a like!"
-    },
-    {
-      content: "You liked a total of {{ user_data.total_liked_posts }} posts this year. <br> Your top 3 most liked accounts for posts are: {{ user_data.top_3_most_liked_account_for_posts|map(attribute='name')|join(', ') }}."
-    },
-    {
-      title: "Total Liked Comments",
-      content: "You liked a total of {{ user_data.total_liked_comments }} comments this year."
-    },
-    {
-      title: "Total Liked Stories",
-      content: "You liked a total of {{ user_data.total_liked_stories }} stories this year."
-    },
-    {
-      title: "Total Posts Commented",
-      content: "You commented on a total of {{ user_data.total_posts_comments }} posts this year."
-    },
-    {
-      title: "Total Reels Commented",
-      content: "You commented on a total of {{ user_data.total_reels_comments }} reels this year."
-    },
-    {
-      title: "Total Stories Posted",
-      content: "You posted a total of {{ user_data.total_stories_posted }} stories this year."
-    },
-    {
-      title: "Total People Messaged",
-      content: "You messaged a total of {{ user_data.total_people_messaged }} people this year."
-    }
-  ];
-
-  const storyStepDiv = document.getElementById("story-step");
+  // Store story steps data in a variable
+  const storySteps = {{ storySteps|tojson|safe }};
+  
+  // DOM elements
   const storyBox = document.getElementById("story-box");
   const dataTable = document.getElementById("data-table");
   const skipBtn = document.getElementById("skip-btn");
+  const typewriter = document.getElementById("typewriter");
 
+  // Variables for tracking state and touch events
   let currentStep = 0;
+  let touchStartX = 0;
+  let touchEndX = 0;
+  let isTyping = false;
 
-  function showStep(index) {
-    storyStepDiv.style.opacity = 0;
-    setTimeout(() => {
-      if (index < storySteps.length) {
-        const step = storySteps[index];
-        storyStepDiv.innerHTML = '<h2>' + step.title + '</h2><p>' + step.content + '</p>';
-      } else {
-        storyBox.style.display = "none";
-        dataTable.style.opacity = 1;
-      }
-      storyStepDiv.style.opacity = 1;
-    }, 500);
-    
+  // Function to create typewriter effect
+  function typeWriterEffect(text, i, callback) {
+    if (i < text.length) {
+      typewriter.innerHTML += text.charAt(i);
+      setTimeout(() => typeWriterEffect(text, i + 1, callback), 30);
+    } else if (callback) {
+      isTyping = false;
+      callback();
+    }
   }
 
+  // Function to render the templated content for a story step
+  function renderStepContent(step) {
+    if (!step.template_key) {
+      return step.content || "";
+    }
+    
+    let content = "";
+    
+    switch(step.template_key) {
+      case "total_liked_posts":
+        content = `You liked a total of {{ user_data.total_liked_posts }} posts. 
+        These are the accounts whose posts you engaged with the most:`;
+        if ({{ (user_data.top_3_most_liked_account_for_posts|length > 0)|tojson }}) {
+          content += "<ul>";
+          {% for acc in user_data.top_3_most_liked_account_for_posts %}
+            content += "<li>{{ acc.name }} ({{ acc.liked_posts_count }} like(s))</li>";
+          {% endfor %}
+          content += "</ul>";
+        } else {
+          content += " No data found.";
+        }
+        break;
+        
+      case "total_liked_comments":
+        content = `You liked a total of {{ user_data.total_liked_comments }} comments.`;
+        if ({{ (user_data.top_3_most_liked_account_for_comments|length > 0)|tojson }}) {
+          content += "<ul>";
+          {% for acc in user_data.top_3_most_liked_account_for_comments %}
+            content += "<li>{{ acc.name }} ({{ acc.liked_comments_count }} like(s))</li>";
+          {% endfor %}
+          content += "</ul>";
+        } else {
+          content += " No data found.";
+        }
+        break;
+        
+      case "total_liked_stories":
+        content = `You liked a total of {{ user_data.total_liked_stories }} stories.`;
+        if ({{ (user_data.top_3_most_liked_account_for_stories|length > 0)|tojson }}) {
+          content += "<ul>";
+          {% for acc in user_data.top_3_most_liked_account_for_stories %}
+            content += "<li>{{ acc.name }} ({{ acc.story_activities_story_likes }} like(s))</li>";
+          {% endfor %}
+          content += "</ul>";
+        } else {
+          content += " No data found.";
+        }
+        break;
+        
+      case "total_posts_commented":
+        content = `You commented on a total of {{ user_data.total_posts_comments }} posts.`;
+        if ({{ (user_data.top_3_most_commented_accounts_for_posts|length > 0)|tojson }}) {
+          content += "<ul>";
+          {% for acc in user_data.top_3_most_commented_accounts_for_posts %}
+            content += "<li>{{ acc.name }} ({{ acc.comment_count }} comment(s))</li>";
+          {% endfor %}
+          content += "</ul>";
+        } else {
+          content += " No data found.";
+        }
+        break;
+        
+      case "total_reels_commented":
+        content = `You commented on a total of {{ user_data.total_reels_comments }} reels.`;
+        if ({{ (user_data.top_3_most_commented_accounts_for_reels|length > 0)|tojson }}) {
+          content += "<ul>";
+          {% for acc in user_data.top_3_most_commented_accounts_for_reels %}
+            content += "<li>{{ acc.name }} ({{ acc.comment_count }} comment(s))</li>";
+          {% endfor %}
+          content += "</ul>";
+        } else {
+          content += " No data found.";
+        }
+        break;
+        
+      case "total_stories_posted":
+        content = `You posted a total of {{ user_data.total_stories_posted }} stories.`;
+        break;
+        
+      case "total_people_messaged":
+        content = `You messaged a total of {{ user_data.total_people_messaged }} people.`;
+        if ({{ (user_data.top_3_most_messaged_people|length > 0)|tojson }}) {
+          content += "<ul>";
+          {% for person in user_data.top_3_most_messaged_people %}
+            content += "<li>{{ person.name }} ({{ person.message_count }} message(s))</li>";
+          {% endfor %}
+          content += "</ul>";
+        } else {
+          content += " No data found.";
+        }
+        break;
+    }
+    
+    return content;
+  }
+
+  // Show a specific story step
+  function showStep(index) {
+    if (isTyping) return;
+    
+    // Clear the typewriter
+    typewriter.innerHTML = "";
+    
+    // Check if we've reached the end of steps
+    if (index >= storySteps.length) {
+      endStory();
+      return;
+    }
+    
+    const step = storySteps[index];
+    let displayContent = "";
+    
+    // Add title if it exists
+    if (step.title) {
+      document.getElementById("story-title").innerHTML = step.title;
+    }
+    
+    // Add content based on step type
+    if (step.template_key) {
+      displayContent += renderStepContent(step);
+    } else if (step.content) {
+      displayContent += step.content;
+    }
+    
+    // Check if content contains a list
+    const hasUl = displayContent.includes("<ul>");
+    
+    isTyping = true;
+    
+    if (hasUl) {
+      // Split content before and after the list
+      const beforeUl = displayContent.substring(0, displayContent.indexOf("<ul>"));
+      const afterUl = displayContent.substring(displayContent.indexOf("<ul>"));
+      
+      // Type out text before the list, then add the list all at once
+      typeWriterEffect(beforeUl, 0, () => {
+        typewriter.innerHTML += afterUl;
+      });
+    } else {
+      // Type out all content
+      typeWriterEffect(displayContent, 0, () => {});
+    }
+  }
+
+  // Move to the next step
   function nextStep() {
+    if (isTyping) {
+      // If still typing, show full content immediately
+      isTyping = false;
+      typewriter.innerHTML = "";
+      
+      const step = storySteps[currentStep];
+      let displayContent = "";
+      
+      if (step.title) {
+        displayContent += `<h2>${step.title}</h2>`;
+      }
+      
+      if (step.template_key) {
+        displayContent += renderStepContent(step);
+      } else if (step.content) {
+        displayContent += step.content;
+      }
+      
+      typewriter.innerHTML = displayContent;
+      return;
+    }
+    
     currentStep++;
     showStep(currentStep);
   }
 
+  // End the story and show data table
+  function endStory() {
+    storyBox.style.transition = "opacity 1s";
+    storyBox.style.opacity = 0;
+    setTimeout(() => {
+      storyBox.style.display = "none";
+      dataTable.style.opacity = 1;
+    }, 1000);
+  }
+
+  // Touch event handlers
   storyBox.addEventListener("touchstart", e => {
-    touchStarti = e.changedTouches[0].screenX;
+    touchStartX = e.changedTouches[0].screenX;
   });
 
   storyBox.addEventListener("touchend", e => {
-    touchEndi = e.changedTouches[0].screenX;
-    if (touchEndi < touchStarti - 30) {
+    touchEndX = e.changedTouches[0].screenX;
+    if (touchEndX < touchStartX - 30) {
       nextStep();
     }
   });
 
+  // Click handler for story box
   storyBox.addEventListener("click", function() {
     nextStep();
   });
 
+  // Skip button handler
   skipBtn.addEventListener("click", function() {
-    storyBox.style.display = "none";
-    dataTable.style.opacity = 1;
+    endStory();
   });
 
-  showNextStep();
-
+  // Initialize on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    showStep(currentStep);
+  });
+  
+  // Start showing steps (redundant with DOMContentLoaded but keeping for safety)
+  showStep(currentStep);
 </script>
 {% endblock %}

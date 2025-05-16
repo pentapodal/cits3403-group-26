@@ -137,11 +137,19 @@ body {
   margin: 0;
 }
 
-.story-box {
-  position: relative; /* Ensure positioning context for the button */
-  min-height: 180px;  /* Make sure there's room for the button */
-}
 
 #story-step {
+  opacity: 1;
   transition: opacity 0.3s ease;
+}
+
+.story-bar {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3); /* inactive */
+  border-radius: 2px;
+  transition: background-color 0.3s;
+}
+
+.story-bar.active {
+  background-color: rgba(255, 255, 255, 1); /* active */
 }
