@@ -79,14 +79,7 @@ def home():
 @login_required
 def following():
   form = EmptyForm()
-  following_list = [
-    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
-    {'username': 'Andrea', 'profile_picture': 'andrea.png'},
-    {'username': 'Jia', 'profile_picture': 'jia.png'},
-    {'username': 'David', 'profile_picture': None},
-    {'username': 'Eve', 'profile_picture': None},
-  ]
-  # following_list = db.session.scalars(current_user.following.select()).all()
+  following_list = db.session.scalars(current_user.following.select()).all()
   return render_template(
     'following.html',
     title='Following',
@@ -99,14 +92,7 @@ def following():
 @login_required
 def followers():
   form = EmptyForm()
-  followers_list = [
-    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
-    {'username': 'Andrea', 'profile_picture': 'andrea.png'},
-    {'username': 'Jia', 'profile_picture': 'jia.png'},
-    {'username': 'Anna', 'profile_picture': None},
-    {'username': 'Ryan', 'profile_picture': None},
-  ]
-  # followers_list = db.session.scalars(current_user.followers.select()).all()
+  followers_list = db.session.scalars(current_user.followers.select()).all()
   return render_template(
     'followers.html',
     title='Followers',
@@ -119,14 +105,7 @@ def followers():
 @login_required
 def follow_requesters():
   form = EmptyForm()
-  requesters_list = [
-    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
-    {'username': 'Andrea', 'profile_picture': 'andrea.png'},
-    {'username': 'Jia', 'profile_picture': 'jia.png'},
-    {'username': 'Anna', 'profile_picture': None},
-    {'username': 'Ryan', 'profile_picture': None},
-  ]
-  # requesters_list = db.session.scalars(current_user.follow_requesters.select()).all()
+  requesters_list = db.session.scalars(current_user.follow_requesters.select()).all()
   return render_template(
     'follow-requesters.html',
     title='Follow Requests',
@@ -139,14 +118,7 @@ def follow_requesters():
 @login_required
 def follow_requesting():
   form = EmptyForm()
-  requesting_list = [
-    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
-    {'username': 'Andrea', 'profile_picture': 'andrea.png'},
-    {'username': 'Jia', 'profile_picture': 'jia.png'},
-    {'username': 'Anna', 'profile_picture': None},
-    {'username': 'Ryan', 'profile_picture': None},
-  ]
-  # requesting_list = db.session.scalars(current_user.follow_requesting.select()).all()
+  requesting_list = db.session.scalars(current_user.follow_requesting.select()).all()
   return render_template(
     'follow-requesting.html',
     title='Follow Requesting',
@@ -160,11 +132,16 @@ def follow_requesting():
 def search_users():
   search_form = SearchForm()
   follow_form = EmptyForm()
+  results: sa.ScalarResult[User] | None = None
+  if search_form.validate():
+    q = request.args.get('q')
+    results = current_user.search_unfollowed(q)
   return render_template(
     'search-users.html',
     title='Search',
     search_form=search_form,
-    follow_form=follow_form
+    follow_form=follow_form,
+    results=results
   )
 
 
@@ -284,21 +261,6 @@ def remove_follower(username):
       db.session.commit()
       flash(f'You have removed the follower {username}.')
   return redirect(url_for('followers'))
-
-
-@app.route('/search-unfollowed')
-@login_required
-def search_unfollowed():
-  q = request.args.get('q')
-  result: sa.ScalarResult[User] = current_user.search_unfollowed(q)
-  return {"result": [
-    {
-      "username": user.username,
-      "is_follower": current_user.is_followed_by(user),
-      "has_pic": os.path.isfile(os.path.join("images", f"{current_user.username}.jpg"))
-    }
-    for user in result
-  ]}
 
 
 @app.route('/upload', methods=['GET', 'POST'])
