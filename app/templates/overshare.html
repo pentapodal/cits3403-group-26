@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="container mt-5">
-  <h1 class="story-title">Day in the Life of {{ current_user.username }} Instagram Persona</h1>
+  <h1 class="story-title">{{ current_user.username }}'s Overshare!</h1>
   <div id="story-box" class="story-box" style="position:relative;">
     <span id="typewriter"></span>
     <button id="skip-btn" class="btn btn-secondary skip-btn">Skip</button>
@@ -137,81 +137,85 @@
 <script>
   // Prepare story steps
   const storySteps = [
-    `As you open your eyes first thing in the morning, you reach to your phone and eagerly check your Instagram. You came accross lots of interesting posts and
-    decided to like them. Over the past year, you’ve liked a total of {{ user_data.total_liked_posts }} post(s) while scrolling through your feed!
-    {% if user_data.top_3_most_liked_account_for_posts %}
-      Your top liked account(s) for posts were:
+    `First thing in the morning, before you even had your coffee, you were on Instagram. Sound familiar? Over the past year, 
+    you’ve liked a staggering {{ user_data.total_liked_posts }} post(s). That’s a lot of double taps!
+    {% if user_data.top_3_most_liked_account_for_posts %} 
+      And because you <em>definitely</em> have favorites, here are the accounts you couldn’t stop liking:
       <ul>
         {% for account in user_data.top_3_most_liked_account_for_posts %}
           <li>{{ account.name }} ({{ account.liked_posts_count }} like(s))</li>
         {% endfor %}
       </ul>
     {% else %}
-      Oh no! You didn't like any posts this year.
+      Looks like you played it cool—no likes to be found. Are you okay?
     {% endif %}`,
 
-    `As you are doom scrolling in bed, you come across a funny comment section and decided to like some comments! You've liked a total of {{ user_data.total_liked_comments }} comment(s).
+    `You weren’t just scrolling, you were engaging. This year, you’ve liked {{ user_data.total_liked_comments }} comment(s).
+    Yes, even the ones that just said "🔥" or "same."
     {% if user_data.top_3_most_liked_account_for_comments %}
-      The comment(s) you liked most came from:
+      Here are the accounts whose comments got your seal of approval:
       <ul>
         {% for account in user_data.top_3_most_liked_account_for_comments %}
           <li>{{ account.name }} ({{ account.liked_comments_count }} like(s))</li>
         {% endfor %}
       </ul>
     {% else %}
-      Oh no! You didn't like any comments this year.
+      No liked comments? You’re missing out on the wildest part of Instagram.
     {% endif %}`,
 
-    `You decided to post a funny comment on the post. In the past year, you've commented on {{ user_data.total_posts_comments }} post(s).
+    `But wait, there’s more. You didn’t just like other people’s comments—you made your 
+    own voice heard, commenting on {{ user_data.total_posts_comments }} post(s) this year.
     {% if user_data.top_3_most_commented_accounts_for_posts %}
-      Most of your comments went to:
+      Here’s where your comments landed the most:
       <ul>
         {% for account in user_data.top_3_most_commented_accounts_for_posts %}
           <li>{{ account.name }} ({{ account.comment_count }} comment(s))</li>
         {% endfor %}
       </ul>
     {% else %}
-      Oh no! You didn't comment on any posts this year.
+      No comments? Silent scrolling is so 2015.
     {% endif %}`,
 
-    `Your midday scroll is all about Stories. As you sit on the couch, you decided to look at some stories posted from your friends! You have liked {{ user_data.total_liked_stories }} stories this year.
+    `Ah, Stories—Instagram’s version of a fleeting diary. This year, you’ve liked {{ user_data.total_liked_stories }} stories.
+    You’re practically the friend we all want hyping us up.
     {% if user_data.top_3_most_liked_account_for_stories %}
-      Most liked stories were from:
+      Here’s who kept you tapping that heart:
       <ul>
         {% for account in user_data.top_3_most_liked_account_for_stories %}
           <li>{{ account.name }} ({{ account.story_activities_story_likes }} like(s))</li>
         {% endfor %}
       </ul>
     {% else %}
-      Oh no! You didn't like any stories this year.
+      No story likes? Missed out on some quality vacation pics and latte art.
     {% endif %}`,
 
-    `As the day winds down, you decided to take a stroll into Instagram reels, you came accross a KBBQ reel and a drool came down your lips and you decided to comment on it.
-    This past year, you have commented on {{ user_data.total_reels_comments }} reel(s).
+    `If reels are Instagram’s candy, you’ve got a sweet tooth. This year, you’ve commented on {{ user_data.total_reels_comments }} 
+    reel(s) — from KBBQ temptations to dance challenges you swore you’d learn.
     {% if user_data.top_3_most_commented_accounts_for_reels %}
-      Most of your reel comments went to:
+      Here are the reels you couldn’t resist commenting on:
       <ul>
         {% for account in user_data.top_3_most_commented_accounts_for_reels %}
           <li>{{ account.name }} ({{ account.comment_count }} comment(s))</li>
         {% endfor %}
       </ul>
     {% else %}
-      Oh no! You didn't comment on any reels this year.
+      No reel comments? Not even on those satisfying cake-cutting videos? 
     {% endif %}`,
 
-    `You couldn't take it anymore so you drive to the closest KBBQ restaurant you know and ordered some food. Before eating, you take a photo of the food to post as a Story 
-    to flex to your friends. This past year, you shared {{ user_data.total_stories_posted }} stories of your own.`,
+    `Of course, Instagram isn’t just about consuming content—it’s about sharing it. This year, 
+    you posted {{ user_data.total_stories_posted }} stories of your own.`,
 
-    `As you eat, you receive so many messages from your jealous friends. This past year, you messaged {{ user_data.total_people_messaged }} people.
+    `Finally, let’s talk DMs. You messaged {{ user_data.total_people_messaged }} people this year.
+    We’re not saying you’re addicted to gossip, but the numbers don’t lie.
     {% if user_data.top_3_most_messaged_people %}
-      Your top conversations were with:
+      Here’s who heard from you the most:
       <ul>
         {% for person in user_data.top_3_most_messaged_people %}
           <li>{{ person.name }} ({{ person.message_count }} messages)</li>
         {% endfor %}
       </ul>
     {% else %}
-      Oh no! You didn't message anyone this year.
+      No messages? Don’t leave your friends on read all year!
     {% endif %}`
   ];
 
