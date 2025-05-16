@@ -26,6 +26,10 @@ Overshare is a web application that lets users to upload their Instagram data an
 4. Connect with friends.
 - The Followers page shows who can view your Overshare.
 - The Following page shows the Overshares you're following.
+
+## Testing
+Using the standard python -m unittest <testingfile>
+NOTE: Tests only works on Linux
   
 ## Group details
 | Student ID | Full name             | GitHub username                               |
