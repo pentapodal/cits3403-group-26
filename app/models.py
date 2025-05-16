@@ -5,6 +5,7 @@ import sqlalchemy.orm as so
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login
+from flask import current_app
 
 
 follow_requests = sa.Table(
@@ -138,7 +139,7 @@ class User(UserMixin, db.Model):
     return db.session.scalars(query)
 
   def has_pic(self):
-    return os.path.isfile(os.path.join(app.config['PROFILE_PICS_PATH'], f"{self.username}.jpg"))
+    return os.path.isfile(os.path.join(current_app.config['PROFILE_PICS_PATH'], f"{self.username}.jpg"))
 
   def following_posts(self):
     # Eventually want to rework this into following Overshares

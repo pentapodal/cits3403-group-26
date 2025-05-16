@@ -277,7 +277,7 @@ def upload():
         try:
             process_and_save_all(file.stream, current_user.username)
             flash(f'File Successfully Uploaded')
-            return redirect(url_for('overshare'))
+            return redirect(url_for('main.overshare'))
         except (BadZipFile, OSError) as error:
             flash(str(error))
     return render_template('upload.html', title='Upload', form=form)
@@ -293,19 +293,19 @@ def overshare(username: str | None = None):
     user = db.session.scalar(sa.select(User).where(User.username == username))
     if user is None:
       flash(f'User {username} not found.')
-      return redirect(url_for('home'))
+      return redirect(url_for('main.home'))
     elif not current_user.is_following(user):
       flash(f'You are not following {username}!')
-      return redirect(url_for('home'))
+      return redirect(url_for('main.home'))
 
-  json_file_path = os.path.join(app.config['UPLOAD_PATH'], f'{username}.json')
+  json_file_path = os.path.join(current_app.config['UPLOAD_PATH'], f'{username}.json')
 
   if not os.path.isfile(json_file_path):
     if username == current_user.username:
       flash("You have not uploaded any data yet!")
-      return redirect(url_for('upload'))
+      return redirect(url_for('main.upload'))
     flash(f"{username} has not uploaded any data yet!")
-    return redirect(url_for('following')
+    return redirect(url_for('main.following'))
 
   with open(json_file_path, 'r') as json_file:
     user_data = json.load(json_file)

@@ -58,7 +58,7 @@ class SystemTests(unittest.TestCase):
     password_field.send_keys('testpassword')
     submit_button.click()
 
-    time.sleep(10)
+    time.sleep(5)
 
 
   def test_loggout_page(self):

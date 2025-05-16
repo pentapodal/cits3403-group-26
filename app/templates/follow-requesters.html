@@ -11,9 +11,9 @@
         <div class="d-flex align-items-center">
 
           {% if request.has_pic() %}
-            <img src="{{ url_for('main.static', filename='images/profile-pictures/' ~ request.username ~ '.jpg') }}" class="rounded-circle" alt="pfp" height="100" width="100">
+            <img src="{{ url_for('static', filename='images/profile-pictures/' ~ request.username ~ '.jpg') }}" class="rounded-circle" alt="pfp" height="100" width="100">
           {% else %}
-            <img src="{{ url_for('main.static', filename='images/profile-pictures/default.png') }}" class="rounded-circle" alt="pfp" height="100" width="100">
+            <img src="{{ url_for('static', filename='images/profile-pictures/default.png') }}" class="rounded-circle" alt="pfp" height="100" width="100">
           {% endif %}
           <span class="fs-5 p-2">{{ request.username }}</span>
 

@@ -2,11 +2,11 @@ import os
 import json
 from collections import Counter
 from zipfile import ZipFile, BadZipFile
-from app import app
+from flask import current_app
 
 
 def process_zip_and_save(file_stream, username):
-    upload_path = app.config['UPLOAD_PATH']
+    upload_path = current_app.config['UPLOAD_PATH']
     try:
         with ZipFile(file_stream) as archive:
             # Your liked posts
@@ -250,7 +250,7 @@ def extract_and_save_profile_pic_from_json(file_stream, username):
     from zipfile import ZipFile
     import os
 
-    profile_pics_path = app.config['PROFILE_PICS_PATH']
+    profile_pics_path = current_app.config['PROFILE_PICS_PATH']
     try:
         with ZipFile(file_stream) as archive:
             try:
