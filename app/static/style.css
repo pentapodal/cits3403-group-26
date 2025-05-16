@@ -142,6 +142,11 @@ body {
   transition: opacity 1s;
 }
 
+.story-title {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
 .data-table h2 {
   color: white;
   font-family: 'Lobster', sans-serif;
@@ -162,4 +167,27 @@ body {
 .story-box {
   position: relative; /* Ensure positioning context for the button */
   min-height: 180px;  /* Make sure there's room for the button */
+}
+
+.table-cute {
+  background: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+.numbered-list {
+  margin-left: 1.5em;
+  padding-left: 0.5em;
+}
+.table thead th {
+  background: #b8e0fc;
+  color: #222;
+  border-bottom: 2px solid #a0c4ff;
+}
+.table td, .table th {
+  vertical-align: middle;
+}
+
+.value-align {
+  padding-left: 0.5em;
 }

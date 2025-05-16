@@ -10,8 +10,9 @@ from app import db
 from flask import current_app
 from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm, SearchForm
 from app.models import User
-from app.utils import process_zip_and_save
 from app.blueprints import blueprint
+from app.utils import process_and_save_all
+
 current_user: User
 
 
@@ -274,9 +275,9 @@ def upload():
     if form.validate_on_submit():
         file: FileStorage = form.file.data
         try:
-            path = process_zip_and_save(file.stream, current_app.config['UPLOAD_PATH'], current_user.username)
+            process_and_save_all(file.stream, current_user.username)
             flash(f'File Successfully Uploaded')
-            return redirect(url_for('main.overshare', username=current_user.username))
+            return redirect(url_for('overshare'))
         except (BadZipFile, OSError) as error:
             flash(str(error))
     return render_template('upload.html', title='Upload', form=form)
@@ -285,17 +286,28 @@ def upload():
 @blueprint.route('/overshare')
 @blueprint.route('/overshare/<username>')
 @login_required
-def overshare(username=None):
-    if username is None:
-        username = current_user.username
+def overshare(username: str | None = None):
+  if username is None:
+    username = current_user.username
+  elif username != current_user.username:
+    user = db.session.scalar(sa.select(User).where(User.username == username))
+    if user is None:
+      flash(f'User {username} not found.')
+      return redirect(url_for('home'))
+    elif not current_user.is_following(user):
+      flash(f'You are not following {username}!')
+      return redirect(url_for('home'))
 
-    json_file_path = os.path.join(current_app.config['UPLOAD_PATH'], f'{username}.json')
+  json_file_path = os.path.join(app.config['UPLOAD_PATH'], f'{username}.json')
 
-    if not os.path.isfile(json_file_path): 
-        flash("No data available for this user.")
-        return redirect(url_for('main.upload'))
+  if not os.path.isfile(json_file_path):
+    if username == current_user.username:
+      flash("You have not uploaded any data yet!")
+      return redirect(url_for('upload'))
+    flash(f"{username} has not uploaded any data yet!")
+    return redirect(url_for('following')
 
-    with open(json_file_path, 'r') as json_file:
-        user_data = json.load(json_file)
+  with open(json_file_path, 'r') as json_file:
+    user_data = json.load(json_file)
 
-    return render_template('overshare.html', title='Overshare', username=username, user_data=user_data)
+  return render_template('overshare.html', title='Overshare', username=username, user_data=user_data)

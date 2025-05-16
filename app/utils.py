@@ -2,9 +2,11 @@ import os
 import json
 from collections import Counter
 from zipfile import ZipFile, BadZipFile
+from app import app
 
 
-def process_zip_and_save(file_stream, upload_path, username):
+def process_zip_and_save(file_stream, username):
+    upload_path = app.config['UPLOAD_PATH']
     try:
         with ZipFile(file_stream) as archive:
             # Your liked posts
@@ -203,6 +205,7 @@ def process_zip_and_save(file_stream, upload_path, username):
             else:
                 top_3_most_messaged_people = []
 
+
         # Ensure the upload directory exists, if not create it
         if not os.path.isdir(upload_path):
             os.mkdir(upload_path)
@@ -238,3 +241,43 @@ def process_zip_and_save(file_stream, upload_path, username):
         raise error
 
 
+def extract_and_save_profile_pic_from_json(file_stream, username):
+    """
+    Extracts the profile picture using the uri in your_instagram_activity/media/profile_photos.json,
+    saves it to uploads, and returns the photo bytes (or None if not found).
+    """
+    import json
+    from zipfile import ZipFile
+    import os
+
+    profile_pics_path = app.config['PROFILE_PICS_PATH']
+    try:
+        with ZipFile(file_stream) as archive:
+            try:
+                with archive.open('your_instagram_activity/media/profile_photos.json') as f:
+                    profile_json = json.load(f)
+                uri = profile_json["ig_profile_picture"][0]["uri"]
+            except Exception as e:
+                return None
+
+            # Now extract the photo using the URI
+            if uri in archive.namelist():
+                if not os.path.isdir(profile_pics_path):
+                    os.makedirs(profile_pics_path, exist_ok=True)
+                save_path = os.path.join(profile_pics_path, f'{username}.jpg')
+                with archive.open(uri) as pic_file:
+                    photo_bytes = pic_file.read()
+                    with open(save_path, 'wb') as out_pic:
+                        out_pic.write(photo_bytes)
+                return photo_bytes
+            else:
+                return None
+    except (BadZipFile, OSError) as error:
+        print("Error extracting profile pic:", error)
+        raise error
+
+
+def process_and_save_all(file_stream, username):
+    process_zip_and_save(file_stream, username)
+    file_stream.seek(0)
+    extract_and_save_profile_pic_from_json(file_stream, username)
