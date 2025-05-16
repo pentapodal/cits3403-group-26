@@ -1,6 +1,282 @@
 {% extends "base.html" %}
 
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
 {% block content %}
-  <h1>Hi, {{ current_user.username }}</h1>
-  <div><p>Viewing {{ username }}'s Overshare</p></div>
-{% endblock content %}
+<div class="container mt-5">
+  <h1 class="story-title">{{ username }}'s Overshare!</h1>
+  <div id="story-box" class="story-box" style="position:relative;">
+    <span id="typewriter"></span>
+    <button id="skip-btn" class="btn btn-secondary skip-btn">Skip</button>
+  </div>
+
+  <div id="data-table" class="data-table" style="opacity:0; transition: opacity 1s;">
+    <table class="table table-striped table-bordered table-hover align-middle table-cute">
+      <thead class="table-dark">
+        <tr>
+          <th>Metric</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Total Liked Posts</td>
+          <td><div class="value-align"><strong>{{ user_data.total_liked_posts }}</strong></div></td>
+        </tr>
+        <tr>
+          <td>Top 3 Most Liked Accounts for Posts</td>
+          <td>
+            <ol class="numbered-list mb-0 ms-3">
+              {% for account in user_data.top_3_most_liked_account_for_posts %}
+                <li><strong>{{ account.name }}</strong> ({{ account.liked_posts_count }} like(s))</li>
+              {% endfor %}
+              {% for i in range(user_data.top_3_most_liked_account_for_posts|length + 1, 4) %}
+                <li><span class="text-muted">No data found</span></li>
+              {% endfor %}
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td>Total Liked Comments</td>
+          <td><div class="value-align"><strong>{{ user_data.total_liked_comments }}</strong></div></td>
+        </tr>
+        <tr>
+          <td>Top 3 Most Liked Accounts for Comments</td>
+          <td>
+            <ol class="numbered-list mb-0 ms-3">
+              {% for account in user_data.top_3_most_liked_account_for_comments %}
+                <li><strong>{{ account.name }}</strong> ({{ account.liked_comments_count }} likes)</li>
+              {% endfor %}
+              {% for i in range(user_data.top_3_most_liked_account_for_comments|length + 1, 4) %}
+                <li><span class="text-muted">No data found</span></li>
+              {% endfor %}
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td>Total Liked Stories</td>
+          <td><div class="value-align"><strong>{{ user_data.total_liked_stories }}</strong></div></td>
+        </tr>
+        <tr>
+          <td>Top 3 Most Liked Accounts for Stories</td>
+          <td>
+            <ol class="numbered-list mb-0 ms-3">
+              {% for account in user_data.top_3_most_liked_account_for_stories %}
+                <li><strong>{{ account.name }}</strong> ({{ account.story_activities_story_likes }} likes)</li>
+              {% endfor %}
+              {% for i in range(user_data.top_3_most_liked_account_for_stories|length + 1, 4) %}
+                <li><span class="text-muted">No data found</span></li>
+              {% endfor %}
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td>Total Posts Commented</td>
+          <td><div class="value-align"><strong>{{ user_data.total_posts_comments }}</strong></div></td>
+        </tr>
+        <tr>
+          <td>Top 3 Most Commented Accounts for Posts</td>
+          <td>
+            <ol class="numbered-list mb-0 ms-3">
+              {% for account in user_data.top_3_most_commented_accounts_for_posts %}
+                <li><strong>{{ account.name }}</strong> ({{ account.comment_count }} comments)</li>
+              {% endfor %}
+              {% for i in range(user_data.top_3_most_commented_accounts_for_posts|length + 1, 4) %}
+                <li><span class="text-muted">No data found</span></li>
+              {% endfor %}
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td>Total Reels Commented</td>
+          <td><div class="value-align"><strong>{{ user_data.total_reels_comments }}</strong></div></td>
+        </tr>
+        <tr>
+          <td>Top 3 Most Commented Accounts for Reels</td>
+          <td>
+            <ol class="numbered-list mb-0 ms-3">
+              {% for account in user_data.top_3_most_commented_accounts_for_reels %}
+                <li><strong>{{ account.name }}</strong> ({{ account.comment_count }} comments)</li>
+              {% endfor %}
+              {% for i in range(user_data.top_3_most_commented_accounts_for_reels|length + 1, 4) %}
+                <li><span class="text-muted">No data found</span></li>
+              {% endfor %}
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td>Total Stories Posted</td>
+          <td><div class="value-align"><strong>{{ user_data.total_stories_posted }}</strong></div></td>
+        </tr>
+        <tr>
+          <td>Total People Messaged</td>
+          <td><div class="value-align"><strong>{{ user_data.total_people_messaged }}</strong></div></td>
+        </tr>
+        <tr>
+          <td>Top 3 Most Messaged People</td>
+          <td>
+            <ol class="numbered-list mb-0 ms-3">
+              {% for person in user_data.top_3_most_messaged_people %}
+                <li><strong>{{ person.name }}</strong> ({{ person.message_count }} messages)</li>
+              {% endfor %}
+              {% for i in range(user_data.top_3_most_messaged_people|length + 1, 4) %}
+                <li><span class="text-muted">No data found</span></li>
+              {% endfor %}
+            </ol>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // Prepare story steps
+  const storySteps = [
+    `First thing in the morning, before you even had your coffee, you were on Instagram. Sound familiar? Over the past year, 
+    you’ve liked a staggering {{ user_data.total_liked_posts }} post(s). That’s a lot of double taps!
+    {% if user_data.top_3_most_liked_account_for_posts %} 
+      And because you definitely have favourites, here are the accounts you couldn’t stop liking:
+      <ul>
+        {% for account in user_data.top_3_most_liked_account_for_posts %}
+          <li>{{ account.name }} ( {{ account.liked_posts_count }} like(s) )</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      Looks like you played it cool—no likes to be found. Are you okay?
+    {% endif %}`,
+
+    `You weren’t just scrolling, you were engaging. This year, you’ve liked {{ user_data.total_liked_comments }} comment(s).
+    Yes, even the ones that just said "🔥" or "same."
+    {% if user_data.top_3_most_liked_account_for_comments %}
+      Here are the accounts whose comments got your seal of approval:
+      <ul>
+        {% for account in user_data.top_3_most_liked_account_for_comments %}
+          <li>{{ account.name }} ( {{ account.liked_comments_count }} like(s) )</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      No liked comments? You’re missing out on the wildest part of Instagram.
+    {% endif %}`,
+
+    `But wait, there’s more. You didn’t just like other people’s comments—you made your 
+    own voice heard, commenting on {{ user_data.total_posts_comments }} post(s) this year.
+    {% if user_data.top_3_most_commented_accounts_for_posts %}
+      Here’s where your comments landed the most:
+      <ul>
+        {% for account in user_data.top_3_most_commented_accounts_for_posts %}
+          <li>{{ account.name }} ( {{ account.comment_count }} comment(s) )</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      No comments? Silent scrolling is so 2015.
+    {% endif %}`,
+
+    `Ah, Stories—Instagram’s version of a fleeting diary. This year, you’ve liked {{ user_data.total_liked_stories }} stories.
+    You’re practically the friend we all want hyping us up.
+    {% if user_data.top_3_most_liked_account_for_stories %}
+      Here’s who kept you tapping that heart:
+      <ul>
+        {% for account in user_data.top_3_most_liked_account_for_stories %}
+          <li>{{ account.name }} ( {{ account.story_activities_story_likes }} like(s) )</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      No story likes? Missed out on some quality vacation pics and latte art.
+    {% endif %}`,
+
+    `If reels are Instagram’s candy, you’ve got a sweet tooth. This year, you’ve commented on {{ user_data.total_reels_comments }} 
+    reel(s) — from KBBQ temptations to dance challenges you swore you’d learn.
+    {% if user_data.top_3_most_commented_accounts_for_reels %}
+      Here are the reels you couldn’t resist commenting on:
+      <ul>
+        {% for account in user_data.top_3_most_commented_accounts_for_reels %}
+          <li>{{ account.name }} ( {{ account.comment_count }} comment(s) )</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      No reel comments? Not even on those satisfying cake-cutting videos? 
+    {% endif %}`,
+
+    `Of course, Instagram isn’t just about consuming content—it’s about sharing it. This year, 
+    you posted {{ user_data.total_stories_posted }} stories of your own.`,
+
+    `Finally, let’s talk DMs. You messaged {{ user_data.total_people_messaged }} people this year.
+    We’re not saying you’re addicted to gossip, but the numbers don’t lie.
+    {% if user_data.top_3_most_messaged_people %}
+      Here’s who heard from you the most:
+      <ul>
+        {% for person in user_data.top_3_most_messaged_people %}
+          <li>{{ person.name }} ( {{ person.message_count }} messages )</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      No messages? Don’t leave your friends on read all year!
+    {% endif %}`
+  ];
+
+  // Typewriter effect
+  const storyBox = document.getElementById("story-box");
+  const typewriter = document.getElementById("typewriter");
+  const dataTable = document.getElementById("data-table");
+  let step = 0;
+
+  function typeWriterEffect(text, i, cb) {
+    if (i < text.length) {
+      typewriter.innerHTML += text.charAt(i);
+      setTimeout(() => typeWriterEffect(text, i + 1, cb), 30);
+    } else if (cb) {
+      cb();
+    }
+  }
+
+  function showStoryStep() {
+    typewriter.innerHTML = "";
+    // Fade in HTML tags (ul/li) instantly, not typewriter
+    let html = storySteps[step];
+    // Split at first <ul> if present
+    let ulIndex = html.indexOf("<ul>");
+    if (ulIndex !== -1) {
+      let beforeUl = html.substring(0, ulIndex);
+      let afterUl = html.substring(ulIndex);
+      typeWriterEffect(beforeUl, 0, () => {
+        typewriter.innerHTML += afterUl;
+        setTimeout(nextStep, 4500);
+      });
+    } else {
+      typeWriterEffect(html, 0, () => setTimeout(nextStep, 5500));
+    }
+  }
+
+  function nextStep() {
+    step++;
+    if (step < storySteps.length) {
+      showStoryStep();
+    } else {
+      // Fade out story box, fade in table
+      storyBox.style.transition = "opacity 1s";
+      storyBox.style.opacity = 0;
+      setTimeout(() => {
+        storyBox.style.display = "none";
+        dataTable.style.opacity = 1;
+      }, 1000);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    showStoryStep();
+  });
+
+  document.getElementById("skip-btn").onclick = function() {
+    storyBox.style.transition = "opacity 1s";
+    storyBox.style.opacity = 0;
+    setTimeout(() => {
+      storyBox.style.display = "none";
+      dataTable.style.opacity = 1;
+    }, 1000);
+  };
+</script>
+{% endblock %}

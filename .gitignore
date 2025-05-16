@@ -175,3 +175,9 @@ cython_debug/
 
 # Flask database
 app.db
+
+# Some directories to ignore
+uploads/
+app/static/images/profile-pictures/
+!app/static/images/profile-pictures/default.png
+

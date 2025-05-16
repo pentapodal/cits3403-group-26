@@ -7,9 +7,10 @@ from flask_wtf.file import FileStorage
 from zipfile import ZipFile, BadZipFile
 import sqlalchemy as sa
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm
+from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm, SearchForm
 from app.models import User
-from app.utils import process_zip_and_save
+from app.utils import process_and_save_all
+
 current_user: User
 
 
@@ -81,32 +82,76 @@ def home():
 
 
 @app.route('/following')
-#@login_required # Uncomment this line to require login for the friends page
+@login_required
 def following():
-  following_list = [
-    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
-    {'username': 'Andrea', 'profile_picture': 'andrea.png'},
-    {'username': 'Jia', 'profile_picture': 'jia.png'},
-    {'username': 'David', 'profile_picture': None},
-    {'username': 'Eve', 'profile_picture': None},
-  ]
+  form = EmptyForm()
+  following_list = db.session.scalars(current_user.following.select()).all()
+  return render_template(
+    'following.html',
+    title='Following',
+    form=form,
+    following=following_list
+  )
 
-  return render_template('following.html', title='Following', following=following_list)
 
 @app.route('/followers')
 @login_required
 def followers():
-  followers_list = [
-    {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
-    {'username': 'Andrea', 'profile_picture': 'andrea.png'},
-    {'username': 'Jia', 'profile_picture': 'jia.png'},
-    {'username': 'Anna', 'profile_picture': None},
-    {'username': 'Ryan', 'profile_picture': None},
-  ]
-  return render_template('followers.html', title='Followers', followers=followers_list)
+  form = EmptyForm()
+  followers_list = db.session.scalars(current_user.followers.select()).all()
+  return render_template(
+    'followers.html',
+    title='Followers',
+    form=form,
+    followers=followers_list
+  )
 
 
-@app.route('/send_follow_request/<username>', methods=['POST'])
+@app.route('/follow-requesters')
+@login_required
+def follow_requesters():
+  form = EmptyForm()
+  requesters_list = db.session.scalars(current_user.follow_requesters.select()).all()
+  return render_template(
+    'follow-requesters.html',
+    title='Follow Requests',
+    form=form,
+    friend_requests=requesters_list
+  )
+
+
+@app.route('/follow-requesting')
+@login_required
+def follow_requesting():
+  form = EmptyForm()
+  requesting_list = db.session.scalars(current_user.follow_requesting.select()).all()
+  return render_template(
+    'follow-requesting.html',
+    title='Follow Requesting',
+    form=form,
+    friend_requests=requesting_list
+  )
+
+
+@app.route('/search-users')
+@login_required
+def search_users():
+  search_form = SearchForm()
+  follow_form = EmptyForm()
+  results: sa.ScalarResult[User] | None = None
+  if search_form.validate():
+    q = request.args.get('q')
+    results = current_user.search_unfollowed(q)
+  return render_template(
+    'search-users.html',
+    title='Search',
+    search_form=search_form,
+    follow_form=follow_form,
+    results=results
+  )
+
+
+@app.route('/send-follow-request/<username>', methods=['POST'])
 @login_required
 def send_follow_request(username):
   form = EmptyForm()
@@ -124,10 +169,10 @@ def send_follow_request(username):
       current_user.send_follow_request(user)
       db.session.commit()
       flash(f'You have sent a follow request to {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('search_users'))
 
 
-@app.route('/cancel_follow_request/<username>', methods=['POST'])
+@app.route('/cancel-follow-request/<username>', methods=['POST'])
 @login_required
 def cancel_follow_request(username):
   form = EmptyForm()
@@ -143,10 +188,10 @@ def cancel_follow_request(username):
       current_user.cancel_follow_request(user)
       db.session.commit()
       flash(f'You have cancelled a follow request to {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('follow_requesting'))
 
 
-@app.route('/accept_follow_requester/<username>', methods=['POST'])
+@app.route('/accept-follow-requester/<username>', methods=['POST'])
 @login_required
 def accept_follow_requester(username):
   form = EmptyForm()
@@ -164,10 +209,10 @@ def accept_follow_requester(username):
       current_user.accept_follow_requester(user)
       db.session.commit()
       flash(f'You have accepted a follow request from {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('follow_requesters'))
 
 
-@app.route('/dismiss_follow_requester/<username>', methods=['POST'])
+@app.route('/dismiss-follow-requester/<username>', methods=['POST'])
 @login_required
 def dismiss_follow_requester(username):
   form = EmptyForm()
@@ -183,10 +228,10 @@ def dismiss_follow_requester(username):
       current_user.dismiss_follow_requester(user)
       db.session.commit()
       flash(f'You have dismissed a follow request from {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('follow_requesters'))
 
 
-@app.route('/stop_following/<username>', methods=['POST'])
+@app.route('/stop-following/<username>', methods=['POST'])
 @login_required
 def stop_following(username):
   form = EmptyForm()
@@ -202,10 +247,10 @@ def stop_following(username):
       current_user.stop_following(user)
       db.session.commit()
       flash(f'You have stopped following {username}.')
-  return redirect(url_for('friends'))
+  return redirect(url_for('following'))
 
 
-@app.route('/remove_follower/<username>', methods=['POST'])
+@app.route('/remove-follower/<username>', methods=['POST'])
 @login_required
 def remove_follower(username):
   form = EmptyForm()
@@ -221,28 +266,7 @@ def remove_follower(username):
       current_user.remove_follower(user)
       db.session.commit()
       flash(f'You have removed the follower {username}.')
-  return redirect(url_for('friends'))
-
-
-@app.route('/search_users/<query>')
-@login_required
-def search_users(query):
-  # Need to use .from_statement() because selecting ORM, see:
-  # https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html#selecting-entities-from-unions-and-other-set-operations
-  result: sa.ScalarResult[User] = db.session.scalars(
-    sa.select(User).from_statement(
-      sa.select(User)
-      .where(User.username.ilike(f'%{query}%'))
-      .except_(
-        current_user.follow_requesting.select(),
-        current_user.following.select()
-      )
-    )
-  )
-  return {"result": [
-    {"username": user.username, "is_follower": current_user.is_followed_by(user)}
-    for user in result
-  ]}
+  return redirect(url_for('followers'))
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -252,31 +276,39 @@ def upload():
     if form.validate_on_submit():
         file: FileStorage = form.file.data
         try:
-            # Call the utility function to process the ZIP file and save the JSON
-            path = process_zip_and_save(file.stream, app.config['UPLOAD_PATH'], current_user.get_id())
-            flash(f'File processed and saved to {path}')
+            process_and_save_all(file.stream, current_user.username)
+            flash(f'File Successfully Uploaded')
+            return redirect(url_for('overshare'))
         except (BadZipFile, OSError) as error:
             flash(str(error))
-        finally:
-            return redirect(url_for('upload'))
     return render_template('upload.html', title='Upload', form=form)
 
 
 @app.route('/overshare')
 @app.route('/overshare/<username>')
 @login_required
-def overshare(username=None):
+def overshare(username: str | None = None):
   if username is None:
     username = current_user.username
-  return render_template('overshare.html', title='Overshare', username=username)
+  elif username != current_user.username:
+    user = db.session.scalar(sa.select(User).where(User.username == username))
+    if user is None:
+      flash(f'User {username} not found.')
+      return redirect(url_for('home'))
+    elif not current_user.is_following(user):
+      flash(f'You are not following {username}!')
+      return redirect(url_for('home'))
 
-@app.route('/follow-requesters')
-@login_required
-def follow_requesters():
-  return render_template('follow-requesters.html', title='Follow Request')
-  
-@app.route('/follow-requestings')
-@login_required
-def follow_requestings():
-  return render_template('follow-requesting.html', title='Follow Requesting')
+  json_file_path = os.path.join(app.config['UPLOAD_PATH'], f'{username}.json')
 
+  if not os.path.isfile(json_file_path):
+    if username == current_user.username:
+      flash("You have not uploaded any data yet!")
+      return redirect(url_for('upload'))
+    flash(f"{username} has not uploaded any data yet!")
+    return redirect(url_for('following'))
+
+  with open(json_file_path, 'r') as json_file:
+    user_data = json.load(json_file)
+
+  return render_template('overshare.html', title='Overshare', username=username, user_data=user_data)
