@@ -9,7 +9,8 @@ import sqlalchemy as sa
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm
 from app.models import User
-from app.utils import process_zip_and_save
+from app.utils import process_zip_and_save, extract_and_save_profile_pic_from_json
+
 current_user: User
 
 
@@ -248,6 +249,9 @@ def upload():
         file: FileStorage = form.file.data
         try:
             path = process_zip_and_save(file.stream, app.config['UPLOAD_PATH'], current_user.username)
+            file.stream.seek(0)
+            extract_and_save_profile_pic_from_json(file.stream,  os.path.join(app.root_path, 'static', 'images', 'profile_pictures'), current_user.username)
+  
             flash(f'File Successfully Uploaded')
             return redirect(url_for('overshare', username=current_user.username))
         except (BadZipFile, OSError) as error:

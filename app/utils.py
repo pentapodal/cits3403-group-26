@@ -203,6 +203,7 @@ def process_zip_and_save(file_stream, upload_path, username):
             else:
                 top_3_most_messaged_people = []
 
+
         # Ensure the upload directory exists, if not create it
         if not os.path.isdir(upload_path):
             os.mkdir(upload_path)
@@ -238,3 +239,42 @@ def process_zip_and_save(file_stream, upload_path, username):
         raise error
 
 
+
+def extract_and_save_profile_pic_from_json(file_stream, upload_path, username):
+    """
+    Extracts the profile picture using the uri in your_instagram_activity/media/profile_photos.json,
+    saves it to uploads, and returns the photo bytes (or None if not found).
+    """
+    import json
+    from zipfile import ZipFile
+    import os
+
+    try:
+        with ZipFile(file_stream) as archive:
+            try:
+                with archive.open('your_instagram_activity/media/profile_photos.json') as f:
+                    profile_json = json.load(f)
+                print("Loaded profile_photos.json:", profile_json)
+                uri = profile_json["ig_profile_picture"][0]["uri"]
+                print("Profile picture URI from JSON:", uri)
+            except Exception as e:
+                print("Could not load or parse profile_photos.json:", e)
+                return None
+
+            # Now extract the photo using the URI
+            if uri in archive.namelist():
+                if not os.path.isdir(upload_path):
+                    os.makedirs(upload_path, exist_ok=True)
+                save_path = os.path.join(upload_path, f'{username}_profile_pic.jpg')
+                with archive.open(uri) as pic_file:
+                    photo_bytes = pic_file.read()
+                    with open(save_path, 'wb') as out_pic:
+                        out_pic.write(photo_bytes)
+                print("Profile pic saved successfully to:", save_path)
+                return photo_bytes
+            else:
+                print("Profile picture file not found in zip:", uri)
+                return None
+    except (BadZipFile, OSError) as error:
+        print("Error extracting profile pic:", error)
+        raise error
