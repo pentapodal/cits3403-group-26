@@ -140,6 +140,11 @@ body {
   transition: opacity 1s;
 }
 
+.story-title {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
 .data-table h2 {
   color: white;
   font-family: 'Lobster', sans-serif;
