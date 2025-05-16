@@ -274,34 +274,62 @@ def overshare(username=None):
     # Define story steps with proper structure
     storySteps = [
         {
+            "title": "", 
+            "content": "As you open your eyes first thing in the morning, you reach to your phone and check Instagram. You came accross lots of interesting posts and decided to like them!"
+        },
+        {
             "title": "Total Liked Posts", 
             "template_key": "total_liked_posts"
+        },
+        {
+            "title": "", 
+            "content": "As you are doom scrolling in bed, you come across a funny comment section and decided to like some comments!"
         },
         {
             "title": "Total Liked Comments", 
             "template_key": "total_liked_comments"
         },
         {
+            "title": "",
+            "content": "Your mid-day scroll is all about stories, As you sit on the couch, you decided to look at some stories posted from your friends!"
+        },
+        {
             "title": "Total Liked Stories", 
             "template_key": "total_liked_stories"
+        },
+        {
+            "title": "",
+            "content": "As you are scrolling through your feed, you come across a post that you find interesting and decide to comment on it!"
         },
         {
             "title": "Total Posts Commented", 
             "template_key": "total_posts_commented"
         },
         {
+            "title": "",
+            "content": "As the day winds down, you decided to take a stroll into Instagram reels, you come across a reel about KBBQ and you decide to tag your friends in the comments!"
+        },
+        {
             "title": "Total Reels Commented", 
             "template_key": "total_reels_commented"
+        },
+        {
+          "title": "",
+          "content": "You couldn't take it anymore so you drive to the closest KBBQ restaurant you know and ordered some food. Before eating, you take a photo of the food to post as a Story!"
         },
         {
             "title": "Total Stories Posted", 
             "template_key": "total_stories_posted"
         },
         {
+          "title": "",
+          "content": "As you are eating, your friends mesaage you about how hungry you made them!"
+        },
+        {
             "title": "Total People Messaged", 
             "template_key": "total_people_messaged"
-        }
-    ]
+        },
+  ]
 
     # Render the template directly (no need for story_content.html)
     return render_template('overshare.html', title='Overshare', username=username, user_data=user_data, storySteps=storySteps)
