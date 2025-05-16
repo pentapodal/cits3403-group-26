@@ -37,11 +37,13 @@
   <!-- Flash Messages -->
   {% with messages = get_flashed_messages() %}
     {% if messages %}
-      <div class="container mt-3">
+      <div class="position-fixed start-50 translate-middle-x z-3" 
+      style=" top: 70px; width: 90%; max-width: 600px;">
         {% for message in messages %}
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <div class="alert alert-warning alert-dismissible fade show shadow-sm mb-2 py-2 px-2 text-center" role="alert"
+          style= "font-size: 0.95rem;">
             {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y me-3" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
         {% endfor %}
       </div>

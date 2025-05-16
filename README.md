@@ -15,3 +15,22 @@
 9. Update requirements.txt with `pip freeze > requirements.txt`
 10. Commit and push the new branch to GitHub
 11. Create a pull request for the new branch
+
+## Application Introduction 
+Overshare is a web application that lets users to upload their Instagram data and get a cool summary of their activity over the past year. Users can also connect with friends to view and share their personal insights. 
+
+## How it works 
+1. Download your Instagram data from the app itself in .json format.
+2. Upload your zip file on the Upload Data page.
+3. Explore your recap.
+4. Connect with friends.
+- The Followers page shows who can view your Overshare.
+- The Following page shows the Overshares you're following.
+  
+## Group details
+| Student ID | Full name             | GitHub username                               |
+|------------|-----------------------|-----------------------------------------------|
+| 23509629   | Enrichson Paris       | [Enrichson](https://github.com/Enrichson)     |
+| 23952666   | Andrea Cheng Ern Bong | [andreabong](https://github.com/andreabong)   |
+| 23463523   | Jia Xin Yeo           | [1sdfghjx10n](https://github.com/1sdfghjx10n) |
+| 23846903   | Chen Yu Lim           | [pentapodal](https://github.com/pentapodal)   |
