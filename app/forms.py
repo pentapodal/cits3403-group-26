@@ -44,3 +44,7 @@ class UploadForm(FlaskForm):
 
 class EmptyForm(FlaskForm):
   submit = SubmitField('Submit')
+
+
+class SearchForm(FlaskForm):
+  pass

@@ -7,7 +7,7 @@ from flask_wtf.file import FileStorage
 from zipfile import ZipFile, BadZipFile
 import sqlalchemy as sa
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm
+from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm, SearchForm
 from app.models import User
 from app.utils import process_zip_and_save
 current_user: User
@@ -87,7 +87,12 @@ def following():
     {'username': 'Eve', 'profile_picture': None},
   ]
   # following_list = db.session.scalars(current_user.following.select()).all()
-  return render_template('following.html', title='Following', form=form, following=following_list)
+  return render_template(
+    'following.html',
+    title='Following',
+    form=form,
+    following=following_list
+  )
 
 
 @app.route('/followers')
@@ -101,12 +106,19 @@ def followers():
     {'username': 'Anna', 'profile_picture': None},
     {'username': 'Ryan', 'profile_picture': None},
   ]
-  return render_template('followers.html', title='Followers', form=form, followers=followers_list)
+  # followers_list = db.session.scalars(current_user.followers.select()).all()
+  return render_template(
+    'followers.html',
+    title='Followers',
+    form=form,
+    followers=followers_list
+  )
 
 
 @app.route('/follow-requesters')
 @login_required
 def follow_requesters():
+  form = EmptyForm()
   requesters_list = [
     {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
     {'username': 'Andrea', 'profile_picture': 'andrea.png'},
@@ -114,11 +126,19 @@ def follow_requesters():
     {'username': 'Anna', 'profile_picture': None},
     {'username': 'Ryan', 'profile_picture': None},
   ]
-  return render_template('follow-requesters.html', title='Follow Requests', friend_requests=requesters_list)
+  # requesters_list = db.session.scalars(current_user.follow_requesters.select()).all()
+  return render_template(
+    'follow-requesters.html',
+    title='Follow Requests',
+    form=form,
+    friend_requests=requesters_list
+  )
+
 
 @app.route('/follow-requesting')
 @login_required
 def follow_requesting():
+  form = EmptyForm()
   requesting_list = [
     {'username': 'Chen ', 'profile_picture': 'chen.jpg'},
     {'username': 'Andrea', 'profile_picture': 'andrea.png'},
@@ -126,10 +146,16 @@ def follow_requesting():
     {'username': 'Anna', 'profile_picture': None},
     {'username': 'Ryan', 'profile_picture': None},
   ]
-  return render_template('follow-requesting.html', title='Follow Requesting', friend_requests=requesting_list)
+  # requesting_list = db.session.scalars(current_user.follow_requesting.select()).all()
+  return render_template(
+    'follow-requesting.html',
+    title='Follow Requesting',
+    form=form,
+    friend_requests=requesting_list
+  )
 
 
-@app.route('/send_follow_request/<username>', methods=['POST'])
+@app.route('/send-follow-request/<username>', methods=['POST'])
 @login_required
 def send_follow_request(username):
   form = EmptyForm()
@@ -150,7 +176,7 @@ def send_follow_request(username):
   return redirect(url_for('follow_requesting'))
 
 
-@app.route('/cancel_follow_request/<username>', methods=['POST'])
+@app.route('/cancel-follow-request/<username>', methods=['POST'])
 @login_required
 def cancel_follow_request(username):
   form = EmptyForm()
@@ -169,7 +195,7 @@ def cancel_follow_request(username):
   return redirect(url_for('follow_requesting'))
 
 
-@app.route('/accept_follow_requester/<username>', methods=['POST'])
+@app.route('/accept-follow-requester/<username>', methods=['POST'])
 @login_required
 def accept_follow_requester(username):
   form = EmptyForm()
@@ -190,7 +216,7 @@ def accept_follow_requester(username):
   return redirect(url_for('follow_requesters'))
 
 
-@app.route('/dismiss_follow_requester/<username>', methods=['POST'])
+@app.route('/dismiss-follow-requester/<username>', methods=['POST'])
 @login_required
 def dismiss_follow_requester(username):
   form = EmptyForm()
@@ -209,7 +235,7 @@ def dismiss_follow_requester(username):
   return redirect(url_for('follow_requesters'))
 
 
-@app.route('/stop_following/<username>', methods=['POST'])
+@app.route('/stop-following/<username>', methods=['POST'])
 @login_required
 def stop_following(username):
   form = EmptyForm()
@@ -228,7 +254,7 @@ def stop_following(username):
   return redirect(url_for('following'))
 
 
-@app.route('/remove_follower/<username>', methods=['POST'])
+@app.route('/remove-follower/<username>', methods=['POST'])
 @login_required
 def remove_follower(username):
   form = EmptyForm()
@@ -247,25 +273,35 @@ def remove_follower(username):
   return redirect(url_for('followers'))
 
 
-@app.route('/search_users/<query>')
+@app.route('/search-users', methods=['GET', 'POST'])
 @login_required
-def search_users(query):
+def search_users():
   # Need to use .from_statement() because selecting ORM, see:
   # https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html#selecting-entities-from-unions-and-other-set-operations
-  result: sa.ScalarResult[User] = db.session.scalars(
-    sa.select(User).from_statement(
-      sa.select(User)
-      .where(User.username.ilike(f'%{query}%'))
-      .except_(
-        current_user.follow_requesting.select(),
-        current_user.following.select()
+  search_form = SearchForm()
+  follow_form = EmptyForm()
+  if search_form.validate_on_submit():
+    q = request.args.get('q')
+    result: sa.ScalarResult[User] = db.session.scalars(
+      sa.select(User).from_statement(
+        sa.select(User)
+        .where(User.username.ilike(f'%{q}%'))
+        .except_(
+          current_user.follow_requesting.select(),
+          current_user.following.select()
+        )
       )
     )
+    return {"result": [
+      {"username": user.username, "is_follower": current_user.is_followed_by(user)}
+      for user in result
+    ]}
+  return render_template(
+    'search-users.html',
+    title='Search',
+    search_form=search_form,
+    follow_form=follow_form
   )
-  return {"result": [
-    {"username": user.username, "is_follower": current_user.is_followed_by(user)}
-    for user in result
-  ]}
 
 
 @app.route('/upload', methods=['GET', 'POST'])

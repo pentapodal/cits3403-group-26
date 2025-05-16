@@ -16,7 +16,7 @@
 
       <div class="mb-3 p-2">
         <a href="{{ url_for('follow_requesters') }}" class="btn btn-info w-100 text-white">
-          Requests
+          Received
           <!--add {{received_count}} for notifs-->
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
         </a>
@@ -24,6 +24,10 @@
 
       <div class="mb-3 p-2">
         <a href="{{ url_for('follow_requesting') }}" class="btn btn-info w-100 text-white">Sent</a>
+      </div>
+
+      <div class="mb-3 p-2">
+        <a href="{{ url_for('search_users') }}" class="btn btn-info w-100 text-white">Search</a>
       </div>
 
     </div>
