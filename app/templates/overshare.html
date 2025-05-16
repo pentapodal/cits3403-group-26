@@ -139,10 +139,10 @@
     `First thing in the morning, before you even had your coffee, you were on Instagram. Sound familiar? Over the past year, 
     you’ve liked a staggering {{ user_data.total_liked_posts }} post(s). That’s a lot of double taps!
     {% if user_data.top_3_most_liked_account_for_posts %} 
-      And because you definitely have favorites, here are the accounts you couldn’t stop liking:
+      And because you definitely have favourites, here are the accounts you couldn’t stop liking:
       <ul>
         {% for account in user_data.top_3_most_liked_account_for_posts %}
-          <li>{{ account.name }} ({{ account.liked_posts_count }} like(s))</li>
+          <li>{{ account.name }} ( {{ account.liked_posts_count }} like(s) )</li>
         {% endfor %}
       </ul>
     {% else %}
@@ -155,7 +155,7 @@
       Here are the accounts whose comments got your seal of approval:
       <ul>
         {% for account in user_data.top_3_most_liked_account_for_comments %}
-          <li>{{ account.name }} ({{ account.liked_comments_count }} like(s))</li>
+          <li>{{ account.name }} ( {{ account.liked_comments_count }} like(s) )</li>
         {% endfor %}
       </ul>
     {% else %}
@@ -168,7 +168,7 @@
       Here’s where your comments landed the most:
       <ul>
         {% for account in user_data.top_3_most_commented_accounts_for_posts %}
-          <li>{{ account.name }} ({{ account.comment_count }} comment(s))</li>
+          <li>{{ account.name }} ( {{ account.comment_count }} comment(s) )</li>
         {% endfor %}
       </ul>
     {% else %}
@@ -181,7 +181,7 @@
       Here’s who kept you tapping that heart:
       <ul>
         {% for account in user_data.top_3_most_liked_account_for_stories %}
-          <li>{{ account.name }} ({{ account.story_activities_story_likes }} like(s))</li>
+          <li>{{ account.name }} ( {{ account.story_activities_story_likes }} like(s) )</li>
         {% endfor %}
       </ul>
     {% else %}
@@ -194,7 +194,7 @@
       Here are the reels you couldn’t resist commenting on:
       <ul>
         {% for account in user_data.top_3_most_commented_accounts_for_reels %}
-          <li>{{ account.name }} ({{ account.comment_count }} comment(s))</li>
+          <li>{{ account.name }} ( {{ account.comment_count }} comment(s) )</li>
         {% endfor %}
       </ul>
     {% else %}
@@ -210,7 +210,7 @@
       Here’s who heard from you the most:
       <ul>
         {% for person in user_data.top_3_most_messaged_people %}
-          <li>{{ person.name }} ({{ person.message_count }} messages)</li>
+          <li>{{ person.name }} ( {{ person.message_count }} messages )</li>
         {% endfor %}
       </ul>
     {% else %}
