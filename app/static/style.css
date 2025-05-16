@@ -235,31 +235,46 @@ body {
   pointer-events: none;
 }
 
-/* Masonry-style background with slow vertical scroll */
-.masonry-background {
+.masonry-container {
   position: fixed;
   top: 0;
-  left: 0;
+  display: flex;
   width: 100%;
-  height: auto;
-  column-count: 5;
-  /* Adjust columns based on your preference */
-  column-gap: 10px;
-  animation: scroll-up 100s linear infinite;
-  will-change: transform;
+  height: 100;
+  justify-content: space-evenly;
   z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-.masonry-background img {
+/* Masonry-style background with slow vertical scroll */
+.masonry-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation-name: float-strip;
+  animation-duration: 80s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  will-change: transform;
+}
+
+.masonry-column[data-direction="down"] {
+  animation-direction: alternate-reverse;
+}
+
+.masonry-column img {
   width: 100%;
-  margin-bottom: 10px;
+  max-width: 180px;
+  aspect-ratio: 2 / 3;
   border-radius: 8px;
   object-fit: cover;
   display: block;
   opacity: 0.9;
 }
 
-@keyframes scroll-up {
+@keyframes float-strip {
   0% {
     transform: translateY(0);
   }
