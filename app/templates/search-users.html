@@ -2,7 +2,7 @@
 
 {% block heading %}Search Users{% endblock %}
 {% block friends_content %}
-<form id="search" method="GET" action="{{ url_for('search_users') }}">
+<form id="search" method="GET" action="{{ url_for('main.search_users') }}">
   <div class="input-group">
     {{ search_form.q(class="form-control", placeholder=search_form.q.label.text) }}
   </div>
@@ -27,7 +27,7 @@
         </div>
 
         <div>
-          <form method="POST" action="{{ url_for('send_follow_request', username=user.username) }}">
+          <form method="POST" action="{{ url_for('main.send_follow_request', username=user.username) }}">
             {{ follow_form.hidden_tag() }}
             {{ follow_form.submit(class="btn btn-m btn-success justify-content-end", value="Send") }}
           </form>

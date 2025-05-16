@@ -1,4 +1,4 @@
-import threading
+import multiprocessing
 import unittest
 import time
 import os
@@ -27,7 +27,7 @@ class SystemTests(unittest.TestCase):
     os.makedirs('uploads', exist_ok=True)  # Ensure the folder exists
     shutil.copy('tests/testuser.json', 'uploads/testuser.json') 
 
-    self.server_thread = threading.Thread(
+    self.server_thread = multiprocessing.Process(
         target=self.testApplication.run,
         kwargs={'debug': False, 'use_reloader': False}
     )
@@ -114,6 +114,7 @@ class SystemTests(unittest.TestCase):
   
 
   def tearDown(self):
+    self.server_thread.terminate()
     self.driver.close()
     db.session.remove()
     db.drop_all()
