@@ -155,6 +155,19 @@ def follow_requesting():
   )
 
 
+@app.route('/search-users')
+@login_required
+def search_users():
+  search_form = SearchForm()
+  follow_form = EmptyForm()
+  return render_template(
+    'search-users.html',
+    title='Search',
+    search_form=search_form,
+    follow_form=follow_form
+  )
+
+
 @app.route('/send-follow-request/<username>', methods=['POST'])
 @login_required
 def send_follow_request(username):
@@ -173,7 +186,7 @@ def send_follow_request(username):
       current_user.send_follow_request(user)
       db.session.commit()
       flash(f'You have sent a follow request to {username}.')
-  return redirect(url_for('follow_requesting'))
+  return redirect(url_for('search_users'))
 
 
 @app.route('/cancel-follow-request/<username>', methods=['POST'])
@@ -273,35 +286,19 @@ def remove_follower(username):
   return redirect(url_for('followers'))
 
 
-@app.route('/search-users', methods=['GET', 'POST'])
+@app.route('/search-unfollowed')
 @login_required
-def search_users():
-  # Need to use .from_statement() because selecting ORM, see:
-  # https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html#selecting-entities-from-unions-and-other-set-operations
-  search_form = SearchForm()
-  follow_form = EmptyForm()
-  if search_form.validate_on_submit():
-    q = request.args.get('q')
-    result: sa.ScalarResult[User] = db.session.scalars(
-      sa.select(User).from_statement(
-        sa.select(User)
-        .where(User.username.ilike(f'%{q}%'))
-        .except_(
-          current_user.follow_requesting.select(),
-          current_user.following.select()
-        )
-      )
-    )
-    return {"result": [
-      {"username": user.username, "is_follower": current_user.is_followed_by(user)}
-      for user in result
-    ]}
-  return render_template(
-    'search-users.html',
-    title='Search',
-    search_form=search_form,
-    follow_form=follow_form
-  )
+def search_unfollowed():
+  q = request.args.get('q')
+  result: sa.ScalarResult[User] = current_user.search_unfollowed(q)
+  return {"result": [
+    {
+      "username": user.username,
+      "is_follower": current_user.is_followed_by(user),
+      "has_pic": os.path.isfile(os.path.join("images", f"{current_user.username}.jpg"))
+    }
+    for user in result
+  ]}
 
 
 @app.route('/upload', methods=['GET', 'POST'])

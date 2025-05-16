@@ -122,6 +122,20 @@ class User(UserMixin, db.Model):
     query = sa.select(sa.func.count()).select_from(self.following.select().subquery())
     return db.session.scalar(query)
 
+  def search_unfollowed(self, q: str):
+    # Need to use .from_statement() because selecting ORM, see:
+    # https://docs.sqlalchemy.org/en/20/orm/queryguide/select.html#selecting-entities-from-unions-and-other-set-operations
+    query = sa.select(User).from_statement(
+      sa.select(User)
+      .where(User.username.ilike(f'%{q}%'))
+      .where(User.username != self.username)
+      .except_(
+        self.follow_requesting.select(),
+        self.following.select()
+      )
+    )
+    return db.session.scalars(query)
+
   def following_posts(self):
     # Eventually want to rework this into following Overshares
     Author = so.aliased(User)

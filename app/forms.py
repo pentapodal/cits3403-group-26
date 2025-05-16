@@ -1,3 +1,4 @@
+from flask import request
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed, FileSize
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
@@ -47,4 +48,11 @@ class EmptyForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
-  pass
+  q = StringField('Search', validators=[DataRequired()])
+
+  def __init__(self, *args, **kwargs):
+    if 'formdata' not in kwargs:
+      kwargs['formdata'] = request.args
+    if 'meta' not in kwargs:
+      kwargs['meta'] = {'csrf': False}
+    super(SearchForm, self).__init__(*args, **kwargs)
