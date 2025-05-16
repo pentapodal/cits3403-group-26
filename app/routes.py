@@ -281,17 +281,28 @@ def upload():
 @app.route('/overshare')
 @app.route('/overshare/<username>')
 @login_required
-def overshare(username=None):
-    if username is None:
-        username = current_user.username
+def overshare(username: str | None = None):
+  if username is None:
+    username = current_user.username
+  else:
+    user = db.session.scalar(sa.select(User).where(User.username == username))
+    if user is None:
+      flash(f'User {username} not found.')
+      return redirect(url_for('home'))
+    elif not current_user.is_following(user):
+      flash(f'You are not following {username}!')
+      return redirect(url_for('home'))
 
-    json_file_path = os.path.join(app.config['UPLOAD_PATH'], f'{username}.json')
+  json_file_path = os.path.join(app.config['UPLOAD_PATH'], f'{username}.json')
 
-    if not os.path.isfile(json_file_path): 
-        flash("No data available for this user.")
-        return redirect(url_for('upload'))
+  if not os.path.isfile(json_file_path):
+    if username == current_user.username:
+      flash("You have not uploaded any data yet!")
+      return redirect(url_for('upload'))
+    flash(f"{username} has not uploaded any data yet!")
+    return redirect(url_for('following'))
 
-    with open(json_file_path, 'r') as json_file:
-        user_data = json.load(json_file)
+  with open(json_file_path, 'r') as json_file:
+    user_data = json.load(json_file)
 
-    return render_template('overshare.html', title='Overshare', username=username, user_data=user_data)
+  return render_template('overshare.html', title='Overshare', username=username, user_data=user_data)
