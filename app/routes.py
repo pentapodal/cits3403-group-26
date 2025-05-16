@@ -6,16 +6,18 @@ from flask_login import current_user, login_user, logout_user, login_required
 from flask_wtf.file import FileStorage
 from zipfile import ZipFile, BadZipFile
 import sqlalchemy as sa
-from app import app, db
+from app import db
+from flask import current_app
 from app.forms import LoginForm, RegistrationForm, UploadForm, EmptyForm, SearchForm
 from app.models import User
+from app.blueprints import blueprint
 from app.utils import process_and_save_all
 
 current_user: User
 
 
-@app.route('/')
-@app.route('/index')
+@blueprint.route('/')
+@blueprint.route('/index')
 def index():
   posts = [
     {
@@ -30,35 +32,35 @@ def index():
   return render_template('index.html', posts=posts)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@blueprint.route('/login', methods=['GET', 'POST'])
 def login():
   if current_user.is_authenticated:
-    return redirect(url_for('home'))
+    return redirect(url_for('main.home'))
   form = LoginForm()
   if form.validate_on_submit():
     user = db.session.scalar(
       sa.select(User).where(User.username == form.username.data))
     if user is None or not user.check_password(form.password.data):
       flash('Invalid username or password')
-      return redirect(url_for('login'))
+      return redirect(url_for('main.login'))
     login_user(user, remember=form.remember_me.data)
     next_page = request.args.get('next')
     if not next_page or urlsplit(next_page).netloc != '':
-      next_page = url_for('home')
+      next_page = url_for('main.home')
     return redirect(next_page)
   return render_template('login.html', title='Sign In', form=form)
 
 
-@app.route('/logout')
+@blueprint.route('/logout')
 def logout():
   logout_user()
-  return redirect(url_for('index'))
+  return redirect(url_for('main.index'))
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@blueprint.route('/register', methods=['GET', 'POST'])
 def register():
   if current_user.is_authenticated:
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
   form = RegistrationForm()
   if form.validate_on_submit():
     user = User(username=form.username.data, email=form.email.data)
@@ -66,17 +68,18 @@ def register():
     db.session.add(user)
     db.session.commit()
     flash('Congratulations, you are now a registered user!')
-    return redirect(url_for('login'))
+    return redirect(url_for('main.login'))
   return render_template('register.html', title='Register', form=form)
 
 
-@app.route('/home')
+@blueprint.route('/home')
 @login_required
 def home():
   return render_template('home.html', title='Home')
 
 
-@app.route('/following')
+
+@blueprint.route('/following')
 @login_required
 def following():
   form = EmptyForm()
@@ -89,7 +92,7 @@ def following():
   )
 
 
-@app.route('/followers')
+@blueprint.route('/followers')
 @login_required
 def followers():
   form = EmptyForm()
@@ -102,7 +105,8 @@ def followers():
   )
 
 
-@app.route('/follow-requesters')
+
+@blueprint.route('/follow-requesters')
 @login_required
 def follow_requesters():
   form = EmptyForm()
@@ -115,7 +119,7 @@ def follow_requesters():
   )
 
 
-@app.route('/follow-requesting')
+@blueprint.route('/follow-requesting')
 @login_required
 def follow_requesting():
   form = EmptyForm()
@@ -128,7 +132,7 @@ def follow_requesting():
   )
 
 
-@app.route('/search-users')
+@blueprint.route('/search-users')
 @login_required
 def search_users():
   search_form = SearchForm()
@@ -146,7 +150,7 @@ def search_users():
   )
 
 
-@app.route('/send-follow-request/<username>', methods=['POST'])
+@blueprint.route('/send-follow-request/<username>', methods=['POST'])
 @login_required
 def send_follow_request(username):
   form = EmptyForm()
@@ -164,10 +168,10 @@ def send_follow_request(username):
       current_user.send_follow_request(user)
       db.session.commit()
       flash(f'You have sent a follow request to {username}.')
-  return redirect(url_for('search_users'))
+  return redirect(url_for('main.search_users'))
 
 
-@app.route('/cancel-follow-request/<username>', methods=['POST'])
+@blueprint.route('/cancel-follow-request/<username>', methods=['POST'])
 @login_required
 def cancel_follow_request(username):
   form = EmptyForm()
@@ -183,10 +187,10 @@ def cancel_follow_request(username):
       current_user.cancel_follow_request(user)
       db.session.commit()
       flash(f'You have cancelled a follow request to {username}.')
-  return redirect(url_for('follow_requesting'))
+  return redirect(url_for('main.follow_requesting'))
 
 
-@app.route('/accept-follow-requester/<username>', methods=['POST'])
+@blueprint.route('/accept-follow-requester/<username>', methods=['POST'])
 @login_required
 def accept_follow_requester(username):
   form = EmptyForm()
@@ -204,10 +208,10 @@ def accept_follow_requester(username):
       current_user.accept_follow_requester(user)
       db.session.commit()
       flash(f'You have accepted a follow request from {username}.')
-  return redirect(url_for('follow_requesters'))
+  return redirect(url_for('main.follow_requesters'))
 
 
-@app.route('/dismiss-follow-requester/<username>', methods=['POST'])
+@blueprint.route('/dismiss-follow-requester/<username>', methods=['POST'])
 @login_required
 def dismiss_follow_requester(username):
   form = EmptyForm()
@@ -223,10 +227,10 @@ def dismiss_follow_requester(username):
       current_user.dismiss_follow_requester(user)
       db.session.commit()
       flash(f'You have dismissed a follow request from {username}.')
-  return redirect(url_for('follow_requesters'))
+  return redirect(url_for('main.follow_requesters'))
 
 
-@app.route('/stop-following/<username>', methods=['POST'])
+@blueprint.route('/stop-following/<username>', methods=['POST'])
 @login_required
 def stop_following(username):
   form = EmptyForm()
@@ -242,10 +246,10 @@ def stop_following(username):
       current_user.stop_following(user)
       db.session.commit()
       flash(f'You have stopped following {username}.')
-  return redirect(url_for('following'))
+  return redirect(url_for('main.following'))
 
 
-@app.route('/remove-follower/<username>', methods=['POST'])
+@blueprint.route('/remove-follower/<username>', methods=['POST'])
 @login_required
 def remove_follower(username):
   form = EmptyForm()
@@ -261,10 +265,10 @@ def remove_follower(username):
       current_user.remove_follower(user)
       db.session.commit()
       flash(f'You have removed the follower {username}.')
-  return redirect(url_for('followers'))
+  return redirect(url_for('main.followers'))
 
 
-@app.route('/upload', methods=['GET', 'POST'])
+@blueprint.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
     form = UploadForm()
@@ -273,14 +277,14 @@ def upload():
         try:
             process_and_save_all(file.stream, current_user.username)
             flash(f'File Successfully Uploaded')
-            return redirect(url_for('overshare'))
+            return redirect(url_for('main.overshare'))
         except (BadZipFile, OSError) as error:
             flash(str(error))
     return render_template('upload.html', title='Upload', form=form)
 
 
-@app.route('/overshare')
-@app.route('/overshare/<username>')
+@blueprint.route('/overshare')
+@blueprint.route('/overshare/<username>')
 @login_required
 def overshare(username: str | None = None):
   if username is None:
@@ -289,19 +293,19 @@ def overshare(username: str | None = None):
     user = db.session.scalar(sa.select(User).where(User.username == username))
     if user is None:
       flash(f'User {username} not found.')
-      return redirect(url_for('home'))
+      return redirect(url_for('main.home'))
     elif not current_user.is_following(user):
       flash(f'You are not following {username}!')
-      return redirect(url_for('home'))
+      return redirect(url_for('main.home'))
 
-  json_file_path = os.path.join(app.config['UPLOAD_PATH'], f'{username}.json')
+  json_file_path = os.path.join(current_app.config['UPLOAD_PATH'], f'{username}.json')
 
   if not os.path.isfile(json_file_path):
     if username == current_user.username:
       flash("You have not uploaded any data yet!")
-      return redirect(url_for('upload'))
+      return redirect(url_for('main.upload'))
     flash(f"{username} has not uploaded any data yet!")
-    return redirect(url_for('following'))
+    return redirect(url_for('main.following'))
 
   with open(json_file_path, 'r') as json_file:
     user_data = json.load(json_file)

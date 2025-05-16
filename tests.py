@@ -1,17 +1,20 @@
 import os
 from typing import override
+
+from config import TestingConfig
 os.environ['DATABASE_URL'] = 'sqlite://'
 
 from datetime import datetime, timezone, timedelta
 import unittest
-from app import app, db
+from app import create_application, db
 from app.models import User, Post
 
 
 class UserModelCase(unittest.TestCase):
   @override
   def setUp(self):
-    self.app_context = app.app_context()
+    self.app = create_application(TestingConfig)
+    self.app_context = self.app.app_context()
     self.app_context.push()
     db.create_all()
 
@@ -31,7 +34,8 @@ class UserModelCase(unittest.TestCase):
 class UserModelFollowCase(unittest.TestCase):
   @override
   def setUp(self):
-    self.app_context = app.app_context()
+    self.app = create_application(TestingConfig)
+    self.app_context = self.app.app_context()
     self.app_context.push()
     db.create_all()
 

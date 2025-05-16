@@ -20,11 +20,11 @@
         </div>
 
         <div>
-          <form method="POST" action="{{ url_for('accept_follow_requester', username=request.username) }}">
+          <form method="POST" action="{{ url_for('main.accept_follow_requester', username=request.username) }}">
             {{ form.hidden_tag() }}
             {{ form.submit(class="btn btn-m btn-success justify-content-end", value="Accept") }}
           </form>
-          <form method="POST" action="{{ url_for('dismiss_follow_requester', username=request.username) }}">
+          <form method="POST" action="{{ url_for('main.dismiss_follow_requester', username=request.username) }}">
             {{ form.hidden_tag() }}
             {{ form.submit(class="btn btn-m btn-warning justify-content-end", value="Decline") }}
           </form>

@@ -4,10 +4,10 @@
 <div class="container pt-5 mt-5 text-center">
   <h1 class="text-white mb-4">Hi, {{ current_user.username }}</h1>
   <div class="center-buttons">
-    <a href="{{url_for('overshare')}}" class="main-btn">View</a>
-    <a href="{{url_for('upload')}}" class="main-btn">Upload Data</a>
-    <a href="{{url_for('followers')}}" class="main-btn">View Followers</a>
-    <a href="{{url_for('following')}}" class="main-btn">View Following</a>
+    <a href="{{url_for('main.overshare')}}" class="main-btn">View</a>
+    <a href="{{url_for('main.upload')}}" class="main-btn">Upload Data</a>
+    <a href="{{url_for('main.followers')}}" class="main-btn">View Followers</a>
+    <a href="{{url_for('main.following')}}" class="main-btn">View Following</a>
   </div>
 </div>
 {% endblock %}

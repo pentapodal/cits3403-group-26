@@ -16,11 +16,10 @@
             <img src="{{ url_for('static', filename='images/profile-pictures/default.png') }}" class="rounded-circle" alt="pfp" height="100" width="100">
           {% endif %}
           <span class="fs-5 p-2">{{ follow.username }}</span>
-
         </div>
 
         <div>
-          <form method="POST" action="{{ url_for('remove_follower', username=follow.username) }}">
+          <form method="POST" action="{{ url_for('main.remove_follower', username=follow.username) }}">
             {{ form.hidden_tag() }}
             {{ form.submit(class="btn btn-m btn-warning justify-content-end", value="Remove") }}
           </form>

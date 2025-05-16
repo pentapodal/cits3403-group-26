@@ -16,11 +16,10 @@
             <img src="{{ url_for('static', filename='images/profile-pictures/default.png') }}" class="rounded-circle" alt="pfp" height="100" width="100">
           {% endif %}
           <span class="fs-5 p-2">{{ request.username }}</span>
-
         </div>
 
         <div>
-          <form method="POST" action="{{ url_for('cancel_follow_request', username=request.username) }}">
+          <form method="POST" action="{{ url_for('main.cancel_follow_request', username=request.username) }}">
             {{ form.hidden_tag() }}
             {{ form.submit(class="btn btn-m btn-warning justify-content-end", value="Cancel") }}
           </form>

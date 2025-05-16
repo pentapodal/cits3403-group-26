@@ -1,5 +1,4 @@
 {% extends "friends-base.html" %}
-
 {% block heading %}Following{% endblock %}
 {% block friends_content %}
 <div class="flex-grow-1 overflow-auto px-3 pb-3">
@@ -10,7 +9,7 @@
 
         <div class="d-flex align-items-center">
 
-          <a href="{{ url_for('overshare', username=follow.username) }}">
+          <a href="{{ url_for('main.overshare', username=follow.username) }}">
             {% if follow.has_pic() %}
               <img src="{{ url_for('static', filename='images/profile-pictures/' ~ follow.username ~ '.jpg') }}" class="rounded-circle" alt="pfp" height="100" width="100">
             {% else %}
@@ -22,7 +21,7 @@
         </div>
 
         <div>
-          <form method="POST" action="{{ url_for('stop_following', username=follow.username) }}">
+          <form method="POST" action="{{ url_for('main.stop_following', username=follow.username) }}">
             {{ form.hidden_tag() }}
             {{ form.submit(class="btn btn-m btn-warning justify-content-end", value="Unfollow") }}
           </form>
